@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Entity\Traits\ObjectMetaDataTrait;
 use App\Entity\Traits\SoftDeleteableTrait;
 use App\Entity\Traits\TimestampableTrait;
+use DateTime;
+use DateTimeInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -78,6 +80,7 @@ class Doctor implements UserInterface
     /**
      * @var string The doctor plain password
      *
+     * @Assert\NotBlank(groups={"registration"})
      * @Assert\Length(
      *      min = 8,
      *      minMessage="The password must be at least {{ limit }} characters long",
@@ -100,7 +103,7 @@ class Doctor implements UserInterface
     private $confirmationToken;
 
     /**
-     * @var \DateTime The last datetime at which the doctor requested for a new password
+     * @var DateTime The last datetime at which the doctor requested for a new password
      *t
      * @ORM\Column(name="password_requested_at", type="datetime", nullable=true)
      */
@@ -291,7 +294,7 @@ class Doctor implements UserInterface
         return $this;
     }
 
-    public function getPasswordRequestedAt(): ?\DateTimeInterface
+    public function getPasswordRequestedAt(): ?DateTimeInterface
     {
         return $this->passwordRequestedAt;
     }
@@ -360,7 +363,7 @@ class Doctor implements UserInterface
      */
     public function isPasswordRequestNonExpired($ttl)
     {
-        return $this->getPasswordRequestedAt() instanceof \DateTime &&
+        return $this->getPasswordRequestedAt() instanceof DateTime &&
             $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
