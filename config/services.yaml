@@ -17,11 +17,16 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
+    App\Action\:
+        resource: '../src/Action'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    sensio_framework_extra.view.guesser:
+        class:     App\Templating\TemplateGuesser
+        arguments: [ "@kernel" ]
+
+    app.listener.authentication_success_response:
+        class: App\EventListener\AuthenticationSuccessListener
+        arguments: ["@event_dispatcher"]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
