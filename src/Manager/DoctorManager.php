@@ -242,22 +242,4 @@ class DoctorManager
         return $this->passwordEncoder->isPasswordValid($doctor, $password);
     }
 
-    /**
-     * Load client by confirmation token
-     *
-     * @param string $confirmationToken
-     *
-     * @return Doctor
-     */
-    public function getClientByConfirmationToken(string $confirmationToken): ?Doctor
-    {
-        $doctor = $this->em->getRepository(Doctor::class)->findOneBy([
-            'confirmationToken' => $confirmationToken
-        ]);
-
-        if (!$doctor instanceof Doctor)
-            return null;
-
-        return $doctor;
-    }
 }

@@ -98,4 +98,49 @@ class DoctorSubscriber implements EventSubscriberInterface
             ])
         );
     }
+
+    /**
+     * Actions to perform after doctor request password goes here
+     *
+     * @param DoctorEvent $doctorEvent
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function onRequestPassword(DoctorEvent $doctorEvent)
+    {
+        $doctor = $doctorEvent->getDoctor();
+        $url = $this->mailer->getFrontEndServerUrl().'/password/reset/'.$doctor->getConfirmationToken();
+        // send request password email
+        $this->mailer->sendEmail(
+            "New Password Requested At ". $doctor->getPasswordRequestedAt()->format('H:i d/m/Y'),
+            $doctor->getEmail(),
+            $this->templating->render('emails/security/request-password.html.twig', [
+                'doctor' => $doctor,
+                'url' => $url
+            ])
+        );
+    }
+
+    /**
+     * Actions to perform after doctor reset password success goes here
+     *
+     * @param DoctorEvent $doctorEvent
+     * @throws \Exception
+     */
+    public function onResetPasswordSuccess(DoctorEvent $doctorEvent)
+    {
+        $doctor = $doctorEvent->getDoctor();
+
+        // send reset password success email
+        $this->mailer->sendEmail(
+            'Password Successfully Reset',
+            $doctor->getEmail(),
+            $this->templating->render('emails/security/reset-password.html.twig', [
+                'doctor' => $doctor
+            ])
+        );
+    }
+
+
 }
