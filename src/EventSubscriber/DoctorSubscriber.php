@@ -123,9 +123,9 @@ class DoctorSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Actions to perform after client reset password success goes here
+     * Actions to perform after doctor reset password success goes here
      *
-     * @param ClientEvent $clientEvent
+     * @param DoctorEvent $doctorEvent
      * @throws \Exception
      */
     public function onResetPasswordSuccess(DoctorEvent $doctorEvent)
