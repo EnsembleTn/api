@@ -46,8 +46,8 @@ class AuthenticationSuccessListener
 
         if ($user->isActive() == true) {
 
-            $event = new DoctorEvent($user);
-            $this->dispatcher->dispatch($event, DoctorEvents::DOCTOR_LOGIN);
+            $doctorEvent = new DoctorEvent($user);
+            $this->dispatcher->dispatch($doctorEvent, DoctorEvents::DOCTOR_LOGIN);
 
             $event->setData([
                 'code' => $event->getResponse()->getStatusCode(),
