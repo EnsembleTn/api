@@ -36,7 +36,7 @@ nelmio_api_doc:
                                 type: object
                                 properties:
                                     firstTimeConnection:
-                                        type: string
+                                        type: boolean
                                         example: true
                                     token:
                                         type: string
