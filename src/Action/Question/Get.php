@@ -19,21 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 class Get extends BaseAction
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * Get constructor.
-     *
-     * @param EntityManagerInterface $em
-     */
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
-    /**
      * Get questions list
      *
      * Get all questions

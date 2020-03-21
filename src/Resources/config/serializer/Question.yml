@@ -1,8 +1,8 @@
 App\Entity\Question:
     properties:
         id:
-            groups: ['question']
+            groups: ['question', 'patient']
         frValue:
-            groups: ['question']
+            groups: ['question', 'patient']
         arValue:
-            groups: ['question']
+            groups: ['question', 'patient']

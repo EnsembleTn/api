@@ -40,8 +40,38 @@ class PatientManager
     public function savePatient(Patient $patient): void
     {
         // generate GUID
-        $patient->setGuid(Tools::generateGUID('DCT', 12));
+        $patient->setGuid(Tools::generateGUID('PAT', 12));
 
+        // set status ON_HOLD
+        $patient->setStatus(Patient::STATUS_ON_HOLD);
+
+        $this->em->persist($patient);
+        $this->em->flush();
+    }
+
+    /**
+     * Load patients list
+     */
+    public function getAll()
+    {
+        return $this->em->getRepository(Patient::class)->findAll();
+    }
+
+    /**
+     * Load patient by guid
+     *
+     * @param string $guid
+     * @return object|null
+     */
+    public function getByGuid(string $guid)
+    {
+        return $this->em->getRepository(Patient::class)->findOneBy([
+            'guid' => $guid
+        ]);
+    }
+
+    public function update(Patient $patient)
+    {
         $this->em->persist($patient);
         $this->em->flush();
     }

@@ -1,0 +1,8 @@
+App\Entity\Response:
+    properties:
+        id:
+            groups: ['patient']
+        value:
+            groups: ['patient']
+        question:
+            groups: ['patient']

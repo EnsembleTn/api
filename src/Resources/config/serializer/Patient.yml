@@ -1,0 +1,22 @@
+App\Entity\Patient:
+    properties:
+        id:
+            groups: ['patient-list', 'patient']
+        guid:
+            groups: ['patient-list', 'patient']
+        firstName:
+            groups: ['patient-list', 'patient']
+        lastName:
+            groups: ['patient-list', 'patient']
+        cin:
+            groups: ['patient-list', 'patient']
+        address:
+            groups: ['patient-list', 'patient']
+        zipCode:
+            groups: ['patient-list', 'patient']
+        phoneNumber:
+            groups: ['patient-list', 'patient']
+        status:
+            groups: ['patient-list', 'patient']
+        responses:
+            groups: ['patient']
