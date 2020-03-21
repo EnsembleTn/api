@@ -1,0 +1,8 @@
+App\Entity\Question:
+    properties:
+        id:
+            groups: ['question']
+        frValue:
+            groups: ['question']
+        arValue:
+            groups: ['question']
