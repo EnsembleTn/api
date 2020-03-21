@@ -1,0 +1,45 @@
+security:
+    encoders:
+        App\Entity\Doctor:
+            algorithm: bcrypt
+
+    providers:
+        doctor_provider:
+            entity:
+                class: App\Entity\Doctor
+
+    role_hierarchy:
+        ROLE_USER: ~
+        ROLE_DOCTOR: ROLE_USER
+        ROLE_ADMIN: [ROLE_DOCTOR]
+
+    firewalls:
+        # Documentation firewall
+        documentation:
+            pattern: /api/v1/doc
+            security: false
+
+        # Api firewall
+        login:
+            pattern:  ^/api/v1/security/login-check
+            stateless: true
+            anonymous: true
+            json_login:
+                provider: doctor_provider
+                check_path: /api/v1/security/login-check
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        secured_area:
+            pattern: ^/api/v1/secured
+            stateless: true
+            provider: doctor_provider
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+    access_control:
+        - { path: ^/api/v1/security/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/secured, roles: ROLE_CLIENT }

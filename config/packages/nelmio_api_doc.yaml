@@ -1,0 +1,57 @@
+nelmio_api_doc:
+    areas:
+        path_patterns:
+            - ^/api/v1(?!/doc(.json)??$)
+    documentation:
+        schemes: [http]
+        info:
+            title: Ensemble TN
+            description: This is the official API Documentation for
+                "Ensemble TN Initiative against COVID19"
+            version: 0.0.1
+        paths:
+            /api/v1/security/login-check:
+                post:
+                    tags:
+                        - Security
+                    summary: Doctor Login
+                    description: Login using credentials and get A JWT that will be used in every secured request.
+                    security: []
+                    consumes:
+                        -   application/json
+                    produces:
+                        -   application/json
+                    parameters:
+                        -   name: Credentials
+                            description: Login credentials
+                            in: body
+                            required: true
+                            schema:
+                                type: object
+                                $ref: '#/definitions/Credentials'
+                    responses:
+                        '200':
+                            description: Authentication Success
+                            schema:
+                                type: object
+                                properties:
+                                    token:
+                                        type: string
+                                        example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NDcwMjUyMzQsImV4cCI6MTU0NzAyODgzNCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiZGFseS5naGFpdGhAZ21haWwuY29tIn0.P2CiMsZ4MhcNrNhBSFTn6CVCycgpeM1uJJXSQk1S6iZU1rLJaFNkJB_Hn4xyCLFHLnKGtic8LQ2dHxjlXQqfZnccu-sygjjZsZfU36igclhhris3mnGT6RYK0Mk3dCottGFPF86PG7wzdEhIO_ydF_sN4ZqpbSgFUpNZjIQwLZRN8Bkgi4a8Wt9AHqHJT9kbBHN4UlgurDBBXHsZoR363qB6r4J_9ARcm_G3_p1YpA6NLgGJ5-zAcFjAFs8269IpXs8p_pPUQRauh3TAUGndL1AvMa7KuseTFGa4oe8bDxuOsrx4HoaA-x8q_h-ClaFRW5QoZXPwOFumF5i7O1U4J8qJWSPntIXf9ii9X2idhO8ursHDKkUTGGjMt32Ml2rPOVxvh5IYS19J0Xw7Ae7YejoKfbqkmS8elKzZnp6c_sea8gdSgoqLHH908pVVx90590Qy3Dlw2ssvQ2GwSA1Kaoc4RYdPt7LCrANRhwbWcSn0-W2P--Kb9_GYnThH3IzkZjKv3QAs5dVGaFH4thforPysW5OWZ4lrGy8wL7Axdr0_fHpUGbtXFn2ftTDMs8jYQ7dEr57iLPGA67txEiQ_NP1VDOr9nwlC8ecSlLctT4IYalAyuADerGe6ZrA-c8GIAWnGnbPKBhe3Sz-bUxOUwvZxVhmbTIYoUbB3iHptulg
+                        '400':
+                            description: Bad Request
+                        '401':
+                            description: Bad credentials
+                        '423':
+                            description: Account Locked
+        definitions:
+            Credentials:
+                type: object
+                properties:
+                    email:
+                        type: string
+                    password:
+                        type: string
+                required:
+                    -   email
+                    -   password

@@ -1,0 +1,3 @@
+# Login Check
+login_check:
+    path: /api/v1/security/login-check

@@ -1,0 +1,7 @@
+actions:
+    resource: ../../src/Action
+    type: annotation
+
+kernel:
+    resource: ../../src/Kernel.php
+    type: annotation
