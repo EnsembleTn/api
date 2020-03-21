@@ -105,7 +105,7 @@ class DoctorManager
     /**
      * @param Doctor|null $doctor
      */
-    public function updateDoctor(Doctor $doctor): void
+    public function update(Doctor $doctor): void
     {
         $this->em->merge($doctor);
         $this->em->flush();

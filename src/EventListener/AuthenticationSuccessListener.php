@@ -60,6 +60,7 @@ class AuthenticationSuccessListener
             $doctorEvent = new DoctorEvent($user);
             $this->dispatcher->dispatch($doctorEvent, DoctorEvents::DOCTOR_LOGIN);
 
+            $data['guid'] = $user->getGuid();
             $data['firstTimeConnection'] = $user->getLastLogin() ? false: true;
             $data['token'] = $event->getData()['token'];
 
@@ -71,7 +72,7 @@ class AuthenticationSuccessListener
             ]);
 
             $user->getLastLogin() ?:$user->setLastLogin(new DateTime());
-            $this->dm->updateDoctor($user);
+            $this->dm->update($user);
 
         } else {
             $event->getResponse()->setStatusCode(Response::HTTP_LOCKED);

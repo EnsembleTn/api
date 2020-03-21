@@ -37,8 +37,8 @@ class Doctor implements UserInterface
 
     //doctor categories
 
-    const CATEGORY_SENIOR = 1;
-    const CATEGORY_JUNIOR = 2;
+    const CATEGORY_SENIOR = "SENIOR";
+    const CATEGORY_JUNIOR = "JUNIOR";
 
     // <editor-fold defaultstate="collapsed" desc="traits">
 
@@ -157,7 +157,6 @@ class Doctor implements UserInterface
      */
     private $address;
 
-
     /**
      * @var int The doctor phone number
      *
@@ -185,7 +184,7 @@ class Doctor implements UserInterface
     private $region;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=20, nullable=false)
      */
     private $category;
 
@@ -440,18 +439,25 @@ class Doctor implements UserInterface
         return $this;
     }
 
-    public function getCategory(): ?int
+    public function getCategory(): ?string
     {
         return $this->category;
     }
 
-    public function setCategory(int $category): self
+    public function setCategory(string $category): self
     {
         $this->category = $category;
 
         return $this;
     }
 
+    public static function getCategoriesList()
+    {
+        return [
+            self::CATEGORY_JUNIOR,
+            self::CATEGORY_SENIOR
+        ];
+    }
 
     // </editor-fold>
 }

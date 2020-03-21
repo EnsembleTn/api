@@ -4,19 +4,18 @@
  * @author : Ala Daly <ala.daly@dotit-corp.com>
  * @date : 21‏/3‏/2020, Sat
  **/
+
 namespace App\Action\Doctor;
 
 use App\Action\BaseAction;
+use App\Entity\Doctor;
 use App\Manager\DoctorManager;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
-
-
-class Me  extends BaseAction
+class Get  extends BaseAction
 {
     /**
      * @var DoctorManager
@@ -24,7 +23,7 @@ class Me  extends BaseAction
     private $dm;
 
     /**
-     * Me constructor.
+     * Get constructor.
      * @param DoctorManager $dm
      */
     public function __construct(DoctorManager $dm)
@@ -34,11 +33,11 @@ class Me  extends BaseAction
 
 
     /**
-     * Doctor Profile Retrieval
+     * Doctor Profile
      *
      * Retrieve Doctor Profile
      *
-     * @Rest\Get("/api/v1/secured/doctor/me")
+     * @Rest\Get("/api/v1/secured/doctor/{guid}")
      *
      * @SWG\Parameter(
      *     name="Authorization",
@@ -58,17 +57,17 @@ class Me  extends BaseAction
      * @SWG\Tag(name="Doctor")
      *
      * @Rest\View(serializerGroups={"profile"})
+     * @param Doctor $doctor
      * @return View
      */
-    public function __invoke()
+    public function __invoke(Doctor $doctor)
     {
-
-        $doctor = $this->dm->getCurrentDoctor();
-
-        return $this->JsonResponse(
+        return $this->jsonResponse(
             Response::HTTP_OK,
-            'Success',
-            $doctor
+            'Patient resource get success',
+            [
+                'patient' => $doctor
+            ]
         );
     }
 

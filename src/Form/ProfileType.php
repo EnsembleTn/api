@@ -10,6 +10,7 @@ namespace App\Form;
 
 use App\Entity\Doctor;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,7 +29,9 @@ class ProfileType extends AbstractType
             ->add('lastName', TextType::class, ['required' => false])
             ->add('address', TextType::class, ['required' => false])
             ->add('phoneNumber', TextType::class, ['required' => false])
-            ->add('category', TextType::class, ['required' => false])
+            ->add('category', ChoiceType::class, [
+                'choices' => Doctor::getCategoriesList()
+            ])
             ->add('region', TextType::class, ['required' => false])
             ->add('phoneNumber', IntegerType::class, ['required' => false])
 

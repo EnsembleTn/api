@@ -5,7 +5,7 @@
  * @date : 21‏/3‏/2020, Sat
  **/
 
-namespace App\Action\Doctor;
+namespace App\Action\Security;
 
 
 use App\Action\BaseAction;
@@ -42,7 +42,7 @@ class ChangePassword extends BaseAction
      *
      * Change doctor account's password
      *
-     * @Rest\Put("/api/v1/secured/doctor/change-password")
+     * @Rest\Put("/api/v1/secured/security/change-password")
      *
      * @SWG\Parameter(
      *     name="Authorization",
@@ -66,7 +66,7 @@ class ChangePassword extends BaseAction
      *     description="JWT Token not found / Invalid JWT Token / Bad Credentials / You can't choose the same password"
      * )
      *
-     * @SWG\Tag(name="Doctor")
+     * @SWG\Tag(name="Security")
      *
      * @Rest\View()
      * @param Request $request
