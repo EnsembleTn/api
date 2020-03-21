@@ -179,12 +179,12 @@ class Doctor implements UserInterface
     private $roles = ['ROLE_DOCTOR'];
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $region;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=false)
+     * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $category;
 
