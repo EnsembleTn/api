@@ -227,7 +227,6 @@ class DoctorManager
         $doctor->setPassword($this->passwordEncoder->encodePassword($doctor, $doctor->getPlainPassword()));
 
         // erase sensitive data
-        $doctor->eraseCredentials();
     }
 
     /**

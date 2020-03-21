@@ -32,3 +32,7 @@ services:
         arguments: ["@event_dispatcher"]
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+
+    App\EventListener\NotifyDoctorEventListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
