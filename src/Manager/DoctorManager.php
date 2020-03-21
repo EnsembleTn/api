@@ -241,4 +241,5 @@ class DoctorManager
     {
         return $this->passwordEncoder->isPasswordValid($doctor, $password);
     }
+
 }
