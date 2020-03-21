@@ -72,6 +72,9 @@ class DoctorManager
         // generate confirmation token
         $doctor->setConfirmationToken(Tools::generateToken());
 
+        // automatically active doctor's account
+        $doctor->setActive(true);
+
         // generate GUID
         $doctor->setGuid(Tools::generateGUID('DCT', 12));
 

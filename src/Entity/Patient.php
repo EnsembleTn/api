@@ -23,6 +23,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Patient
 {
+    //patient status
+
+    const STATUS_ON_HOLD = 'ON_HOLD';
+    const STATUS_IN_PROGRESS = 'IN_PROGRESS';
+    const STATUS_CLOSED = 'CLOSED';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -73,6 +79,11 @@ class Patient
      * )
      */
     private $phoneNumber;
+
+    /**
+     *  @ORM\Column(type="string", length=20, nullable=false)
+     */
+    private $status;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="patient", orphanRemoval=true, cascade={"persist"})
@@ -171,6 +182,27 @@ class Patient
         $this->phoneNumber = $phoneNumber;
 
         return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public static function getStatusesList()
+    {
+        return [
+            self::STATUS_ON_HOLD,
+            self::STATUS_IN_PROGRESS,
+            self::STATUS_CLOSED,
+        ];
     }
 
     /**

@@ -42,6 +42,9 @@ class PatientManager
         // generate GUID
         $patient->setGuid(Tools::generateGUID('PAT', 12));
 
+        // set status ON_HOLD
+        $patient->setStatus(Patient::STATUS_ON_HOLD);
+
         $this->em->persist($patient);
         $this->em->flush();
     }
@@ -65,5 +68,11 @@ class PatientManager
         return $this->em->getRepository(Patient::class)->findOneBy([
             'guid' => $guid
         ]);
+    }
+
+    public function update(Patient $patient)
+    {
+        $this->em->persist($patient);
+        $this->em->flush();
     }
 }

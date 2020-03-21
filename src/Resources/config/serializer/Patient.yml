@@ -16,5 +16,7 @@ App\Entity\Patient:
             groups: ['patient-list', 'patient']
         phoneNumber:
             groups: ['patient-list', 'patient']
+        status:
+            groups: ['patient-list', 'patient']
         responses:
             groups: ['patient']
