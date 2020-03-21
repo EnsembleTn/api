@@ -104,10 +104,17 @@ class Doctor implements UserInterface
 
     /**
      * @var DateTime The last datetime at which the doctor requested for a new password
-     *t
+     *
      * @ORM\Column(name="password_requested_at", type="datetime", nullable=true)
      */
     private $passwordRequestedAt;
+
+    /**
+     * @var DateTime The last datetime at which the doctor logged in
+     *
+     * @ORM\Column(name="last_login", type="datetime", nullable=true)
+     */
+    private $lastLogin;
 
     /**
      * @var string The doctor first name
@@ -302,6 +309,17 @@ class Doctor implements UserInterface
     public function setPasswordRequestedAt($passwordRequestedAt)
     {
         $this->passwordRequestedAt = $passwordRequestedAt;
+        return $this;
+    }
+
+    public function getLastLogin(): ?DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin($lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
         return $this;
     }
 
