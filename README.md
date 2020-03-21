@@ -4,7 +4,7 @@ $ composer install
 $ php bin/console assets:install 
 $ cp .env .env.local  
 $ put your local configuration entries in .env.local
-$ bin/consele doctrine:database:create
+$ bin/console doctrine:database:create
 $ bin/console doctrine:schema:update
 ```
 ## Configuration LexikJWTAuthentication
