@@ -37,7 +37,7 @@ class Post extends BaseAction
      *
      * Save new Patient Resource
      *
-     * @Rest\Post("/api/v1/question")
+     * @Rest\Post("/api/v1/patient")
      *
      * @SWG\Parameter(
      *     name="patient",
