@@ -34,6 +34,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Doctor implements UserInterface
 {
+
+    //doctor categories
+
+    const CATEGORY_SENIOR = 1;
+    const CATEGORY_JUNIOR = 2;
+
     // <editor-fold defaultstate="collapsed" desc="traits">
 
     use TimestampableTrait;
@@ -172,6 +178,16 @@ class Doctor implements UserInterface
      * @ORM\Column(type="json_array")
      */
     private $roles = ['ROLE_DOCTOR'];
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $region;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $category;
 
     // </editor-fold>
 
@@ -411,6 +427,31 @@ class Doctor implements UserInterface
 
         return $this;
     }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function setRegion(string $region): self
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    public function getCategory(): ?int
+    {
+        return $this->category;
+    }
+
+    public function setCategory(int $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
 
     // </editor-fold>
 }

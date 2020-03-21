@@ -1,0 +1,21 @@
+App\Entity\Doctor:
+  exclusion_policy: none
+
+  accessor_order: custom
+  custom_accessor_order: [email, firstName, lastName, phoneNumber, address,region,category]
+
+  properties:
+    email:
+      groups: ['profile']
+    firstName:
+      groups: ['profile']
+    lastName:
+      groups: ['profile']
+    phoneNumber:
+      groups: ['profile']
+    address:
+      groups: ['profile']
+    region:
+      groups: ['profile']
+    category:
+      groups: ['profile']
