@@ -22,12 +22,42 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  **/
 final class DoctorAdmin extends AbstractAdmin
 {
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private $encodingPassword;
 
+    /**
+     * DoctorAdmin constructor.
+     * @param $code
+     * @param $class
+     * @param $baseControllerName
+     * @param UserPasswordEncoderInterface $encodePassword
+     */
     public function __construct($code, $class, $baseControllerName, UserPasswordEncoderInterface $encodePassword)
     {
         parent::__construct($code, $class, $baseControllerName);
         $this->encodingPassword = $encodePassword;
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('import', 'import', [
+            '_controller' => 'App\AdminController\UploadDoctor::indexAction'
+        ]);
+
+    }
+    public function getDashboardActions()
+    {
+        $actions = parent::getDashboardActions();
+
+        $actions['import'] = array(
+            'label' => 'Import',
+            'url' => $this->generateUrl('import'),
+            'icon' => 'upload',
+        );
+
+        return $actions;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
