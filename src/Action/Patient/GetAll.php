@@ -46,7 +46,7 @@ class GetAll extends BaseAction
     public function __invoke(Request $request, PatientManager $pm)
     {
 
-        $patients = $pm->getAll();
+        $patients = $pm->getAll(true);
 
         return $this->jsonResponse(
             Response::HTTP_OK,

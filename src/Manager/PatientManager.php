@@ -51,10 +51,49 @@ class PatientManager
 
     /**
      * Load patients list
+     * @param bool $sorted
+     * @return array|object[]
      */
-    public function getAll()
+    public function getAll($sorted = true)
     {
-        return $this->em->getRepository(Patient::class)->findAll();
+        $patients = $this->em->getRepository(Patient::class)->findAll();
+
+        if ($sorted) {
+            $onHold = [];
+            $inProgress = [];
+            $closed = [];
+
+            foreach ($patients as $patient) {
+                switch ($patient->getStatus()) {
+                    case Patient::STATUS_ON_HOLD :
+                        $onHold[] = $patient;
+                        break;
+                    case Patient::STATUS_IN_PROGRESS :
+                        $inProgress[] = $patient;
+                        break;
+                    case Patient::STATUS_CLOSED :
+                        $closed[] = $patient;
+                        break;
+                }
+            }
+
+            return [
+                "ON_HOLD" => [
+                    'count' => count($onHold),
+                    'patients' => $onHold
+                ],
+                "IN_PROGRESS" => [
+                    'count' => count($inProgress),
+                    'patients' => $inProgress
+                ],
+                "CLOSED" => [
+                    'count' => count($closed),
+                    'patients' => $closed
+                ]
+            ];
+        }
+
+        return $patients;
     }
 
     /**
