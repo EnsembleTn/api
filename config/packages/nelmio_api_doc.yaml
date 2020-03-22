@@ -47,6 +47,40 @@ nelmio_api_doc:
                             description: Bad credentials
                         '423':
                             description: Account Locked
+
+            /api/v1/security/token/refresh:
+                post:
+                    tags:
+                        - Security
+                    summary: Refresh Token
+                    description: Refrsh JWT generated tokens
+                    security: []
+                    consumes:
+                        - application/json
+                    produces:
+                        - application/json
+                    parameters:
+                        -   name: RefreshToken
+                            description: Refresh Token
+                            in: body
+                            required: true
+                            schema:
+                                type: object
+                                $ref: '#/definitions/RefreshToken'
+                    responses:
+                        '200':
+                            description: Refresh Token Success
+                            schema:
+                                type: object
+                                properties:
+                                    token:
+                                        type: string
+                                        example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NDcwMjUyMzQsImV4cCI6MTU0NzAyODgzNCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiZGFseS5naGFpdGhAZ21haWwuY29tIn0.P2CiMsZ4MhcNrNhBSFTn6CVCycgpeM1uJJXSQk1S6iZU1rLJaFNkJB_Hn4xyCLFHLnKGtic8LQ2dHxjlXQqfZnccu-sygjjZsZfU36igclhhris3mnGT6RYK0Mk3dCottGFPF86PG7wzdEhIO_ydF_sN4ZqpbSgFUpNZjIQwLZRN8Bkgi4a8Wt9AHqHJT9kbBHN4UlgurDBBXHsZoR363qB6r4J_9ARcm_G3_p1YpA6NLgGJ5-zAcFjAFs8269IpXs8p_pPUQRauh3TAUGndL1AvMa7KuseTFGa4oe8bDxuOsrx4HoaA-x8q_h-ClaFRW5QoZXPwOFumF5i7O1U4J8qJWSPntIXf9ii9X2idhO8ursHDKkUTGGjMt32Ml2rPOVxvh5IYS19J0Xw7Ae7YejoKfbqkmS8elKzZnp6c_sea8gdSgoqLHH908pVVx90590Qy3Dlw2ssvQ2GwSA1Kaoc4RYdPt7LCrANRhwbWcSn0-W2P--Kb9_GYnThH3IzkZjKv3QAs5dVGaFH4thforPysW5OWZ4lrGy8wL7Axdr0_fHpUGbtXFn2ftTDMs8jYQ7dEr57iLPGA67txEiQ_NP1VDOr9nwlC8ecSlLctT4IYalAyuADerGe6ZrA-c8GIAWnGnbPKBhe3Sz-bUxOUwvZxVhmbTIYoUbB3iHptulg
+                                    refreshToken:
+                                        type: string
+                                        example: 469f9fbf4b816f883ea4yh12c9d1311be95dbddcf1613e6c9da3a3f64504a8122a5f9a898ac703f7e0f13313e743319fd542e6105875b3bbd1fdb75ca5756c52
+                        '401':
+                            description: Bad credentials
         definitions:
             Credentials:
                 type: object
@@ -58,3 +92,11 @@ nelmio_api_doc:
                 required:
                     -   email
                     -   password
+
+            RefreshToken:
+                type: object
+                properties:
+                    refreshToken:
+                        type: string
+                required:
+                    - refreshToken

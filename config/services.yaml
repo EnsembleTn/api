@@ -27,6 +27,12 @@ services:
         class:     App\Templating\TemplateGuesser
         arguments: [ "@kernel" ]
 
+    gesdinet.jwtrefreshtoken.send_token:
+        class: App\EventListener\AttachRefreshTokenOnSuccessListener
+        arguments: [ "@gesdinet.jwtrefreshtoken.refresh_token_manager", "%gesdinet_jwt_refresh_token.ttl%", "@validator", "@request_stack", "%gesdinet_jwt_refresh_token.user_identity_field%", "%gesdinet_jwt_refresh_token.token_parameter_name%" ]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: attachRefreshToken }
+
     app.listener.authentication_success_response:
         class: App\EventListener\AuthenticationSuccessListener
         arguments: ["@event_dispatcher"]

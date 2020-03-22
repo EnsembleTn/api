@@ -1,3 +1,8 @@
 # Login Check
 login_check:
     path: /api/v1/security/login-check
+
+# Refresh Token
+gesdinet_jwt_refresh_token:
+    path: /api/v1/security/token/refresh
+    controller: gesdinet.jwtrefreshtoken::refresh

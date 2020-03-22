@@ -62,8 +62,8 @@ class AuthenticationSuccessListener
 
             $data['guid'] = $user->getGuid();
             $data['firstTimeConnection'] = $user->getLastLogin() ? false: true;
-            $data['token'] = $event->getData()['token'];
-
+            $data['token'] = $event->getData()['payload']['token'];
+            $data['refreshToken'] = $event->getData()['payload']['refreshToken'];
 
             $event->setData([
                 'code' => $event->getResponse()->getStatusCode(),

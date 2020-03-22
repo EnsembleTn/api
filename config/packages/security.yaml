@@ -43,3 +43,4 @@ security:
     access_control:
         - { path: ^/api/v1/security/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/v1/secured, roles: ROLE_DOCTOR }
+        - { path: ^/api/v1/security/refresh-token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
