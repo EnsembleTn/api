@@ -16,8 +16,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="patient")
  * @ORM\Entity(repositoryClass="App\Repository\PatientRepository")
  * @UniqueEntity(
- *     fields={"cin"},
- *     message="This cin address is already used.",
+ *     fields={"phoneNumber"},
+ *     message="This phoneNumber address is already used.",
  * )
  *
  */
@@ -50,11 +50,6 @@ class Patient
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
-
-    /**
-     * @ORM\Column(type="string", length=8, nullable=true)
-     */
-    private $cin;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -132,18 +127,6 @@ class Patient
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getCin(): ?string
-    {
-        return $this->cin;
-    }
-
-    public function setCin(?string $cin): self
-    {
-        $this->cin = $cin;
 
         return $this;
     }

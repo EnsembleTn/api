@@ -20,7 +20,6 @@ class PatientType extends AbstractType
         $builder
             ->add('firstName')
             ->add('lastName')
-            ->add('cin')
             ->add('address')
             ->add('zipCode')
             ->add('phoneNumber')
