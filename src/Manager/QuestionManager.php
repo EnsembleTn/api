@@ -31,10 +31,38 @@ class QuestionManager
 
     /**
      * Load questions list
+     * @param bool $sorted
      * @return Question[]|object[]
      */
-    public function getAll()
+    public function getAll($sorted = true)
     {
-        return $this->em->getRepository(Question::class)->findAll();
+        $questions = $this->em->getRepository(Question::class)->findAll();
+
+        if ($sorted) {
+            $general = [];
+            $antecedent = [];
+            $symptoms = [];
+
+            foreach ($questions as $question) {
+                switch ($question->getCategory()) {
+                    case Question::CATEGORY_GENERAL :
+                        $general[] = $question;
+                        break;
+                    case Question::CATEGORY_ANTECEDENT :
+                        $antecedent[] = $question;
+                        break;
+                    case Question::CATEGORY_SYMPTOMS :
+                        $symptoms[] = $question;
+                }
+            }
+
+            return [
+                "CATEGORY_GENERAL" => $general,
+                "CATEGORY_ANTECEDENT" => $antecedent,
+                "CATEGORY_SYMPTOMS" => $symptoms,
+            ];
+        }
+
+        return $questions;
     }
 }

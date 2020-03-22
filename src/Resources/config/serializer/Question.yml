@@ -8,3 +8,5 @@ App\Entity\Question:
             groups: ['question', 'patient']
         type:
             groups: ['question', 'patient']
+        category:
+            groups: ['question', 'patient']

@@ -21,7 +21,8 @@ class Get extends BaseAction
      * Get questions list
      *
      * Get all questions <br>
-     * Field **type** : <br><br> 1 : TYPE_YES_OR_NO (oui,non) <br> 2 : TYPE_YES_OR_NO_NEUTRAL (oui, non, je ne sais pas) <br> 3 : TYPE_YES_OR_NO_NOT_APPLICABLE (oui, non, non applicable) <br> 4 : TYPE_NORMAL ( text input )
+     * Field **type** : <br><br> 1 : TYPE_YES_OR_NO (oui,non) <br> 2 : TYPE_YES_OR_NO_NEUTRAL (oui, non, je ne sais pas) <br> 3 : TYPE_YES_OR_NO_NOT_APPLICABLE (oui, non, non applicable) <br> 4 : TYPE_NORMAL ( text input )<br>
+     * Category **type** : <br><br> 1 : CATEGORY_GENERAL <br> 2 : CATEGORY_ANTECEDENT <br> 3 : CATEGORY_SYMPTOMS
      *
      * @Rest\Get("/api/v1/question")
      *
@@ -37,7 +38,7 @@ class Get extends BaseAction
     public function __invoke(Request $request, QuestionManager $qm)
     {
 
-        $questions = $qm->getAll();
+        $questions = $qm->getAll(true);
 
         return $this->jsonResponse(
             Response::HTTP_OK,
