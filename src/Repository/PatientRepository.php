@@ -9,7 +9,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 /**
  * @method Patient|null find($id, $lockMode = null, $lockVersion = null)
  * @method Patient|null findOneBy(array $criteria, array $orderBy = null)
- * @method Patient[]    findAll()
  * @method Patient[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PatientRepository extends ServiceEntityRepository
@@ -19,32 +18,13 @@ class PatientRepository extends ServiceEntityRepository
         parent::__construct($registry, Patient::class);
     }
 
-    // /**
-    //  * @return Patient[] Returns an array of Patient objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAll()
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->findBy([], ['createdAt' => 'ASC']);
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Patient
+    public function first($status = Patient::STATUS_ON_HOLD)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->findBy(['status' => $status], ['createdAt' => 'ASC'], 1);
     }
-    */
 }

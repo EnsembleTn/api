@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\ObjectMetaDataTrait;
+use App\Entity\Traits\SoftDeleteableTrait;
+use App\Entity\Traits\TimestampableTrait;
 use App\Validator\constraints\CollectionSameItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,6 +33,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Patient
 {
+    // <editor-fold defaultstate="collapsed" desc="traits">
+
+    use TimestampableTrait;
+    use ObjectMetaDataTrait;
+
+    // </editor-fold>
+
     //patient status
 
     const STATUS_ON_HOLD = 'ON_HOLD';
@@ -89,7 +99,7 @@ class Patient
     private $phoneNumber;
 
     /**
-     *  @ORM\Column(type="string", length=20, nullable=false)
+     * @ORM\Column(type="string", length=20, nullable=false)
      */
     private $status;
 
@@ -209,6 +219,42 @@ class Patient
     public function getResponses(): Collection
     {
         return $this->responses;
+    }
+
+    public function getGroupedResponses()
+    {
+
+        $general = [];
+        $antecedent = [];
+        $symptoms = [];
+
+        foreach ($this->responses as $response) {
+            switch ($response->getQuestion()->getCategory()) {
+                case Question::CATEGORY_GENERAL :
+                    $general[] = [
+                        "question" => $response->getQuestion(),
+                        "response" => $response
+                    ];
+                    break;
+                case Question::CATEGORY_ANTECEDENT :
+                    $antecedent[] = [
+                        "question" => $response->getQuestion(),
+                        "response" => $response
+                    ];
+                    break;
+                case Question::CATEGORY_SYMPTOMS :
+                    $symptoms[] = [
+                        "question" => $response->getQuestion(),
+                        "response" => $response
+                    ];
+            }
+        }
+
+        return [
+            "CATEGORY_GENERAL" => $general,
+            "CATEGORY_ANTECEDENT" => $antecedent,
+            "CATEGORY_SYMPTOMS" => $symptoms,
+        ];
     }
 
     public function addResponse(Response $response): self

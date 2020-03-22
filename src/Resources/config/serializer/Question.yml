@@ -1,12 +1,12 @@
 App\Entity\Question:
     properties:
         id:
-            groups: ['question', 'patient']
+            groups: ['question', 'patient', 'treat']
         frValue:
-            groups: ['question', 'patient']
+            groups: ['question', 'patient', 'treat']
         arValue:
-            groups: ['question', 'patient']
+            groups: ['question', 'patient', 'treat']
         type:
-            groups: ['question', 'patient']
+            groups: ['question', 'patient', 'treat']
         category:
             groups: ['question', 'patient']

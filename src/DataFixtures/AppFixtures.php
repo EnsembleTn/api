@@ -12,21 +12,21 @@ class AppFixtures extends Fixture
     {
         $questions = [
             [
-                "fr_value" => "Étiez vous à l’étranger récemment ?",
+                "fr_value" => "Étiez vous à l’étranger récemment ? (oui, non)",
                 "ar_value" => "هل كنت  في الخارج مؤخرًا ؟",
-                "type" => Question::TYPE_NORMAL,
+                "type" => Question::TYPE_YES_OR_NO,
                 "category" => Question::CATEGORY_GENERAL
             ],
             [
-                "fr_value" => "Étiez vous en contact avec une personne venant de l’étranger ?",
+                "fr_value" => "Étiez vous en contact avec une personne venant de l’étranger ? (oui, non)",
                 "ar_value" => "هل كنت على اتصال بشخص قادم  من الخارج ؟",
-                "type" => Question::TYPE_NORMAL,
+                "type" => Question::TYPE_YES_OR_NO,
                 "category" => Question::CATEGORY_GENERAL
             ],
             [
-                "fr_value" => "Étiez en contact avec une personne qui a été testée positive ?",
+                "fr_value" => "Étiez en contact avec une personne qui a été testée positive ? (oui, non)",
                 "ar_value" => "هل كنت على اتصال بشخص كانت نتيجة اختباره إيجابية ؟",
-                "type" => Question::TYPE_NORMAL,
+                "type" => Question::TYPE_YES_OR_NO,
                 "category" => Question::CATEGORY_GENERAL
             ],
             [

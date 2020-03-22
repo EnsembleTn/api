@@ -114,4 +114,13 @@ class PatientManager
         $this->em->persist($patient);
         $this->em->flush();
     }
+
+    /**
+     * get first on hold patient in queue
+     */
+    public function treat()
+    {
+
+        return $this->em->getRepository(Patient::class)->first();
+    }
 }

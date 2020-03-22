@@ -55,7 +55,7 @@ class Post extends BaseAction
         $patient = new Patient();
 
         // attach responses to patient
-        $questions = $qm->getAll();
+        $questions = $qm->getAll(false);
         foreach ($questions as $question){
             $response = new QuestionResponse();
             $response->setQuestion($question);
