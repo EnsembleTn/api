@@ -20,7 +20,7 @@ class GetAll extends BaseAction
     /**
      * Get patient list
      *
-     * Get all patient without questions responses
+     * Get all patient without questions responses (only guid , firstName, lastName, phoneNumber and status will be provided)
      *
      * @Rest\Get("/api/v1/secured/patient")
      *
