@@ -138,4 +138,37 @@ class Tools
 
         return strtr($string, $table);
     }
+
+    public static function csv_to_array($filename = '', $delimiter = ',')
+    {
+        if (!file_exists($filename) || !is_readable($filename))
+            return FALSE;
+
+        $header = NULL;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== FALSE) {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+        return $data;
+    }
+
+    /**
+     * Split full name into first name and last name
+     *
+     * @param string $fullName
+     * @return array
+     */
+    public static function split_name( string $fullName):array
+    {
+        $fullName = trim($fullName);
+        $last_name = (strpos($fullName, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $fullName);
+        $first_name = trim(preg_replace('#' . $last_name . '#', '', $fullName));
+        return array('firstName'=>$first_name, 'lastName'=>$last_name);
+    }
 }

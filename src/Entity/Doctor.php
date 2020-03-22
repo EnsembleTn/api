@@ -151,9 +151,8 @@ class Doctor implements UserInterface
     /**
      * @var string The doctor address
      *
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text" , nullable=true)
      *
-     * @Assert\NotBlank
      */
     private $address;
 
@@ -457,6 +456,11 @@ class Doctor implements UserInterface
             self::CATEGORY_JUNIOR,
             self::CATEGORY_SENIOR
         ];
+    }
+
+    public function __toString()
+    {
+     return $this->getFullname();
     }
 
     // </editor-fold>

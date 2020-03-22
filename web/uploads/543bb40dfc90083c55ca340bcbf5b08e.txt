@@ -1,0 +1,2 @@
+﻿id,guid,email,password,active,confirmationToken,passwordRequestedAt,lastLogin,firstName,lastName,address,phoneNumber,roles,region,category,createdAt,updatedAt,deletedAt
+13,DCT-634983521552,rafinala0003@gmail.com,$2y$13$MLpq30T5nHQPeMF2i8gpB.YkTmfE1b7Oz5sqWzkviRpMaNv/HOIYS,1,,,"Sun, 22 Mar 2020 00:00:00 +0100",Ala,Daly,string,52002229,,sousseeeeeeee,2,"Sat, 21 Mar 2020 13:31:30 +0100","Sat, 21 Mar 2020 15:17:05 +0100",
