@@ -4,7 +4,6 @@ namespace App\Action\Question;
 
 use App\Action\BaseAction;
 use App\Manager\QuestionManager;
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Swagger\Annotations as SWG;
@@ -21,7 +20,8 @@ class Get extends BaseAction
     /**
      * Get questions list
      *
-     * Get all questions
+     * Get all questions <br>
+     * Field **type** : <br><br> 1 : TYPE_YES_OR_NO (oui,non) <br> 2 : TYPE_YES_OR_NO_NEUTRAL (oui, non, je ne sais pas) <br> 3 : TYPE_YES_OR_NO_NOT_APPLICABLE (oui, non, non applicable) <br> 4 : TYPE_NORMAL ( text input )
      *
      * @Rest\Get("/api/v1/question")
      *

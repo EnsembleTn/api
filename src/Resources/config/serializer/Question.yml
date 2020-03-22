@@ -6,3 +6,5 @@ App\Entity\Question:
             groups: ['question', 'patient']
         arValue:
             groups: ['question', 'patient']
+        type:
+            groups: ['question', 'patient']

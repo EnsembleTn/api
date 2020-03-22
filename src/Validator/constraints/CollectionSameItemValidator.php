@@ -7,6 +7,11 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
+/**
+ * Class CollectionSameItemValidator
+ *
+ * @author Daly Ghaith <daly.ghaith@gmail.com>
+ */
 class CollectionSameItemValidator extends ConstraintValidator
 {
 

@@ -6,6 +6,10 @@ use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\Validator\Constraint;
 
 /**
+ * Class CollectionSameItem
+ *
+ * @author Daly Ghaith <daly.ghaith@gmail.com>
+ *
  * @Annotation
  * @Target({"CLASS", "ANNOTATION"})
  */
