@@ -25,8 +25,8 @@ class PatientType extends AbstractType
             ->add('phoneNumber')
             ->add('responses', CollectionType::class, [
                 'entry_type' => ResponseType::class,
-                'allow_add' => true,
-                'by_reference' => false
+                'allow_add' => false,
+                'allow_delete' => false,
             ]);
     }
 

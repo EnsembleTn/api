@@ -37,7 +37,7 @@ class PatientManager
      * @param Patient $patient
      * @throws Exception
      */
-    public function savePatient(Patient $patient): void
+    public function save(Patient $patient): void
     {
         // generate GUID
         $patient->setGuid(Tools::generateGUID('PAT', 12));

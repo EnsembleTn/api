@@ -31,6 +31,7 @@ class QuestionManager
 
     /**
      * Load questions list
+     * @return Question[]|object[]
      */
     public function getAll()
     {

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Validator\constraints\CollectionSameItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(
  *     fields={"phoneNumber"},
  *     message="This phoneNumber address is already used.",
+ * )
+ * @CollectionSameItem(
+ *     collection="responses",
+ *     errorPath="question",
+ *     variable="question",
+ *     message="duplicate response for question with id =%variable% "
  * )
  *
  */
@@ -57,7 +64,13 @@ class Patient
     private $address;
 
     /**
-     * @ORM\Column(type="string", length=4, nullable=true)
+     * @ORM\Column(type="integer", length=4)
+     *
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 4,
+     *      exactMessage="The zip code should have exactly {{ limit }} characters"
+     * )
      */
     private $zipCode;
 
@@ -82,6 +95,8 @@ class Patient
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="patient", orphanRemoval=true, cascade={"persist"})
+     *
+     * @Assert\Valid()
      */
     private $responses;
 
@@ -143,12 +158,12 @@ class Patient
         return $this;
     }
 
-    public function getZipCode(): ?string
+    public function getZipCode(): ?int
     {
         return $this->zipCode;
     }
 
-    public function setZipCode(?string $zipCode): self
+    public function setZipCode(?int $zipCode): self
     {
         $this->zipCode = $zipCode;
 
