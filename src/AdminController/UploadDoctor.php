@@ -71,7 +71,8 @@ class UploadDoctor extends CRUDControllerAlias
                                 ->setFirstName($name['firstName'])
                                 ->setLastName($name['lastName'])
                                 ->setActive(true);
-                            if($row['Catégorie'] == 'Junior')
+                            $catg = $row['Catégorie'];
+                            if(strpos(strtolower($catg), 'junior') !== false)
                             {
                                 $doctor->setCategory(Doctor::CATEGORY_JUNIOR);
                             } else {
