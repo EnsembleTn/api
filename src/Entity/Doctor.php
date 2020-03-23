@@ -176,7 +176,7 @@ class Doctor implements UserInterface
      *
      * @ORM\Column(type="json_array")
      */
-    private $roles = ['ROLE_DOCTOR'];
+    private $roles;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -407,10 +407,7 @@ class Doctor implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_DOCTOR';
-
-        return array_unique($roles);
+        return is_array($this->roles) ? $this->roles : [];
     }
 
     public function setRoles(array $roles): self

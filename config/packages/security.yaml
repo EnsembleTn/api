@@ -11,6 +11,7 @@ security:
     role_hierarchy:
         ROLE_USER: ~
         ROLE_DOCTOR: ROLE_USER
+        ROLE_EMERGENCY_DOCTOR: ROLE_USER
         ROLE_ADMIN: [ROLE_DOCTOR]
 
     firewalls:
@@ -42,5 +43,5 @@ security:
 
     access_control:
         - { path: ^/api/v1/security/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/v1/secured, roles: ROLE_DOCTOR }
+        - { path: ^/api/v1/secured, roles: [ROLE_DOCTOR, ROLE_EMERGENCY_DOCTOR] }
         - { path: ^/api/v1/security/refresh-token, roles: IS_AUTHENTICATED_ANONYMOUSLY }

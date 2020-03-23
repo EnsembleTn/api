@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Doctor;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,7 +28,15 @@ class RegistrationType extends AbstractType
             ->add('lastName')
             ->add('address')
             ->add('phoneNumber')
-        ;
+            ->add('roles', ChoiceType::class, [
+                    'choices' => [
+                        'ROLE_DOCTOR' => 'ROLE_DOCTOR',
+                        'ROLE_EMERGENCY_DOCTOR' => 'ROLE_EMERGENCY_DOCTOR',
+                    ],
+                    'multiple' => true,
+                    'required' => true,
+                ]
+            );
     }
 
     /**

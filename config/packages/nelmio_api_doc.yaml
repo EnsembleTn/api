@@ -35,12 +35,21 @@ nelmio_api_doc:
                             schema:
                                 type: object
                                 properties:
+                                    guid:
+                                        type: string
+                                        example: DCT-26618791
                                     firstTimeConnection:
                                         type: boolean
                                         example: true
+                                    roles:
+                                        type: array
+                                        example: [ROLE_DOCTOR]
                                     token:
                                         type: string
                                         example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NDcwMjUyMzQsImV4cCI6MTU0NzAyODgzNCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiZGFseS5naGFpdGhAZ21haWwuY29tIn0.P2CiMsZ4MhcNrNhBSFTn6CVCycgpeM1uJJXSQk1S6iZU1rLJaFNkJB_Hn4xyCLFHLnKGtic8LQ2dHxjlXQqfZnccu-sygjjZsZfU36igclhhris3mnGT6RYK0Mk3dCottGFPF86PG7wzdEhIO_ydF_sN4ZqpbSgFUpNZjIQwLZRN8Bkgi4a8Wt9AHqHJT9kbBHN4UlgurDBBXHsZoR363qB6r4J_9ARcm_G3_p1YpA6NLgGJ5-zAcFjAFs8269IpXs8p_pPUQRauh3TAUGndL1AvMa7KuseTFGa4oe8bDxuOsrx4HoaA-x8q_h-ClaFRW5QoZXPwOFumF5i7O1U4J8qJWSPntIXf9ii9X2idhO8ursHDKkUTGGjMt32Ml2rPOVxvh5IYS19J0Xw7Ae7YejoKfbqkmS8elKzZnp6c_sea8gdSgoqLHH908pVVx90590Qy3Dlw2ssvQ2GwSA1Kaoc4RYdPt7LCrANRhwbWcSn0-W2P--Kb9_GYnThH3IzkZjKv3QAs5dVGaFH4thforPysW5OWZ4lrGy8wL7Axdr0_fHpUGbtXFn2ftTDMs8jYQ7dEr57iLPGA67txEiQ_NP1VDOr9nwlC8ecSlLctT4IYalAyuADerGe6ZrA-c8GIAWnGnbPKBhe3Sz-bUxOUwvZxVhmbTIYoUbB3iHptulg
+                                    refreshToken:
+                                        type: string
+                                        example: 88d21f79434cfc17fd572b204e561f801e72192ae454eec04134d38dc15af7ef46acdab92fd3c933475cd3071ab5506d6b302b591e796f24eb294064befbf7a2
                         '400':
                             description: Bad Request
                         '401':
