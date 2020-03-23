@@ -64,13 +64,17 @@ class DoctorManager
      * @param Doctor $doctor
      * @throws Exception
      */
-    public function registerDoctor(Doctor $doctor): void
+    public function registerDoctor(Doctor $doctor, bool $leavePasswordEmpty = false, bool $bulked = false): void
     {
-        // encode password
-        $this->encodePassword($doctor);
+        if (!$leavePasswordEmpty) {
 
-        // generate confirmation token
-        $doctor->setConfirmationToken(Tools::generateToken());
+            // encode password
+            $this->encodePassword($doctor);
+
+            // generate confirmation token
+            $doctor->setConfirmationToken(Tools::generateToken());
+
+        }
 
         // automatically active doctor's account
         $doctor->setActive(true);
@@ -80,7 +84,13 @@ class DoctorManager
 
         // persist doctor in DB
         $this->em->persist($doctor);
-        $this->em->flush();
+
+        if (!$bulked) {
+
+            $this->em->flush();
+
+        }
+
     }
 
     /**

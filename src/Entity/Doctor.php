@@ -79,7 +79,7 @@ class Doctor implements UserInterface
     /**
      * @var string The doctor encoded password
      *
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $password;
 

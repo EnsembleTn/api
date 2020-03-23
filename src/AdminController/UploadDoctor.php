@@ -12,15 +12,11 @@ use App\Manager\DoctorManager;
 use App\Util\Tools;
 use Doctrs\SonataImportBundle\Entity\UploadFile;
 use Doctrs\SonataImportBundle\Form\Type\UploadFileType;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
 use Sonata\AdminBundle\Controller\CRUDController as CRUDControllerAlias;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class UploadDoctor extends CRUDControllerAlias
@@ -31,12 +27,19 @@ class UploadDoctor extends CRUDControllerAlias
     private $dm;
 
     /**
+     * @var ValidatorInterface
+     */
+    private $vi;
+
+    /**
      * UploadDoctor constructor.
      * @param DoctorManager $dm
+     * @param ValidatorInterface $vi
      */
-    public function __construct(DoctorManager $dm)
+    public function __construct(DoctorManager $dm, ValidatorInterface $vi)
     {
         $this->dm = $dm;
+        $this->vi = $vi;
     }
 
 
@@ -46,52 +49,51 @@ class UploadDoctor extends CRUDControllerAlias
             'method' => 'POST'
         ]);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                if (!$fileEntity->getFile()->getError()) {
-                    $fileEntity->move($this->getParameter('doctrs_sonata_import.upload_dir'));
-                    $data = [];
-                    $this->getDoctrine()->getManager()->persist($fileEntity);
-                    $this->getDoctrine()->getManager()->flush($fileEntity);
-                    $filee = $this->getDoctrine()->getRepository('DoctrsSonataImportBundle:UploadFile')->find($fileEntity);
-                    $extension = pathinfo($filee->getFile(), PATHINFO_EXTENSION);
-                    $i = 0 ;
-                    if ($extension === "txt") {
-                        $this->getDoctrine()->getConnection()->getConfiguration()->setSQLLogger(null);
-                        $data = Tools::csv_to_array($filee->getFile(), ',');
-                        foreach ($data as $key=>$value)
-                        {
-
-                            $doctor  = new Doctor();
-                            $name = Tools::split_name($value['Nom et Prénom']);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $fileEntity->getFile();
+            if (!$file->getError()) {
+                $extension = $file->guessExtension();
+                if (in_array($extension, ['txt'])) {
+                    $this->getDoctrine()->getConnection()->getConfiguration()->setSQLLogger(null);
+                    $rows = Tools::csv_to_array($file, ',');
+                    $emailConstraint = new EmailConstraint();
+                    foreach ($rows as $row)
+                    {
+                        $doctor  = new Doctor();
+                        $name = Tools::split_name($row['Nom et Prénom']);
+                        $email = $row['Email'];
+                        $emailValidationErrors = $this->vi->validate($email, $emailConstraint);
+                        if (count($emailValidationErrors) == 0) {
                             $doctor
-                                ->setEmail($value['email'])
-                                ->setPhoneNumber($value['Numèro de tèlèphone '])
-                                ->setRegion($value['Région'])
+                                ->setEmail($row['Email'])
+                                ->setPhoneNumber($row['Numèro de tèlèphone'])
+                                ->setRegion($row['Région'])
                                 ->setFirstName($name['firstName'])
                                 ->setLastName($name['lastName'])
-                                ->setActive(true)
-                                ->setPlainPassword(Tools::generateRandomPassword());
-                            if($value['Catégorie'] == 'Junior')
+                                ->setActive(true);
+                            if($row['Catégorie'] == 'Junior')
                             {
-                                $doctor->setCategory(1);
-                            }else $doctor->setCategory(2);
+                                $doctor->setCategory(Doctor::CATEGORY_JUNIOR);
+                            } else {
+                                $doctor->setCategory(Doctor::CATEGORY_SENIOR);
+                            }
+
+                            $this->dm->registerDoctor($doctor, true, true);
                         }
 
-                        $this->dm->registerDoctor($doctor);
-
-                    } else
-                    {
-                        $form->get('file')->addError(new FormError('Unsupported extension '));
                     }
 
+                    $this->getDoctrine()->getManager()->flush();
+                    $this->getDoctrine()->getManager()->clear();
+
                 } else {
-                    $form->get('file')->addError(new FormError($fileEntity->getFile()->getErrorMessage()));
+                    $form->get('file')->addError(new FormError('Unsupported extension '));
                 }
+
+            } else {
+                $form->get('file')->addError(new FormError($file->getErrorMessage()));
             }
         }
-
-
 
         $builder = $this->get('sonata.admin.pool')
             ->getInstance($this->admin->getCode())
