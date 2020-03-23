@@ -40,7 +40,7 @@ class PatientManager
     public function save(Patient $patient): void
     {
         // generate GUID
-        $patient->setGuid(Tools::generateGUID('PAT', 12));
+        $patient->setGuid(Tools::generateGUID('PAT', 8));
 
         // set status ON_HOLD
         $patient->setStatus(Patient::STATUS_ON_HOLD);

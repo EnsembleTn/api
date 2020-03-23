@@ -76,7 +76,7 @@ class DoctorManager
         $doctor->setActive(true);
 
         // generate GUID
-        $doctor->setGuid(Tools::generateGUID('DCT', 12));
+        $doctor->setGuid(Tools::generateGUID('DCT', 8));
 
         // persist doctor in DB
         $this->em->persist($doctor);
