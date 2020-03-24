@@ -4,6 +4,7 @@ namespace App\Action\Patient;
 
 use App\Action\BaseAction;
 use App\Entity\Patient;
+use App\Manager\DoctorManager;
 use App\Manager\PatientManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -41,17 +42,27 @@ class Treat extends BaseAction
      * @Rest\View(serializerGroups={"treat"})
      * @param Request $request
      * @param PatientManager $pm
+     * @param DoctorManager $dm
      * @return View
      */
-    public function __invoke(Request $request, PatientManager $pm)
+    public function __invoke(Request $request, PatientManager $pm, DoctorManager $dm)
     {
-        $patient = $pm->treat();
+        $doctor = $dm->getCurrentDoctor();
+
+        // get first on hold patient in queue
+        $patient = $pm->treat($doctor);
+
+        if ($patient) {
+            // automatically update patient status to IN_PROGRESS
+            $doctor->isEmergencyDoctor() ? $patient->setEmergencyStatus(Patient::STATUS_IN_PROGRESS) : $patient->setStatus(Patient::STATUS_IN_PROGRESS);
+            $pm->update($patient);
+        }
 
         return $this->jsonResponse(
             Response::HTTP_OK,
             'Patient resource get success',
             [
-                'patient' => $patient
+                'patient' => $patient ? $patient : []
             ]
         );
     }

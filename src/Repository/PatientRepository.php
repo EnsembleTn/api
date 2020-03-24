@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Doctor;
 use App\Entity\Patient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -18,13 +19,21 @@ class PatientRepository extends ServiceEntityRepository
         parent::__construct($registry, Patient::class);
     }
 
-    public function findAll()
+    public function findAllCustom(Doctor $doctor)
     {
-        return $this->findBy([], ['createdAt' => 'ASC']);
+        return $doctor->isEmergencyDoctor() ?
+            $this->findBy(['flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT]], ['createdAt' => 'ASC']) :
+            $this->findBy([], ['createdAt' => 'ASC']);
     }
 
-    public function first($status = Patient::STATUS_ON_HOLD)
+    public function first(Doctor $doctor)
     {
-        return $this->findBy(['status' => $status], ['createdAt' => 'ASC'], 1);
+        if ($doctor->isEmergencyDoctor()) {
+            $arrayResult = $this->findBy(['emergencyStatus' => Patient::STATUS_ON_HOLD, 'flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT]], ['createdAt' => 'ASC'], 1);
+        } else {
+            $arrayResult = $this->findBy(['status' => Patient::STATUS_ON_HOLD, 'flag' => null], ['createdAt' => 'ASC'], 1);
+        }
+
+        return $arrayResult ? $arrayResult[0] : null;
     }
 }

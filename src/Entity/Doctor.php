@@ -40,6 +40,12 @@ class Doctor implements UserInterface
     const CATEGORY_SENIOR = "SENIOR";
     const CATEGORY_JUNIOR = "JUNIOR";
 
+
+    //doctor role
+
+    const ROLE_DOCTOR = "ROLE_DOCTOR";
+    const ROLE_EMERGENCY_DOCTOR = "ROLE_EMERGENCY_DOCTOR";
+
     // <editor-fold defaultstate="collapsed" desc="traits">
 
     use TimestampableTrait;
@@ -454,6 +460,11 @@ class Doctor implements UserInterface
             self::CATEGORY_JUNIOR,
             self::CATEGORY_SENIOR
         ];
+    }
+
+    public function isEmergencyDoctor()
+    {
+        return in_array('ROLE_EMERGENCY_DOCTOR', $this->roles);
     }
 
     // </editor-fold>

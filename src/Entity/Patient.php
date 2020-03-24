@@ -46,6 +46,13 @@ class Patient
     const STATUS_IN_PROGRESS = 'IN_PROGRESS';
     const STATUS_CLOSED = 'CLOSED';
 
+    //patient status
+
+    const FLAG_STABLE = 'STABLE';
+    const FLAG_SUSPECT = 'SUSPECT';
+    const FLAG_URGENT = 'URGENT';
+
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -102,6 +109,16 @@ class Patient
      * @ORM\Column(type="string", length=20, nullable=false)
      */
     private $status;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $emergencyStatus;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $flag;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="patient", orphanRemoval=true, cascade={"persist"})
@@ -204,12 +221,41 @@ class Patient
         return $this;
     }
 
-    public static function getStatusesList()
+    public static function getStatusesList($manageable = false)
+    {
+        return $manageable ?  [self::STATUS_CLOSED] : [self::STATUS_ON_HOLD, self::STATUS_IN_PROGRESS, self::STATUS_CLOSED] ;
+    }
+
+    public function getEmergencyStatus(): ?string
+    {
+        return $this->emergencyStatus;
+    }
+
+    public function setEmergencyStatus(string $emergencyStatus): self
+    {
+        $this->emergencyStatus = $emergencyStatus;
+
+        return $this;
+    }
+
+    public function getFlag(): ?string
+    {
+        return $this->flag;
+    }
+
+    public function setFlag(string $flag): self
+    {
+        $this->flag = $flag;
+
+        return $this;
+    }
+
+    public static function getFlagsList()
     {
         return [
-            self::STATUS_ON_HOLD,
-            self::STATUS_IN_PROGRESS,
-            self::STATUS_CLOSED,
+            self::FLAG_STABLE,
+            self::FLAG_SUSPECT,
+            self::FLAG_URGENT,
         ];
     }
 

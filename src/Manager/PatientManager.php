@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Entity\Doctor;
 use App\Entity\Patient;
 use App\Util\Tools;
 use Doctrine\ORM\EntityManagerInterface;
@@ -52,19 +53,24 @@ class PatientManager
     /**
      * Load patients list
      * @param bool $sorted
+     * @param Doctor $doctor
      * @return array|object[]
      */
-    public function getAll($sorted = true)
+    public function getAll(Doctor $doctor, $sorted = true)
     {
-        $patients = $this->em->getRepository(Patient::class)->findAll();
+        $patients = $this->em->getRepository(Patient::class)->findAllCustom($doctor);
 
         if ($sorted) {
             $onHold = [];
             $inProgress = [];
             $closed = [];
 
+            $typeOfStatusToCallMethod = $doctor->isEmergencyDoctor() ? 'getEmergencyStatus' : 'getStatus';
+
             foreach ($patients as $patient) {
-                switch ($patient->getStatus()) {
+
+
+                switch (call_user_func([$patient, $typeOfStatusToCallMethod])) {
                     case Patient::STATUS_ON_HOLD :
                         $onHold[] = $patient;
                         break;
@@ -111,16 +117,23 @@ class PatientManager
 
     public function update(Patient $patient)
     {
+        if ($patient->getFlag() && $patient->getEmergencyStatus() == null) {
+            //once the flag is set the patient case is closed for doctors and opened for emergency doctors
+            $patient->setStatus(Patient::STATUS_CLOSED);
+            $patient->setEmergencyStatus(Patient::STATUS_ON_HOLD);
+        }
+
         $this->em->persist($patient);
         $this->em->flush();
     }
 
     /**
-     * get first on hold patient in queue
+     * get first patient in queue depending on doctor role
+     * @param Doctor $doctor
+     * @return Patient|null
      */
-    public function treat()
+    public function treat(Doctor $doctor): ?Patient
     {
-
-        return $this->em->getRepository(Patient::class)->first();
+        return $this->em->getRepository(Patient::class)->first($doctor);
     }
 }

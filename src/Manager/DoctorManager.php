@@ -5,6 +5,7 @@ namespace App\Manager;
 use App\Dto\ChangePasswordRequest;
 use App\Dto\ResetPasswordRequest;
 use App\Entity\Doctor;
+use App\Entity\Patient;
 use App\Util\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -244,4 +245,26 @@ class DoctorManager
         return $this->passwordEncoder->isPasswordValid($doctor, $password);
     }
 
+    /**
+     * @param Patient $patient
+     * @throws Exception
+     */
+    public function canUpdatePatient(Patient $patient)
+    {
+        if ($this->getCurrentDoctor()->isEmergencyDoctor()) {
+            if (!$patient->getFlag())
+                throw new Exception('Emergency doctor can\'t update unflagged patient.');
+            if ($patient->getEmergencyStatus() == Patient::STATUS_CLOSED)
+                throw new Exception('Closed patient case can\'t be updated anymore.');
+            if ($patient->getEmergencyStatus() == Patient::STATUS_ON_HOLD)
+                throw new Exception('Patient case emergencyStatus field must be IN_PROGRESS to be updated.');
+        } else {
+
+            if ($patient->getStatus() == Patient::STATUS_CLOSED)
+                throw new Exception('Closed patient case can\'t be updated anymore.');
+            if ($patient->getStatus() == Patient::STATUS_ON_HOLD)
+                throw new Exception('Patient case status field must be IN_PROGRESS to be updated.');
+        }
+
+    }
 }
