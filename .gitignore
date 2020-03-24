@@ -12,6 +12,11 @@
 ###> env
 .idea
 ###<
+
+###> uploads
+public/uploads
+###<
+
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###

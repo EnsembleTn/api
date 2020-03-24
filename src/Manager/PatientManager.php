@@ -156,6 +156,10 @@ class PatientManager
         return $this->em->getRepository(Patient::class)->first($doctor);
     }
 
+    /**
+     * @param Patient $patient
+     * @return string|null
+     */
     public function canSubmit(Patient $patient): ?string
     {
         if (!$patients = $this->getByPhoneNUmber($patient->getPhoneNumber(), 'DESC'))

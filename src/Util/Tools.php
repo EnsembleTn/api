@@ -138,4 +138,16 @@ class Tools
 
         return strtr($string, $table);
     }
+
+    /**
+     * Checking whether the Base64 encoded string is correct or not
+     *
+     * @param string $base64string
+     *
+     * @return bool
+     */
+    public static function isBase64String(?string $base64string): bool
+    {
+        return (base64_encode(base64_decode($base64string, true)) === $base64string);
+    }
 }

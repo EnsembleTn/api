@@ -8,9 +8,13 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
+ * Class PatientRepository
+ *
  * @method Patient|null find($id, $lockMode = null, $lockVersion = null)
  * @method Patient|null findOneBy(array $criteria, array $orderBy = null)
  * @method Patient[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @author Daly Ghaith <daly.ghaith@gmail.com>
  */
 class PatientRepository extends ServiceEntityRepository
 {

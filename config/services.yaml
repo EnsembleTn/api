@@ -7,6 +7,8 @@ parameters:
     mailer_user: '%env(MAILER_USER)%'
     front_end_server: '%env(FRONT_END_SERVER)%'
     back_end_server: '%env(BACK_END_SERVER)%'
+    upload_files_to_server: '%env(UPLOAD_FILES_TO_SERVER)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -42,3 +44,10 @@ services:
     App\EventListener\NotifyDoctorEventListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+
+    app.listener.file_upload:
+        class: App\EventListener\FileUploadListener
+        arguments: []
+        tags:
+            - { name: kernel.event_listener, event: generic.file.upload, method: onUploadableObjectCall }

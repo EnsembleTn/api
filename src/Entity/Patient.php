@@ -3,14 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\Traits\ObjectMetaDataTrait;
-use App\Entity\Traits\SoftDeleteableTrait;
 use App\Entity\Traits\TimestampableTrait;
 use App\Validator\constraints\CollectionSameItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class Patient
@@ -25,7 +23,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     variable="question",
  *     message="duplicate response for question with id =%variable% "
  * )
- *
  */
 class Patient
 {

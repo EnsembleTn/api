@@ -26,28 +26,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class Register extends BaseAction
 {
     /**
-     * @var DoctorManager
-     */
-    private $dm;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $dispatcher;
-
-    /**
-     * Register constructor.
-     *
-     * @param DoctorManager $dm
-     * @param EventDispatcherInterface $dispatcher
-     */
-    public function __construct(DoctorManager $dm, EventDispatcherInterface $dispatcher)
-    {
-        $this->dm = $dm;
-        $this->dispatcher = $dispatcher;
-    }
-
-    /**
      * Doctor Registration
      *
      * Create doctor account
@@ -68,10 +46,12 @@ class Register extends BaseAction
      *
      * @Rest\View()
      * @param Request $request
+     * @param DoctorManager $dm
+     * @param EventDispatcherInterface $dispatcher
      * @return View|FormInterface
      * @throws Exception
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, DoctorManager $dm, EventDispatcherInterface $dispatcher)
     {
         $doctor = new Doctor();
         $form = $this->createForm(RegistrationType::class, $doctor);
@@ -82,9 +62,9 @@ class Register extends BaseAction
             return $form;
         }
 
-        $this->dm->registerDoctor($doctor);
+        $dm->registerDoctor($doctor);
 
-        $this->dispatcher->dispatch( new DoctorEvent($doctor), DoctorEvents::DOCTOR_REGISTRATION_SUCCESS);
+        $dispatcher->dispatch( new DoctorEvent($doctor), DoctorEvents::DOCTOR_REGISTRATION_SUCCESS);
 
         return $this->JsonResponse(
             Response::HTTP_CREATED,
