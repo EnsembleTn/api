@@ -50,7 +50,7 @@ class AppFixtures extends Fixture
             [
                 "fr_value" => "Avez-vous de l’hypertension artérielle ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez-vous un traitement à visée cardiologique ?",
                 "ar_value" => "هل تعاني من ارتفاع ضغط الدم؟ أو لديك مرض القلب أو الأوعية الدموية؟ هل  تأخذ علاج للقلب ؟",
-                "type" => Question::TYPE_YES_OR_NO_NEUTRAL,
+                "type" => Question::TYPE_YES_OR_NO,
                 "category" => Question::CATEGORY_ANTECEDENT
             ],
             [
@@ -74,7 +74,7 @@ class AppFixtures extends Fixture
             [
                 "fr_value" => "Êtes vous enceinte ?",
                 "ar_value" => "هل أنت حامل ؟",
-                "type" => Question::TYPE_YES_OR_NO_NOT_APPLICABLE,
+                "type" => Question::TYPE_YES_OR_NO,
                 "category" => Question::CATEGORY_ANTECEDENT
             ],
             [
