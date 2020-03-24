@@ -40,6 +40,7 @@ class Post extends BaseAction
      *
      * @SWG\Response(response=200, description="Patient resource add success")
      * @SWG\Response(response=400, description="Validation Failed")
+     * @SWG\Response(response=403, description="Patient with phone number %phone number% can submit again in : %remaining time%")
      *
      * @SWG\Tag(name="Patient")
      *
@@ -56,7 +57,7 @@ class Post extends BaseAction
 
         // attach responses to patient
         $questions = $qm->getAll(false);
-        foreach ($questions as $question){
+        foreach ($questions as $question) {
             $response = new QuestionResponse();
             $response->setQuestion($question);
 
@@ -67,6 +68,13 @@ class Post extends BaseAction
         $form->submit($request->request->all());
         if (!$form->isValid()) {
             return $form;
+        }
+
+        if ($timeToSubmitAgain = $pm->canSubmit($patient)) {
+            return $this->jsonResponse(
+                Response::HTTP_FORBIDDEN,
+                "Patient with phone number {$patient->getPhoneNumber()} can submit again in : {$timeToSubmitAgain}"
+            );
         }
 
         $pm->save($patient);

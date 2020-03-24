@@ -19,10 +19,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="patient")
  * @ORM\Entity(repositoryClass="App\Repository\PatientRepository")
- * @UniqueEntity(
- *     fields={"phoneNumber"},
- *     message="This phoneNumber address is already used.",
- * )
  * @CollectionSameItem(
  *     collection="responses",
  *     errorPath="question",

@@ -16,6 +16,11 @@ use Exception;
 class PatientManager
 {
     /**
+     * TTL for submitting cases
+     */
+    const RETRY_TTL = 21600; // 6 hours
+
+    /**
      * @var EntityManagerInterface
      */
     private $em;
@@ -115,6 +120,20 @@ class PatientManager
         ]);
     }
 
+    /**
+     * Load patients by phoneNumber
+     *
+     * @param int $phoneNumber
+     * @param string $orderBy
+     * @return object[]|null
+     */
+    public function getByPhoneNUmber(int $phoneNumber, $orderBy = 'ASC')
+    {
+        return $this->em->getRepository(Patient::class)->findBy([
+            'phoneNumber' => $phoneNumber
+        ], ['createdAt' => 'DESC']);
+    }
+
     public function update(Patient $patient)
     {
         if ($patient->getFlag() && $patient->getEmergencyStatus() == null) {
@@ -135,5 +154,20 @@ class PatientManager
     public function treat(Doctor $doctor): ?Patient
     {
         return $this->em->getRepository(Patient::class)->first($doctor);
+    }
+
+    public function canSubmit(Patient $patient): ?string
+    {
+        if (!$patients = $this->getByPhoneNUmber($patient->getPhoneNumber(), 'DESC'))
+            return null;
+
+        $reversedPatientsArray = array_reverse($patients);
+
+        if (($lastCase = array_pop($reversedPatientsArray))->getCreatedAt()->getTimestamp() + self::RETRY_TTL > time()) {
+
+            return date('H:i:s', $lastCase->getCreatedAt()->getTimestamp() + self::RETRY_TTL - (time() + 3600)); // adding 3600s to fix timezone;
+        }
+
+        return null;
     }
 }
