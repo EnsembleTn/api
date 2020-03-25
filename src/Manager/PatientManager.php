@@ -61,16 +61,16 @@ class PatientManager
      * @param Doctor $doctor
      * @return array|object[]
      */
-    public function getAll(Doctor $doctor, $sorted = true)
+    public function getAll(Doctor $doctor = null, $sorted = true)
     {
-        $patients = $this->em->getRepository(Patient::class)->findAllCustom($doctor);
+        $patients = $doctor ? $this->em->getRepository(Patient::class)->findAllCustom($doctor) : $this->em->getRepository(Patient::class)->findAll();
 
         if ($sorted) {
             $onHold = [];
             $inProgress = [];
             $closed = [];
 
-            $typeOfStatusToCallMethod = $doctor->isEmergencyDoctor() ? 'getEmergencyStatus' : 'getStatus';
+            $typeOfStatusToCallMethod = $doctor && $doctor->isEmergencyDoctor() ? 'getEmergencyStatus' : 'getStatus';
 
             foreach ($patients as $patient) {
 
@@ -173,5 +173,32 @@ class PatientManager
         }
 
         return null;
+    }
+
+    public function revertAll()
+    {
+        $batchSize = 20;
+        $counter = 0;
+
+        foreach ($this->getAll(null, false) as $patient) {
+            // used for batch processing
+            $counter++;
+
+            $patient
+                ->setStatus(Patient::STATUS_ON_HOLD)
+                ->setEmergencyStatus(null)
+                ->setFlag(null)
+                ->setDoctor(null);
+
+            $this->update($patient);
+
+            if (($counter % $batchSize) === 0) {
+                $this->em->flush();
+                $this->em->clear();
+            }
+        }
+
+        $this->em->flush();
+        $this->em->clear();
     }
 }

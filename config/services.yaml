@@ -8,6 +8,12 @@ parameters:
     front_end_server: '%env(FRONT_END_SERVER)%'
     back_end_server: '%env(BACK_END_SERVER)%'
     upload_files_to_server: '%env(UPLOAD_FILES_TO_SERVER)%'
+    tt_sms_gateway: '%env(TT_SMS_GATEWAY)%'
+    tt_sms_username: '%env(TT_SMS_USERNAME)%'
+    tt_sms_password: '%env(TT_SMS_PASSWORD)%'
+    tt_sms_sender_app_id: '%env(TT_SMS_SENDER_APP_ID)%'
+    tt_sms_soa: '%env(TT_SMS_SOA)%'
+    tt_sms_flags: '%env(TT_SMS_FLAGS)%'
 
 services:
     # default configuration for services in *this* file

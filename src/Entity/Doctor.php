@@ -7,6 +7,8 @@ use App\Entity\Traits\SoftDeleteableTrait;
 use App\Entity\Traits\TimestampableTrait;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -198,12 +200,19 @@ class Doctor implements UserInterface
 
     // <editor-fold defaultstate="collapsed" desc="relations">
 
+    /**
+     * One doctor treats many features
+     * @ORM\OneToMany(targetEntity="Patient", mappedBy="doctor")
+     */
+    private $patients;
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="methods">
 
     public function __construct()
     {
+        $this->patients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -450,6 +459,37 @@ class Doctor implements UserInterface
     public function setCategory(string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Patient
+     */
+    public function getPatients(): Collection
+    {
+        return $this->patients;
+    }
+
+    public function addPatient(Patient $patient): self
+    {
+        if (!$this->patients->contains($patient)) {
+            $this->patients[] = $patient;
+            $patient->setDoctor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePatient(Patient $patient): self
+    {
+        if ($this->patients->contains($patient)) {
+            $this->patients->removeElement($patient);
+            // set the owning side to null (unless already changed)
+            if ($patient->getDoctor() === $this) {
+                $patient->setDoctor(null);
+            }
+        }
 
         return $this;
     }

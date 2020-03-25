@@ -55,6 +55,7 @@ class Patch extends BaseAction
      * @SWG\Response(response=200, description="Patient resource patch success")
      * @SWG\Response(response=400, description="Validation Failed")
      * @SWG\Response(response=401, description="JWT Token not found / Invalid JWT Token / Identity has changed")
+     * @SWG\Response(response=403, description="Patient case status was returned to ON_HOLD by the cron due to inactivity.")
      * @SWG\Response(response=404, description="App\\Entity\\Patient object not found by the @ParamConverter annotation.")
      *
      * @SWG\Tag(name="Patient")
@@ -71,6 +72,14 @@ class Patch extends BaseAction
         try {
             $dm->canUpdatePatient($patient);
         } catch (Exception $e) {
+
+            // used to indicate that this case was returned to ON_HOLD due to inactivity by the cron.
+            if ($e->getCode() == Response::HTTP_FORBIDDEN) {
+                return $this->jsonResponse(
+                    Response::HTTP_FORBIDDEN,
+                    $e->getMessage()
+                );
+            }
             return $this->jsonResponse(
                 Response::HTTP_BAD_REQUEST,
                 $e->getMessage()
@@ -82,6 +91,9 @@ class Patch extends BaseAction
         if (!$form->isValid()) {
             return $form;
         }
+
+        // attach tha patient to the doctor
+        $patient->setDoctor($dm->getCurrentDoctor());
 
         $pm->update($patient);
 

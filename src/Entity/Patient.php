@@ -114,6 +114,12 @@ class Patient
     private $flag;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Doctor", inversedBy="patients")
+     * @ORM\JoinColumn(name="doctor_id", referencedColumnName="id")
+     */
+    private $doctor;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="patient", orphanRemoval=true, cascade={"persist"})
      *
      * @Assert\Valid()
@@ -224,7 +230,7 @@ class Patient
         return $this->emergencyStatus;
     }
 
-    public function setEmergencyStatus(string $emergencyStatus): self
+    public function setEmergencyStatus(?string $emergencyStatus): self
     {
         $this->emergencyStatus = $emergencyStatus;
 
@@ -236,7 +242,7 @@ class Patient
         return $this->flag;
     }
 
-    public function setFlag(string $flag): self
+    public function setFlag(?string $flag): self
     {
         $this->flag = $flag;
 
@@ -315,6 +321,25 @@ class Patient
                 $response->setPatient(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Doctor
+     */
+    public function getDoctor()
+    {
+        return $this->doctor;
+    }
+
+    /**
+     * @param Doctor $doctor
+     * @return Patient
+     */
+    public function setDoctor(?Doctor $doctor): self
+    {
+        $this->doctor = $doctor;
 
         return $this;
     }
