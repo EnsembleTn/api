@@ -176,13 +176,7 @@ class PatientManager
 
     public function revertAll()
     {
-        $batchSize = 20;
-        $counter = 0;
-
         foreach ($this->getAll(null, false) as $patient) {
-            // used for batch processing
-            $counter++;
-
             $patient
                 ->setStatus(Patient::STATUS_ON_HOLD)
                 ->setEmergencyStatus(null)
@@ -190,11 +184,6 @@ class PatientManager
                 ->setDoctor(null);
 
             $this->update($patient);
-
-            if (($counter % $batchSize) === 0) {
-                $this->em->flush();
-                $this->em->clear();
-            }
         }
 
         $this->em->flush();
