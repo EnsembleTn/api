@@ -142,7 +142,6 @@ class PatientManager
             $patient->setEmergencyStatus(Patient::STATUS_ON_HOLD);
         }
 
-        $this->em->persist($patient);
         $this->em->flush();
     }
 
