@@ -42,7 +42,7 @@ class TTSMSing implements SMSInterface
     /**
      * @inheritDoc
      */
-    function send(int $destinationAddress, string $content): string
+    function send(int $destinationAddress, string $content): void
     {
         if (!$this->validate($destinationAddress, $content))
             return;

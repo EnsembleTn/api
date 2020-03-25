@@ -83,6 +83,9 @@ class Patch extends BaseAction
             return $form;
         }
 
+        // attach tha patient to the doctor
+        $patient->setDoctor($dm->getCurrentDoctor());
+
         $pm->update($patient);
 
         return $this->jsonResponse(

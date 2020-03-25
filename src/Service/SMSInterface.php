@@ -16,5 +16,5 @@ interface SMSInterface
      * @param string $content
      * @return string
      */
-    function send(int $destinationAddress, string $content): string ;
+    function send(int $destinationAddress, string $content): void ;
 }
