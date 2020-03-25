@@ -230,7 +230,7 @@ class Patient
         return $this->emergencyStatus;
     }
 
-    public function setEmergencyStatus(string $emergencyStatus): self
+    public function setEmergencyStatus(?string $emergencyStatus): self
     {
         $this->emergencyStatus = $emergencyStatus;
 
@@ -242,7 +242,7 @@ class Patient
         return $this->flag;
     }
 
-    public function setFlag(string $flag): self
+    public function setFlag(?string $flag): self
     {
         $this->flag = $flag;
 
@@ -337,7 +337,7 @@ class Patient
      * @param Doctor $doctor
      * @return Patient
      */
-    public function setDoctor(Doctor $doctor): self
+    public function setDoctor(?Doctor $doctor): self
     {
         $this->doctor = $doctor;
 
