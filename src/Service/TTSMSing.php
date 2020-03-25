@@ -13,6 +13,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class TTSMSing implements SMSInterface
 {
+    CONST TN_PHONE_NUMBER_REGEX = '/^((\+|00)216)?([259][0-8]{7}|(3[012]|4[01])[0-9]{6})$/';
+    CONST SMS_LENGTH = 160;
+
     private $gateway;
     private $username;
     private $password;
@@ -44,7 +47,7 @@ class TTSMSing implements SMSInterface
 
         $client = new Client();
 
-        $request = new Request('GET', $this->gateway,[
+        $request = new Request('GET', $this->gateway, [
             'query' => [
                 'UserName' => $this->username,
                 'Password' => $this->password,
@@ -63,7 +66,7 @@ class TTSMSing implements SMSInterface
         $promise->wait();
     }
 
-    private function initParams ():void
+    private function initParams(): void
     {
         $this->gateway = $this->parameterBag->get('tt_sms_gateway');
         $this->username = $this->parameterBag->get('tt_sms_username');
@@ -73,9 +76,9 @@ class TTSMSing implements SMSInterface
         $this->flags = $this->parameterBag->get('tt_sms_flags');
     }
 
-    private function validate(): bool
+    private function validate(int $destinationAddress, string $content): bool
     {
-
+        return (!preg_match(self::TN_PHONE_NUMBER_REGEX, $destinationAddress) or strlen($content) > self::SMS_LENGTH);
     }
 
 }
