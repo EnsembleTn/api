@@ -229,8 +229,6 @@ class DoctorManager
     private function encodePassword(Doctor $doctor): void
     {
         $doctor->setPassword($this->passwordEncoder->encodePassword($doctor, $doctor->getPlainPassword()));
-
-        // erase sensitive data
     }
 
     /**
@@ -257,14 +255,13 @@ class DoctorManager
             if ($patient->getEmergencyStatus() == Patient::STATUS_CLOSED)
                 throw new Exception('Closed patient case can\'t be updated anymore.');
             if ($patient->getEmergencyStatus() == Patient::STATUS_ON_HOLD)
-                throw new Exception('Patient case emergencyStatus field must be IN_PROGRESS to be updated.');
+                throw new Exception('Patient case status was returned to ON_HOLD by the cron due to inactivity.', 403);
         } else {
 
             if ($patient->getStatus() == Patient::STATUS_CLOSED)
                 throw new Exception('Closed patient case can\'t be updated anymore.');
             if ($patient->getStatus() == Patient::STATUS_ON_HOLD)
-                throw new Exception('Patient case status field must be IN_PROGRESS to be updated.');
+                throw new Exception('Patient case status was returned to ON_HOLD by the cron due to inactivity.', 403);
         }
-
     }
 }
