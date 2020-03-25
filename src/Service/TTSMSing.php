@@ -43,6 +43,9 @@ class TTSMSing implements SMSInterface
      */
     function send(int $destinationAddress, string $content): string
     {
+        if (!$this->validate($destinationAddress, $content))
+            return;
+        
         $this->initParams();
 
         $client = new Client();
