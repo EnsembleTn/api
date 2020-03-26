@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\Uploadable;
 use App\Entity\Traits\ObjectMetaDataTrait;
 use App\Entity\Traits\TimestampableTrait;
 use App\Validator\constraints\CollectionSameItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ReflectionException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     message="duplicate response for question with id =%variable% "
  * )
  */
-class Patient
+class Patient implements Uploadable
 {
     // <editor-fold defaultstate="collapsed" desc="traits">
 
@@ -342,5 +344,14 @@ class Patient
         $this->doctor = $doctor;
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     * @throws ReflectionException
+     */
+    public function getUploadPath(): string
+    {
+        return sprintf('%s/%s/', strtolower($this->getClass()), date('Ymd'));
     }
 }

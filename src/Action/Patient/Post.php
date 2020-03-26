@@ -3,7 +3,9 @@
 namespace App\Action\Patient;
 
 use App\Action\BaseAction;
+use App\ApiEvents\GenericEvents;
 use App\Entity\Patient;
+use App\Event\FileUploadEvent;
 use App\Form\PatientType;
 use App\Manager\PatientManager;
 use App\Manager\QuestionManager;
@@ -12,10 +14,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Response as QuestionResponse;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Post
@@ -48,10 +52,12 @@ class Post extends BaseAction
      * @param Request $request
      * @param PatientManager $pm
      * @param QuestionManager $qm
+     * @param EventDispatcherInterface $dispatcher
+     * @param ParameterBagInterface $parameters
      * @return View|FormInterface
      * @throws Exception
      */
-    public function __invoke(Request $request, PatientManager $pm, QuestionManager $qm)
+    public function __invoke(Request $request, PatientManager $pm, QuestionManager $qm, EventDispatcherInterface $dispatcher, ParameterBagInterface $parameters)
     {
         $patient = new Patient();
 
@@ -78,6 +84,14 @@ class Post extends BaseAction
         }
 
         $pm->save($patient);
+
+        // dispatch file upload event
+        $dispatcher->dispatch(new FileUploadEvent(
+            $patient,
+            $form->get('audio')->getData(),
+            $parameters->get('upload_files_to_server') === 'true' ? true : false
+        ), GenericEvents::FILE_UPLOAD);
+
 
         return $this->jsonResponse(
             Response::HTTP_CREATED,

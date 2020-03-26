@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class InformerType
@@ -18,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class InformerType extends AbstractType
 {
+    CONST SIZE = 2000000 ; // 2Mo
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -30,12 +33,13 @@ class InformerType extends AbstractType
             ->add('culpableLastName')
             ->add('culpableAddress')
             ->add('comment')
-            ->add('file', TextType::class, [
+            ->add('image', TextType::class, [
                 'mapped' => false,
                 'constraints' => [
+                    new NotBlank(),
                     new Base64StringConstraint(),
                     new FileSizeConstraint([
-                        'size' => 2048
+                        'size' => self::SIZE
                     ]),
                     new FileMimeTypeConstraint([
                         'mimeTypes' => [

@@ -76,7 +76,7 @@ class Post extends BaseAction
         // dispatch file upload event
         $dispatcher->dispatch(new FileUploadEvent(
             $informer,
-            $form->get('file')->getData(),
+            $form->get('image')->getData(),
             $parameters->get('upload_files_to_server') === 'true' ? true : false
         ), GenericEvents::FILE_UPLOAD);
         
