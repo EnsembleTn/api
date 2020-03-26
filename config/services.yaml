@@ -57,3 +57,8 @@ services:
         arguments: []
         tags:
             - { name: kernel.event_listener, event: generic.file.upload, method: onUploadableObjectCall }
+
+    app.command.revert-patients:
+        class: App\Command\RevertPatients
+        tags:
+            -  { name: console.command }
