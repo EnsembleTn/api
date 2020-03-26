@@ -34,7 +34,7 @@ class FileUploadEvent extends Event
      * @param string $base64EncodedFile
      * @param bool $uploadToServer
      */
-    public function __construct($object, string $base64EncodedFile, bool $uploadToServer)
+    public function __construct($object, ?string $base64EncodedFile, bool $uploadToServer)
     {
         $this->object = $object;
         $this->base64EncodedFile = $base64EncodedFile;
@@ -49,7 +49,7 @@ class FileUploadEvent extends Event
         return $this->object;
     }
 
-    public function getBase64EncodedFile(): string
+    public function getBase64EncodedFile(): ?string
     {
         return $this->base64EncodedFile;
     }

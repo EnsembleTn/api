@@ -33,7 +33,7 @@ class PatientType extends AbstractType
             ->add('audio', TextType::class, [
                 'mapped' => false,
                 'constraints' => [
-                    new NotBlank(),
+                    //new NotBlank(),
                     new Base64StringConstraint(),
                     new FileSizeConstraint([
                         'size' => self::SIZE
