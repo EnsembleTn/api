@@ -103,6 +103,16 @@ class Patient implements Uploadable
     /**
      * @ORM\Column(type="string", length=20, nullable=false)
      */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="string", length=160, nullable=true)
+     */
+    private $sms;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=false)
+     */
     private $status;
 
     /**
@@ -206,6 +216,30 @@ class Patient implements Uploadable
     public function setPhoneNumber(int $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getSms(): ?string
+    {
+        return $this->sms;
+    }
+
+    public function setSms(string $sms): self
+    {
+        $this->sms = $sms;
 
         return $this;
     }

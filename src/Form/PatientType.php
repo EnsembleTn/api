@@ -30,6 +30,7 @@ class PatientType extends AbstractType
             ->add('address')
             ->add('zipCode')
             ->add('phoneNumber')
+            ->add('gender')
             ->add('audio', TextType::class, [
                 'mapped' => false,
                 'constraints' => [
