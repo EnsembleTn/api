@@ -43,7 +43,8 @@ class PatientType extends AbstractType
                         'mimeTypes' => [
                             'audio/mpeg', //mp3
                             'audio/mp4',
-                            'audio/ogg'
+                            'audio/ogg',
+                            'audio/webm'
                         ]
                     ])
                 ],
