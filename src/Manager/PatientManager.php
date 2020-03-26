@@ -145,14 +145,6 @@ class PatientManager
         $this->em->flush();
     }
 
-    public function updateSMS(Patient $patient, string $content): void
-    {
-        $patient->setSms($content);
-
-        $this->em->persist($patient);
-        $this->em->flush();
-    }
-
     /**
      * get first patient in queue depending on doctor role
      * @param Doctor $doctor

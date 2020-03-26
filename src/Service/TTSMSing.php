@@ -2,9 +2,11 @@
 
 namespace App\Service;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class SMS
@@ -16,6 +18,7 @@ class TTSMSing implements SMSInterface
     CONST TN_PHONE_NUMBER_REGEX = '/^([259][0-8]{7}|(3[012]|4[01])[0-9]{6})$/';
     CONST SMS_LENGTH = 160;
     CONST TN_PHONE_NUMBER_PREFIX = '216';
+    CONST TT_SMS_GATEWAY_SUCCESS_CODE = '0';
 
     private $gateway;
     private $username;
@@ -63,8 +66,15 @@ class TTSMSing implements SMSInterface
             ]
         ]);
 
+        // Response coming from gateway is in text/html format, will be using dom crawler to retrieve status code
         $promise = $client->sendAsync($request)->then(function ($response) {
-            echo 'Completed! ' . $response->getBody();
+            $crawler = new Crawler($response->getBody());
+
+            $body = $crawler->filter('body')->text();
+            $statusCode = str_replace("Status=", "", strtok($body, "\n"));
+
+            if (self::TT_SMS_GATEWAY_SUCCESS_CODE !== $statusCode)
+                throw new Exception("Error when sending sms, exited with status code = {$statusCode}");
         });
 
         $promise->wait();
@@ -82,6 +92,6 @@ class TTSMSing implements SMSInterface
 
     private function validate(int $destinationAddress, string $content): bool
     {
-        return (!preg_match(self::TN_PHONE_NUMBER_REGEX, $destinationAddress) or strlen($content) > self::SMS_LENGTH);
+        return (preg_match(self::TN_PHONE_NUMBER_REGEX, $destinationAddress) and strlen($content) < self::SMS_LENGTH);
     }
 }

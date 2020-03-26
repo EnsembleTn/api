@@ -75,9 +75,7 @@ class Tools
     public static function generateRandomCode(int $length = 6): string
     {
         $chars = "123456789";
-        $code = substr(str_shuffle($chars), 0, $length);
-
-        return $code;
+        return substr(str_shuffle($chars), 0, $length);
     }
 
     /**

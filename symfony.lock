@@ -334,6 +334,9 @@
             "config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v4.4.5"
+    },
     "symfony/debug": {
         "version": "v4.4.5"
     },
@@ -341,6 +344,9 @@
         "version": "v4.4.5"
     },
     "symfony/doctrine-bridge": {
+        "version": "v4.4.5"
+    },
+    "symfony/dom-crawler": {
         "version": "v4.4.5"
     },
     "symfony/dotenv": {
