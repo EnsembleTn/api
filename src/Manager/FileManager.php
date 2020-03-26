@@ -75,18 +75,16 @@ class FileManager
     }
 
     /**
-     * Get file by type
+     * Get file
      *
      * @param mixed $object
-     * @param int $type
      * @return File|object|null
      */
-    public function getFileByType(object $object, int $type)
+    public function getFile(object $object)
     {
         return $this->em->getRepository(File::class)->findOneBy([
             'entity' => get_class($object),
             'objectId' => $object->getId(),
-            'type' => $type
         ]);
     }
 
