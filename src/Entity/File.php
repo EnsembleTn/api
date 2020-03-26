@@ -197,7 +197,7 @@ class File
         return $this;
     }
 
-    public function getBase64EncodedString(): string
+    public function getBase64EncodedString(): ?string
     {
         return $this->base64encodedString;
     }
