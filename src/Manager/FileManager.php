@@ -43,7 +43,7 @@ class FileManager
      * @param string $base64EncodedString
      * @param string $path
      */
-    public function newFile(object $object, string $base64EncodedString, string $path = null): void
+    public function newFile(object $object, ?string $base64EncodedString, string $path = null): void
     {
         $file = new File();
         $file

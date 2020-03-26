@@ -202,7 +202,7 @@ class File
         return $this->base64encodedString;
     }
 
-    public function setBase64EncodedString(string $base64EncodedString)
+    public function setBase64EncodedString(?string $base64EncodedString)
     {
         $this->base64encodedString = $base64EncodedString;
 

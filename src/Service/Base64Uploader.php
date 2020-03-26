@@ -35,7 +35,7 @@ class Base64Uploader implements Base64UploaderInterface
      * @param string $uploadPath
      * @return string
      */
-    public function upload(string $base64string, string $uploadPath): string
+    public function upload(?string $base64string, string $uploadPath): string
     {
         // random name for file
         $fileName = $this->generateFileName();
@@ -57,7 +57,7 @@ class Base64Uploader implements Base64UploaderInterface
      * @param string $base64string
      * @return string
      */
-    private function store(string $filePath, string $base64string): string
+    private function store(string $filePath, ?string $base64string): string
     {
         $file = fopen($filePath, 'wb');
         fwrite($file, base64_decode($base64string));
