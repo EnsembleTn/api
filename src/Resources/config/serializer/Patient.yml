@@ -1,7 +1,7 @@
 App\Entity\Patient:
 
     accessor_order: custom
-    custom_accessor_order: [guid, firstName, lastName, address, zipCode, phoneNumber, status, emergencyStatus, flag, responses, virtual_properties]
+    custom_accessor_order: [guid, firstName, lastName, address, zipCode, phoneNumber, gender, status, emergencyStatus, flag, responses, virtual_properties]
 
     virtual_properties:
         getGroupedResponses:
@@ -22,6 +22,8 @@ App\Entity\Patient:
             groups: ['patient', 'treat']
         phoneNumber:
             groups: ['patient-list', 'patient', 'treat']
+        gender:
+            groups: ['patient', 'treat']
         status:
             groups: ['patient-list', 'patient', 'treat']
         emergencyStatus:
