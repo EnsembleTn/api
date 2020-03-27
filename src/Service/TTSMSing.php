@@ -17,7 +17,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class TTSMSing implements SMSInterface
 {
     CONST TN_PHONE_NUMBER_REGEX = '/^([259][0-9]{7}|(3[012]|4[01])[0-9]{6})$/';
-    CONST SMS_LENGTH = 160;
+    CONST SMS_LENGTH = 620;
     CONST TN_PHONE_NUMBER_PREFIX = '216';
     CONST TT_SMS_GATEWAY_SUCCESS_CODE = '0';
 
