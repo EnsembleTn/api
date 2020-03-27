@@ -2,32 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\Patient;
+use App\Dto\Sms;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class PatientStatusType
+ * Class SmsType
  *
  * @author Daly Ghaith <daly.ghaith@gmail.com>
  */
-class PatientStatusType extends AbstractType
+class SmsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('status', ChoiceType::class, [
-                'choices' => Patient::getStatusesList()
-            ]);
+            ->add('content');
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Patient::class,
+            'data_class' => Sms::class,
         ]);
     }
 }

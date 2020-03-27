@@ -2,15 +2,19 @@
 
 namespace App\Repository;
 
+use App\Entity\Doctor;
 use App\Entity\Patient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
+ * Class PatientRepository
+ *
  * @method Patient|null find($id, $lockMode = null, $lockVersion = null)
  * @method Patient|null findOneBy(array $criteria, array $orderBy = null)
- * @method Patient[]    findAll()
  * @method Patient[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @author Daly Ghaith <daly.ghaith@gmail.com>
  */
 class PatientRepository extends ServiceEntityRepository
 {
@@ -19,32 +23,21 @@ class PatientRepository extends ServiceEntityRepository
         parent::__construct($registry, Patient::class);
     }
 
-    // /**
-    //  * @return Patient[] Returns an array of Patient objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllCustom(Doctor $doctor)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $doctor->isEmergencyDoctor() ?
+            $this->findBy(['flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT]], ['createdAt' => 'ASC']) :
+            $this->findBy([], ['createdAt' => 'ASC']);
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Patient
+    public function first(Doctor $doctor)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($doctor->isEmergencyDoctor()) {
+            $arrayResult = $this->findBy(['emergencyStatus' => Patient::STATUS_ON_HOLD, 'flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT]], ['createdAt' => 'ASC'], 1);
+        } else {
+            $arrayResult = $this->findBy(['status' => Patient::STATUS_ON_HOLD, 'flag' => null], ['createdAt' => 'ASC'], 1);
+        }
+
+        return $arrayResult ? $arrayResult[0] : null;
     }
-    */
 }

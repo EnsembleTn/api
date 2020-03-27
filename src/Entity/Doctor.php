@@ -7,6 +7,8 @@ use App\Entity\Traits\SoftDeleteableTrait;
 use App\Entity\Traits\TimestampableTrait;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -39,6 +41,12 @@ class Doctor implements UserInterface
 
     const CATEGORY_SENIOR = "SENIOR";
     const CATEGORY_JUNIOR = "JUNIOR";
+
+
+    //doctor role
+
+    const ROLE_DOCTOR = "ROLE_DOCTOR";
+    const ROLE_EMERGENCY_DOCTOR = "ROLE_EMERGENCY_DOCTOR";
 
     // <editor-fold defaultstate="collapsed" desc="traits">
 
@@ -79,7 +87,7 @@ class Doctor implements UserInterface
     /**
      * @var string The doctor encoded password
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
      */
     private $password;
 
@@ -175,7 +183,7 @@ class Doctor implements UserInterface
      *
      * @ORM\Column(type="json_array")
      */
-    private $roles = ['ROLE_DOCTOR'];
+    private $roles;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -191,12 +199,19 @@ class Doctor implements UserInterface
 
     // <editor-fold defaultstate="collapsed" desc="relations">
 
+    /**
+     * One doctor treats many features
+     * @ORM\OneToMany(targetEntity="Patient", mappedBy="doctor")
+     */
+    private $patients;
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="methods">
 
     public function __construct()
     {
+        $this->patients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -406,10 +421,7 @@ class Doctor implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_DOCTOR';
-
-        return array_unique($roles);
+        return is_array($this->roles) ? $this->roles : [];
     }
 
     public function setRoles(array $roles): self
@@ -450,6 +462,37 @@ class Doctor implements UserInterface
         return $this;
     }
 
+    /**
+     * @return Collection|Patient
+     */
+    public function getPatients(): Collection
+    {
+        return $this->patients;
+    }
+
+    public function addPatient(Patient $patient): self
+    {
+        if (!$this->patients->contains($patient)) {
+            $this->patients[] = $patient;
+            $patient->setDoctor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePatient(Patient $patient): self
+    {
+        if ($this->patients->contains($patient)) {
+            $this->patients->removeElement($patient);
+            // set the owning side to null (unless already changed)
+            if ($patient->getDoctor() === $this) {
+                $patient->setDoctor(null);
+            }
+        }
+
+        return $this;
+    }
+
     public static function getCategoriesList()
     {
         return [
@@ -461,6 +504,11 @@ class Doctor implements UserInterface
     public function __toString()
     {
      return $this->getFullname();
+    }
+
+    public function isEmergencyDoctor()
+    {
+        return in_array('ROLE_EMERGENCY_DOCTOR', $this->roles);
     }
 
     // </editor-fold>

@@ -7,6 +7,14 @@ parameters:
     mailer_user: '%env(MAILER_USER)%'
     front_end_server: '%env(FRONT_END_SERVER)%'
     back_end_server: '%env(BACK_END_SERVER)%'
+    upload_files_to_server: '%env(UPLOAD_FILES_TO_SERVER)%'
+    tt_sms_gateway: '%env(TT_SMS_GATEWAY)%'
+    tt_sms_username: '%env(TT_SMS_USERNAME)%'
+    tt_sms_password: '%env(TT_SMS_PASSWORD)%'
+    tt_sms_sender_app_id: '%env(TT_SMS_SENDER_APP_ID)%'
+    tt_sms_soa: '%env(TT_SMS_SOA)%'
+    tt_sms_flags: '%env(TT_SMS_FLAGS)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -29,6 +37,12 @@ services:
     sensio_framework_extra.view.guesser:
         class:     App\Templating\TemplateGuesser
         arguments: [ "@kernel" ]
+
+    gesdinet.jwtrefreshtoken.send_token:
+        class: App\EventListener\AttachRefreshTokenOnSuccessListener
+        arguments: [ "@gesdinet.jwtrefreshtoken.refresh_token_manager", "%gesdinet_jwt_refresh_token.ttl%", "@validator", "@request_stack", "%gesdinet_jwt_refresh_token.user_identity_field%", "%gesdinet_jwt_refresh_token.token_parameter_name%" ]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: attachRefreshToken }
 
     app.listener.authentication_success_response:
         class: App\EventListener\AuthenticationSuccessListener
@@ -66,3 +80,15 @@ services:
         arguments: [~, App\Entity\Response, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Responses, group: "Patient", show_mosaic_button: false   }
+
+
+    app.listener.file_upload:
+        class: App\EventListener\FileUploadListener
+        arguments: []
+        tags:
+            - { name: kernel.event_listener, event: generic.file.upload, method: onUploadableObjectCall }
+
+    app.command.revert-patients:
+        class: App\Command\RevertPatients
+        tags:
+            -  { name: console.command }

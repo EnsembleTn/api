@@ -18,9 +18,7 @@ class Question
     //question types
 
     const TYPE_YES_OR_NO = 1;
-    const TYPE_YES_OR_NO_NEUTRAL = 2;
-    const TYPE_YES_OR_NO_NOT_APPLICABLE = 3;
-    const TYPE_NORMAL = 4;
+    const TYPE_NORMAL = 2;
 
     //question categories
 
@@ -149,8 +147,9 @@ class Question
 
         return $this;
     }
+
     public function __toString()
     {
-        return (string)$this->id;
+        return (string) $this->id;
     }
 }

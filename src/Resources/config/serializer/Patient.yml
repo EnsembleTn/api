@@ -1,18 +1,34 @@
 App\Entity\Patient:
+
+    accessor_order: custom
+    custom_accessor_order: [guid, firstName, lastName, address, zipCode, phoneNumber, gender, status, emergencyStatus, flag, responses, virtual_properties]
+
+    virtual_properties:
+        getGroupedResponses:
+            serialized_name: responses
+            type: array
+            groups: ['treat']
+
     properties:
         guid:
-            groups: ['patient-list', 'patient']
+            groups: ['patient-list', 'patient', 'treat']
         firstName:
-            groups: ['patient-list', 'patient']
+            groups: ['patient-list', 'patient', 'treat']
         lastName:
-            groups: ['patient-list', 'patient']
+            groups: ['patient-list', 'patient', 'treat']
         address:
-            groups: [ 'patient']
+            groups: ['patient', 'treat']
         zipCode:
-            groups: ['patient']
+            groups: ['patient', 'treat']
         phoneNumber:
-            groups: ['patient-list', 'patient']
+            groups: ['patient-list', 'patient', 'treat']
+        gender:
+            groups: ['patient', 'treat']
         status:
-            groups: ['patient-list', 'patient']
+            groups: ['patient-list', 'patient', 'treat']
+        emergencyStatus:
+            groups: ['patient-list', 'patient', 'treat']
+        flag:
+            groups: ['patient-list', 'patient', 'treat']
         responses:
             groups: ['patient']

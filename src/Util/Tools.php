@@ -67,6 +67,18 @@ class Tools
     }
 
     /**
+     * Generating a random 6-digit code
+     *
+     * @param int $length
+     * @return string
+     */
+    public static function generateRandomCode(int $length = 6): string
+    {
+        $chars = "123456789";
+        return substr(str_shuffle($chars), 0, $length);
+    }
+
+    /**
      * Check if a needle exits in the haystack string
      *
      * @param string $haystack
@@ -170,5 +182,17 @@ class Tools
         $last_name = (strpos($fullName, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $fullName);
         $first_name = trim(preg_replace('#' . $last_name . '#', '', $fullName));
         return array('firstName'=>$first_name, 'lastName'=>$last_name);
+    }
+
+    /**
+     * Checking whether the Base64 encoded string is correct or not
+     *
+     * @param string $base64string
+     *
+     * @return bool
+     */
+    public static function isBase64String(?string $base64string): bool
+    {
+        return (base64_encode(base64_decode($base64string, true)) === $base64string);
     }
 }

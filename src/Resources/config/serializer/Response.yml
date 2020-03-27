@@ -3,6 +3,6 @@ App\Entity\Response:
         id:
             groups: ['patient']
         value:
-            groups: ['patient']
+            groups: ['patient', 'treat']
         question:
             groups: ['patient']

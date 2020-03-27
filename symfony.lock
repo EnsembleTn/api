@@ -120,6 +120,18 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.39"
     },
+    "gesdinet/jwt-refresh-token-bundle": {
+        "version": "v0.9.1"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "6.5.2"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.6.1"
+    },
     "hoa/compiler": {
         "version": "3.17.08.08"
     },
@@ -203,6 +215,9 @@
             "config/packages/lexik_jwt_authentication.yaml"
         ]
     },
+    "monolog/monolog": {
+        "version": "1.25.3"
+    },
     "namshi/jose": {
         "version": "7.2.3"
     },
@@ -261,8 +276,14 @@
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -340,6 +361,9 @@
             "config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v4.4.5"
+    },
     "symfony/debug": {
         "version": "v4.4.5"
     },
@@ -347,6 +371,9 @@
         "version": "v4.4.5"
     },
     "symfony/doctrine-bridge": {
+        "version": "v4.4.5"
+    },
+    "symfony/dom-crawler": {
         "version": "v4.4.5"
     },
     "symfony/dotenv": {
@@ -425,6 +452,23 @@
     },
     "symfony/mime": {
         "version": "v4.4.5"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v4.4.5"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "877bdb4223245783d00ed1f7429aa7ebc606d914"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
     },
     "symfony/options-resolver": {
         "version": "v4.4.5"

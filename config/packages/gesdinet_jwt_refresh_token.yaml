@@ -1,0 +1,5 @@
+gesdinet_jwt_refresh_token:
+    ttl: 2592000 # default 1 month
+    ttl_update: true # expand Refresh Token TTL on refresh
+    firewall: secured_area
+    token_parameter_name: refreshToken

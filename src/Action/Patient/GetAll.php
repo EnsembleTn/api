@@ -3,6 +3,7 @@
 namespace App\Action\Patient;
 
 use App\Action\BaseAction;
+use App\Manager\DoctorManager;
 use App\Manager\PatientManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -41,12 +42,15 @@ class GetAll extends BaseAction
      * @Rest\View(serializerGroups={"patient-list"})
      * @param Request $request
      * @param PatientManager $pm
+     * @param DoctorManager $dm
      * @return View
      */
-    public function __invoke(Request $request, PatientManager $pm)
+    public function __invoke(Request $request, PatientManager $pm, DoctorManager $dm)
     {
 
-        $patients = $pm->getAll(true);
+        $doctor = $dm->getCurrentDoctor();
+
+        $patients = $pm->getAll($doctor, true);
 
         return $this->jsonResponse(
             Response::HTTP_OK,

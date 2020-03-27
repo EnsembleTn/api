@@ -3,9 +3,12 @@
 namespace App\Action\Patient;
 
 use App\Action\BaseAction;
+use App\Entity\Doctor;
 use App\Entity\Patient;
-use App\Form\PatientStatusType;
+use App\Form\PatientUpdateType;
+use App\Manager\DoctorManager;
 use App\Manager\PatientManager;
+use Exception;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -24,7 +27,7 @@ class Patch extends BaseAction
     /**
      * Patch patient resource
      *
-     * Update an existing patient ( used to update status only )
+     * Update an existing patient ( used to update status or flag only )
      *
      * @Rest\Patch("/api/v1/secured/patient/{guid}")
      *
@@ -40,13 +43,19 @@ class Patch extends BaseAction
      *     name="patient",
      *     in="body",
      *     required=true,
-     *     @Model(type=PatientStatusType::class),
-     *     description="status should be : ON_HOLD / IN_PROGRESS / CLOSED"
+     *     @Model(type=PatientUpdateType::class),
+     *     description="Doctor can update only the flag to one of the following options : STABLE / SUSPECT / URGENT.
+    <br> By updating the flag field  the patient case status field will be automatically set to CLOSED and emergencyStatus field will be automatically set to ON_HOLD.
+    <br> **to update flag field remove the emergencyStatus filed from the request body.**
+    <br> Emergency doctor can update only the emergencyStatus field to CLOSED.
+    <br> **to update emergencyStatus field to CLOSED remove the flag field from the request body.**
+    <br> Fields status & emergencyStatus will be automatically set to IN_PROGRESS once **GET /api/v1/secured/treat-patient** is invoked."
      * )
      *
      * @SWG\Response(response=200, description="Patient resource patch success")
      * @SWG\Response(response=400, description="Validation Failed")
      * @SWG\Response(response=401, description="JWT Token not found / Invalid JWT Token / Identity has changed")
+     * @SWG\Response(response=403, description="Patient case status was returned to ON_HOLD by the cron due to inactivity.")
      * @SWG\Response(response=404, description="App\\Entity\\Patient object not found by the @ParamConverter annotation.")
      *
      * @SWG\Tag(name="Patient")
@@ -55,15 +64,36 @@ class Patch extends BaseAction
      * @param Request $request
      * @param Patient $patient
      * @param PatientManager $pm
+     * @param DoctorManager $dm
      * @return View|FormInterface
      */
-    public function __invoke(Request $request, Patient $patient, PatientManager $pm)
+    public function __invoke(Request $request, Patient $patient, PatientManager $pm, DoctorManager $dm)
     {
-        $form = $this->createForm(PatientStatusType::class, $patient);
-        $form->submit($request->request->all());
+        try {
+            $dm->canUpdatePatient($patient);
+        } catch (Exception $e) {
+
+            // used to indicate that this case was returned to ON_HOLD due to inactivity by the cron.
+            if ($e->getCode() == Response::HTTP_FORBIDDEN) {
+                return $this->jsonResponse(
+                    Response::HTTP_FORBIDDEN,
+                    $e->getMessage()
+                );
+            }
+            return $this->jsonResponse(
+                Response::HTTP_BAD_REQUEST,
+                $e->getMessage()
+            );
+        }
+
+        $form = $this->createForm(PatientUpdateType::class, $patient, ['doctor' => $dm->getCurrentDoctor()]);
+        $form->submit($request->request->all(), false);
         if (!$form->isValid()) {
             return $form;
         }
+
+        // attach tha patient to the doctor
+        $patient->setDoctor($dm->getCurrentDoctor());
 
         $pm->update($patient);
 
