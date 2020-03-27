@@ -93,6 +93,6 @@ class TTSMSing implements SMSInterface
 
     private function validate(int $destinationAddress, string $content): bool
     {
-        return (preg_match(self::TN_PHONE_NUMBER_REGEX, $destinationAddress) and strlen($content) < self::SMS_LENGTH);
+        return (preg_match(self::TN_PHONE_NUMBER_REGEX, $destinationAddress) and strlen($content) <= self::SMS_LENGTH);
     }
 }
