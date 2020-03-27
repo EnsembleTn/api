@@ -47,6 +47,7 @@ final class DoctorAdmin extends AbstractAdmin
         ]);
 
     }
+
     public function getDashboardActions()
     {
         $actions = parent::getDashboardActions();
@@ -69,7 +70,7 @@ final class DoctorAdmin extends AbstractAdmin
             ->add('firstName')
             ->add('lastName')
             ->add('active')
-            ->add('passwordRequestedAt')
+                    ->add('passwordRequestedAt')
             ->add('phoneNumber')
             ->add('roles');
     }
@@ -80,7 +81,7 @@ final class DoctorAdmin extends AbstractAdmin
             ->add('firstName')
             ->add('lastName')
             ->add('active')
-        ->add('_action', 'actions', ['actions' => ['edit' => ['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
+            ->add('_action', 'actions', ['actions' => ['edit' => ['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
 
 
     }
@@ -88,7 +89,6 @@ final class DoctorAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            //->add('guid')
             ->add('email')
             ->add('firstName')
             ->add('lastName');
@@ -100,54 +100,47 @@ final class DoctorAdmin extends AbstractAdmin
                 'required' => true,]);
         }
 
-        $formMapper->add('active')
-            //->add('passwordRequestedAt')
-            ->add('phoneNumber')//->add('roles')
+        $formMapper
+            ->add('active')
+            ->add('phoneNumber')
         ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
-            ->add('id')
             ->add('guid')
-            ->add('email')
             ->add('firstName')
             ->add('lastName')
-            ->add('password')
-            ->add('active')
-            ->add('passwordRequestedAt')
-            ->add('phoneNumber');
+            ->add('email')
+            ->add('phoneNumber')
+            ->add('active');
+
     }
 
-    public function prePersist($object)
+    public function prePersist($doctor)
     {
-        if ($object instanceof Doctor != TRUE) {
-            return false;
-        } else {
-            $plainPassword = $object->getPlainPassword();
-            $object->setGuid(Tools::generateGUID('DCT', 12));
-            if (!empty($plainPassword)) {
-                $object->setPassword($this->encodingPassword->encodePassword($object, $plainPassword));
-                $object->eraseCredentials();
-            } else {
-                return FALSE;
-            }
-        }
+
+        $plainPassword = $doctor->getPlainPassword();
+        $doctor
+            ->setGuid(Tools::generateGUID('DCT', 12))
+            ->setPassword($this->encodingPassword->encodePassword($doctor, $plainPassword))
+            ->setRoles([Doctor::ROLE_DOCTOR])
+            ->eraseCredentials();
+
+
     }
 
-    public function preUpdate($object)
+    public function preUpdate($doctor)
     {
-        if ($object instanceof Doctor != TRUE) {
-            return false;
+
+        $plainPassword = $doctor->getPlainPassword();
+        if (!empty($plainPassword)) {
+            $doctor->setPassword($this->encodingPassword->encodePassword($doctor, $plainPassword));
+            $doctor->eraseCredentials();
         } else {
-            $plainPassword = $object->getPlainPassword();
-            if (!empty($plainPassword)) {
-                $object->setPassword($this->encodingPassword->encodePassword($object, $plainPassword));
-                $object->eraseCredentials();
-            } else {
-                return true;
-            }
+            return true;
         }
+
     }
 }

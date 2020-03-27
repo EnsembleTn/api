@@ -81,6 +81,11 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Responses, group: "Patient", show_mosaic_button: false   }
 
+    admin.Informer:
+        class: App\Admin\InformerAdmin
+        arguments: [~, App\Entity\Informer, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Informers, group: "Informer", show_mosaic_button: false   }
 
     app.listener.file_upload:
         class: App\EventListener\FileUploadListener
