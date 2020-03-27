@@ -5,6 +5,7 @@ namespace App\Service;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -52,23 +53,23 @@ class TTSMSing implements SMSInterface
 
         $this->initParams();
 
-        $client = new Client();
+        $uri = new Uri($this->gateway);
+        $queryParams = [
+            'UserName' => $this->username,
+            'Password' => $this->password,
+            'SenderAppId' => $this->appID,
+            'DA' => sprintf("%s%s", self::TN_PHONE_NUMBER_PREFIX, $destinationAddress),
+            'SOA' => $this->soa,
+            'Content' => $content,
+            'Flags' => $this->flags,
+        ];
 
-        $request = new Request('GET', $this->gateway, [
-            'query' => [
-                'UserName' => $this->username,
-                'Password' => $this->password,
-                'SenderAppId' => $this->appID,
-                'DA' => sprintf("%s%s", self::TN_PHONE_NUMBER_PREFIX, $destinationAddress),
-                'SOA' => $this->soa,
-                'Content' => $content,
-                'Flags' => $this->flags,
-            ]
-        ]);
+        $client = new Client();
+        $request = new Request('GET', $uri->withQuery(http_build_query($queryParams)));
 
         // Response coming from gateway is in text/html format, will be using dom crawler to retrieve status code
         $promise = $client->sendAsync($request)->then(function ($response) {
-            $crawler = new Crawler($response->getBody());
+            $crawler = new Crawler($response->getBody()->getContents());
 
             $body = $crawler->filter('body')->text();
             $statusCode = str_replace("Status=", "", strtok($body, "\n"));
