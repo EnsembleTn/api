@@ -14,9 +14,9 @@ security:
     role_hierarchy:
         ROLE_USER: ~
         ROLE_DOCTOR: ROLE_USER
-        ROLE_ADMIN: [ROLE_ADMIN, ROLE_SONATA_ADMIN,ROLE_DOCTOR]
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_EMERGENCY_DOCTOR: ROLE_USER
+        ROLE_ADMIN: [ROLE_USER, ROLE_SONATA_ADMIN]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     firewalls:
         # Documentation firewall
