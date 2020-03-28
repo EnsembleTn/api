@@ -54,6 +54,7 @@ security:
                 use_forward:    false
                 check_path:     /admin/login_check
                 failure_path:   null
+                default_target_path: /admin
             logout:
                 path:           /admin/logout
                 target:         /admin/login

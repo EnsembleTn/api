@@ -32,7 +32,6 @@ final class PatientAdmin extends AbstractAdmin
         $formMapper->add('address', TextType::class);
         $formMapper->add('zipCode', TextType::class);
         $formMapper->add('phoneNumber', TextType::class);
-        $formMapper->add('phoneNumber', TextType::class);
 
     }
 
@@ -44,7 +43,9 @@ final class PatientAdmin extends AbstractAdmin
         $showMapper->add('zipCode');
         $showMapper->add('phoneNumber');
         $showMapper->add('status');
-        $showMapper->add('responses');
+        $showMapper->add('emergencyStatus');
+        $showMapper->add('flag');
+        $showMapper->add('denounced');
     }
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -54,7 +55,9 @@ final class PatientAdmin extends AbstractAdmin
         $datagridMapper->add('zipCode');
         $datagridMapper->add('phoneNumber');
         $datagridMapper->add('status');
-        $datagridMapper->add('responses');
+        $datagridMapper->add('emergencyStatus');
+        $datagridMapper->add('flag');
+        $datagridMapper->add('denounced');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -65,7 +68,9 @@ final class PatientAdmin extends AbstractAdmin
         $listMapper->addIdentifier('zipCode');
         $listMapper->addIdentifier('phoneNumber');
         $listMapper->addIdentifier('status');
-        $listMapper->addIdentifier('responses');
+        $listMapper->addIdentifier('emergencyStatus');
+        $listMapper->addIdentifier('flag');
+        $listMapper->addIdentifier('denounced');
         $listMapper->add('_action','actions', ['actions'=>['edit' =>['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
 
     }
