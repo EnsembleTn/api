@@ -27,7 +27,7 @@ class PatientRepository extends ServiceEntityRepository
     {
         return $doctor->isEmergencyDoctor() ?
             $this->findBy(['flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT]], ['createdAt' => 'ASC']) :
-            $this->findBy([], ['createdAt' => 'ASC']);
+            $this->findBy(['denounced' => 0], ['createdAt' => 'ASC']);
     }
 
     public function first(Doctor $doctor)

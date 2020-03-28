@@ -7,6 +7,7 @@ use App\Validator\constraints\Base64StringConstraint;
 use App\Validator\constraints\FileMimeTypeConstraint;
 use App\Validator\constraints\FileSizeConstraint;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,11 +31,12 @@ class PatientType extends AbstractType
             ->add('address')
             ->add('zipCode')
             ->add('phoneNumber')
-            ->add('gender')
+            ->add('gender', ChoiceType::class, [
+                'choices' => Patient::getGendersList()
+            ])
             ->add('audio', TextType::class, [
                 'mapped' => false,
                 'constraints' => [
-                    //new NotBlank(),
                     new Base64StringConstraint(),
                     new FileSizeConstraint([
                         'size' => self::SIZE

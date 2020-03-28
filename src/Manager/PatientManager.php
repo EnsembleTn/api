@@ -139,7 +139,8 @@ class PatientManager
         if ($patient->getFlag() && $patient->getEmergencyStatus() == null) {
             //once the flag is set the patient case is closed for doctors and opened for emergency doctors
             $patient->setStatus(Patient::STATUS_CLOSED);
-            $patient->setEmergencyStatus(Patient::STATUS_ON_HOLD);
+            if ($patient->getFlag() != Patient::FLAG_STABLE)
+                $patient->setEmergencyStatus(Patient::STATUS_ON_HOLD);
         }
 
         $this->em->flush();

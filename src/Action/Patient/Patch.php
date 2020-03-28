@@ -92,8 +92,11 @@ class Patch extends BaseAction
             return $form;
         }
 
-        // attach tha patient to the doctor
-        $patient->setDoctor($dm->getCurrentDoctor());
+        // attach the patient to the specific doctor
+        if ($dm->getCurrentDoctor()->isEmergencyDoctor())
+            $patient->setEmergencyDoctor($dm->getCurrentDoctor());
+        else
+            $patient->setDoctor($dm->getCurrentDoctor());
 
         $pm->update($patient);
 

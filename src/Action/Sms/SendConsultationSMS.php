@@ -6,6 +6,7 @@ use App\Action\BaseAction;
 use App\Dto\Sms;
 use App\Entity\Patient;
 use App\Form\SmsType;
+use App\Manager\DoctorManager;
 use App\Manager\PatientManager;
 use App\Service\TTSMSing;
 use Exception;
@@ -30,7 +31,7 @@ class SendConsultationSMS extends BaseAction
      *
      * This endpoint is called before submitting patient data to check first if consultation sms is sent successfully or not to patient with {guid}
      *
-     * @Rest\Post("/api/v1/sms/consultation/{guid}")
+     * @Rest\Post("/api/v1/secured/sms/consultation/{guid}")
      *
      * @SWG\Parameter(
      *     name="Authorization",
@@ -49,6 +50,7 @@ class SendConsultationSMS extends BaseAction
      *
      * @SWG\Response(response=200, description="Consultation SMS successfully sent to patient")
      * @SWG\Response(response=400, description="Validation Failed")
+     * @SWG\Response(response=403, description="Forbidden")
      * @SWG\Response(response=500, description="Error with TT SMS Gateway")
      *
      * @SWG\Tag(name="SMS")
@@ -57,11 +59,21 @@ class SendConsultationSMS extends BaseAction
      * @param Request $request
      * @param Patient $patient
      * @param PatientManager $pm
+     * @param DoctorManager $dm
      * @param TTSMSing $ttSMSing
      * @return View|FormInterface
      */
-    public function __invoke(Request $request, Patient $patient,PatientManager $pm, TTSMSing $ttSMSing)
+    public function __invoke(Request $request, Patient $patient, PatientManager $pm, DoctorManager $dm, TTSMSing $ttSMSing)
     {
+
+        try {
+            $dm->canSendSms($patient);
+        } catch (Exception $e) {
+            return $this->jsonResponse(
+                Response::HTTP_FORBIDDEN,
+                $e->getMessage()
+            );
+        }
 
         $number = $patient->getPhoneNumber();
 
@@ -73,7 +85,7 @@ class SendConsultationSMS extends BaseAction
             return $form;
         }
 
-        try{
+        try {
             $ttSMSing->send($number, $sms->getContent());
         } catch (Exception $exception) {
             return $this->jsonResponse(
@@ -82,7 +94,11 @@ class SendConsultationSMS extends BaseAction
             );
         }
 
-        $patient->setSms($sms->getContent());
+        // update SMSs fields
+        if ($dm->getCurrentDoctor()->isEmergencyDoctor())
+            $patient->setEmergencySms($sms->getContent());
+        else
+            $patient->setDoctorSms($sms->getContent());
 
         $pm->update($patient);
 

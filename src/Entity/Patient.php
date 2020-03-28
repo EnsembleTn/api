@@ -47,6 +47,10 @@ class Patient implements Uploadable
     const FLAG_SUSPECT = 'SUSPECT';
     const FLAG_URGENT = 'URGENT';
 
+    //patient gender
+
+    const GENDER_MALE = 'MALE';
+    const GENDER_FEMALE = 'FEMALE';
 
     /**
      * @ORM\Id()
@@ -62,21 +66,27 @@ class Patient implements Uploadable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Assert\NotBlank
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Assert\NotBlank
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Assert\NotBlank
      */
     private $address;
 
     /**
-     * @ORM\Column(type="integer", length=4)
+     * @ORM\Column(type="integer", length=4, nullable=true)
      *
      * @Assert\Length(
      *      min = 4,
@@ -102,13 +112,20 @@ class Patient implements Uploadable
 
     /**
      * @ORM\Column(type="string", length=20, nullable=false)
+     *
+     * @Assert\NotBlank
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="string", length=160, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
-    private $sms;
+    private $doctorSms;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $emergencyDoctorSms;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=false)
@@ -126,10 +143,21 @@ class Patient implements Uploadable
     private $flag;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Doctor", inversedBy="patients")
+     * @ORM\Column(type="smallint", options={"default" : 0})
+     */
+    private $denounced = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Doctor", inversedBy="doctorPatients")
      * @ORM\JoinColumn(name="doctor_id", referencedColumnName="id")
      */
     private $doctor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Doctor", inversedBy="emergencyDoctorPatients")
+     * @ORM\JoinColumn(name="emergency_doctor_id", referencedColumnName="id")
+     */
+    private $emergencyDoctor;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="patient", orphanRemoval=true, cascade={"persist"})
@@ -232,14 +260,34 @@ class Patient implements Uploadable
         return $this;
     }
 
-    public function getSms(): ?string
+    public static function getGendersList()
     {
-        return $this->sms;
+        return [
+            self::GENDER_MALE,
+            self::GENDER_FEMALE,
+        ];
     }
 
-    public function setSms(string $sms): self
+    public function getDoctorSms(): ?string
     {
-        $this->sms = $sms;
+        return $this->doctorSms;
+    }
+
+    public function setDoctorSms(string $sms): self
+    {
+        $this->doctorSms = $sms;
+
+        return $this;
+    }
+
+    public function getEmergencyDoctorSms(): ?string
+    {
+        return $this->emergencyDoctorSms;
+    }
+
+    public function setEmergencySms(string $sms): self
+    {
+        $this->emergencyDoctorSms= $sms;
 
         return $this;
     }
@@ -258,7 +306,7 @@ class Patient implements Uploadable
 
     public static function getStatusesList($manageable = false)
     {
-        return $manageable ?  [self::STATUS_CLOSED] : [self::STATUS_ON_HOLD, self::STATUS_IN_PROGRESS, self::STATUS_CLOSED] ;
+        return $manageable ? [self::STATUS_CLOSED] : [self::STATUS_ON_HOLD, self::STATUS_IN_PROGRESS, self::STATUS_CLOSED];
     }
 
     public function getEmergencyStatus(): ?string
@@ -293,6 +341,26 @@ class Patient implements Uploadable
             self::FLAG_URGENT,
         ];
     }
+
+    /**
+     * @return bool
+     */
+    public function isDenounced(): bool
+    {
+        return $this->denounced == 1;
+    }
+
+    /**
+     * @param int $denounced
+     * @return Patient
+     */
+    public function setDenounced($denounced): self
+    {
+        $this->denounced = $denounced;
+
+        return $this;
+    }
+
 
     /**
      * @return Collection|Response[]
@@ -376,6 +444,25 @@ class Patient implements Uploadable
     public function setDoctor(?Doctor $doctor): self
     {
         $this->doctor = $doctor;
+
+        return $this;
+    }
+
+    /**
+     * @return Doctor
+     */
+    public function getEmergencyDoctor()
+    {
+        return $this->emergencyDoctor;
+    }
+
+    /**
+     * @param Doctor $emergencyDoctor
+     * @return Patient
+     */
+    public function setEmergencyDoctor(?Doctor $emergencyDoctor): self
+    {
+        $this->emergencyDoctor = $emergencyDoctor;
 
         return $this;
     }

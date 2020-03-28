@@ -204,7 +204,13 @@ class Doctor implements UserInterface
      * One doctor treats many features
      * @ORM\OneToMany(targetEntity="Patient", mappedBy="doctor")
      */
-    private $patients;
+    private $doctorPatients;
+
+    /**
+     * One emergency doctor treats many features
+     * @ORM\OneToMany(targetEntity="Patient", mappedBy="emergencyDoctor")
+     */
+    private $emergencyDoctorPatients;
 
     // </editor-fold>
 
@@ -212,7 +218,8 @@ class Doctor implements UserInterface
 
     public function __construct()
     {
-        $this->patients = new ArrayCollection();
+        $this->doctorPatients = new ArrayCollection();
+        $this->emergencyDoctorPatients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -466,25 +473,25 @@ class Doctor implements UserInterface
     /**
      * @return Collection|Patient
      */
-    public function getPatients(): Collection
+    public function getDoctorPatients(): Collection
     {
-        return $this->patients;
+        return $this->doctorPatients;
     }
 
-    public function addPatient(Patient $patient): self
+    public function addDoctorPatient(Patient $patient): self
     {
-        if (!$this->patients->contains($patient)) {
-            $this->patients[] = $patient;
+        if (!$this->doctorPatients->contains($patient)) {
+            $this->doctorPatients[] = $patient;
             $patient->setDoctor($this);
         }
 
         return $this;
     }
 
-    public function removePatient(Patient $patient): self
+    public function removeDoctorPatient(Patient $patient): self
     {
-        if ($this->patients->contains($patient)) {
-            $this->patients->removeElement($patient);
+        if ($this->doctorPatients->contains($patient)) {
+            $this->doctorPatients->removeElement($patient);
             // set the owning side to null (unless already changed)
             if ($patient->getDoctor() === $this) {
                 $patient->setDoctor(null);
@@ -493,6 +500,38 @@ class Doctor implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Patient
+     */
+    public function getEmergencyDoctorPatients(): Collection
+    {
+        return $this->emergencyDoctorPatients;
+    }
+
+    public function addEmergencyDoctorPatient(Patient $patient): self
+    {
+        if (!$this->emergencyDoctorPatients->contains($patient)) {
+            $this->emergencyDoctorPatients[] = $patient;
+            $patient->setEmergencyDoctor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmergencyDoctorPatient(Patient $patient): self
+    {
+        if ($this->emergencyDoctorPatients->contains($patient)) {
+            $this->emergencyDoctorPatients->removeElement($patient);
+            // set the owning side to null (unless already changed)
+            if ($patient->getEmergencyDoctor() === $this) {
+                $patient->setEmergencyDoctor(null);
+            }
+        }
+
+        return $this;
+    }
+
 
     public static function getCategoriesList()
     {
