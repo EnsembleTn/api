@@ -1,6 +1,23 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 
 {% block form %}
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
     <div class="row">
         <div class="col-md-12">
             <div class="row">
@@ -33,8 +50,36 @@
                             </div>
                         </div>
                         <div class="box-header">
-                            <h4>Le fichier doit être sous cette forme</h4>
+                            <h2>File format must look like this : </h2>
+                            <h4>NB:</h4>
+                            <h4> - Please make sure to enter a valid email . </h4>
+                            <h4> - Doctor category must be either "Senior" or "Junior" .</h4>
                         </div>
+
+                        <table>
+                            <tr>
+                                <th>Nom et Prénom</th>
+                                <th>Email</th>
+                                <th>Numèro de tèlèphone</th>
+                                <th>Région</th>
+                                <th>Catégorie</th>
+                            </tr>
+                            <tr>
+                                <td>John Doe</td>
+                                <td>JohnDoe@email.com</td>
+                                <td>Tunis</td>
+                                <td>Tunis</td>
+                                <td>Junior</td>
+                            </tr>
+                            <tr>
+                                <td>Maria Doe</td>
+                                <td>Maria@email.com</td>
+                                <td>Tunis</td>
+                                <td>Tunis</td>
+                                <td>Senior</td>
+                            </tr>
+
+                        </table>
                     </div>
                 </div>
             </div>

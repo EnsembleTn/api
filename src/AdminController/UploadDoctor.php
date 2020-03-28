@@ -43,7 +43,8 @@ class UploadDoctor extends CRUDControllerAlias
     }
 
 
-    public function indexAction(Request $request) {
+    public function indexAction(Request $request)
+    {
         $fileEntity = new UploadFile();
         $form = $this->createForm(UploadFileType::class, $fileEntity, [
             'method' => 'POST'
@@ -57,9 +58,8 @@ class UploadDoctor extends CRUDControllerAlias
                     $this->getDoctrine()->getConnection()->getConfiguration()->setSQLLogger(null);
                     $rows = Tools::csv_to_array($file, ',');
                     $emailConstraint = new EmailConstraint();
-                    foreach ($rows as $row)
-                    {
-                        $doctor  = new Doctor();
+                    foreach ($rows as $row) {
+                        $doctor = new Doctor();
                         $name = Tools::split_name($row['Nom et Prénom']);
                         $email = $row['Email'];
                         $emailValidationErrors = $this->vi->validate($email, $emailConstraint);
@@ -70,16 +70,16 @@ class UploadDoctor extends CRUDControllerAlias
                                 ->setRegion($row['Région'])
                                 ->setFirstName($name['firstName'])
                                 ->setLastName($name['lastName'])
+                                ->addRole('ROLE_DOCTOR')
                                 ->setActive(true);
                             $catg = $row['Catégorie'];
-                            if(strpos(strtolower($catg), 'junior') !== false)
-                            {
+                            if (strpos(strtolower($catg), 'junior') !== false) {
                                 $doctor->setCategory(Doctor::CATEGORY_JUNIOR);
                             } else {
                                 $doctor->setCategory(Doctor::CATEGORY_SENIOR);
                             }
 
-                            $this->dm->registerDoctor($doctor, true, true);
+                            $this->dm->registerDoctor($doctor, false, true);
                         }
 
                     }
@@ -98,9 +98,8 @@ class UploadDoctor extends CRUDControllerAlias
 
         $builder = $this->get('sonata.admin.pool')
             ->getInstance($this->admin->getCode())
-            ->getExportFields()
-        ;
-        return $this->render('CustomViews/import_doctors.html.twig', [
+            ->getExportFields();
+        return $this->renderWithExtraParams('CustomViews/import_doctors.html.twig', [
             'form' => $form->createView(),
             'baseTemplate' => $this->getBaseTemplate(),
             'builder' => $builder,
