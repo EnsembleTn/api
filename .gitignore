@@ -15,6 +15,7 @@
 
 ###> uploads
 public/uploads
+web/uploads
 ###<
 
 ###> lexik/jwt-authentication-bundle ###

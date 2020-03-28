@@ -1,6 +1,0 @@
-id,"
-
-Nom et Prénom",email,"
-
-Numèro de tèlèphone ",Région,Catégorie
-13,DCT-634983521552,rafinala0003@gmail.com,52002229,Tunis,Junior
