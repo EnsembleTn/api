@@ -238,4 +238,9 @@ class Informer implements Uploadable
     {
         return sprintf('%s/%s/', strtolower($this->getClass()), date('Ymd'));
     }
+
+    public function __toString()
+    {
+     return (string) $this->firstName ;
+    }
 }

@@ -31,6 +31,9 @@ services:
         resource: '../src/Action'
         tags: ['controller.service_arguments']
 
+    App\AdminController\:
+        resource: '../src/AdminController'
+        tags: ['controller.service_arguments']
     sensio_framework_extra.view.guesser:
         class:     App\Templating\TemplateGuesser
         arguments: [ "@kernel" ]
@@ -51,6 +54,38 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    security.acl.permission.map:
+        class: Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap
+
+    admin.Doctor:
+        class: App\Admin\DoctorAdmin
+        arguments: [~, App\Entity\Doctor, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: List of doctors, group: "Doctor", show_mosaic_button: false , icon: '<i class="fa fa-user-md"></i>'   }
+
+    admin.Patient:
+        class: App\Admin\PatientAdmin
+        arguments: [~, App\Entity\Patient, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Patients, group: "Patient", show_mosaic_button: false , icon: '<i class="fa fa-wheelchair	"></i>'   }
+
+    admin.Question:
+        class: App\Admin\QuestionAdmin
+        arguments: [~, App\Entity\Question, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Questions, group: "Patient", show_mosaic_button: false   }
+
+    admin.Response:
+        class: App\Admin\ResponseAdmin
+        arguments: [~, App\Entity\Response, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Responses, group: "Patient", show_mosaic_button: false   }
+
+    admin.Informer:
+        class: App\Admin\InformerAdmin
+        arguments: [~, App\Entity\Informer, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Informers, group: "Informer", show_mosaic_button: false   }
 
     app.listener.file_upload:
         class: App\EventListener\FileUploadListener

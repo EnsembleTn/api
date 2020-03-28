@@ -2,17 +2,21 @@ security:
     encoders:
         App\Entity\Doctor:
             algorithm: bcrypt
+        FOS\UserBundle\Model\UserInterface: sha512
 
     providers:
         doctor_provider:
             entity:
                 class: App\Entity\Doctor
+        fos_userbundle:
+            id: fos_user.user_provider.username
 
     role_hierarchy:
         ROLE_USER: ~
         ROLE_DOCTOR: ROLE_USER
+        ROLE_ADMIN: [ROLE_ADMIN, ROLE_SONATA_ADMIN,ROLE_DOCTOR]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_EMERGENCY_DOCTOR: ROLE_USER
-        ROLE_ADMIN: [ROLE_DOCTOR]
 
     firewalls:
         # Documentation firewall
@@ -41,7 +45,31 @@ security:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
+        admin:
+            pattern:            /admin(.*)
+            context:            user
+            form_login:
+                provider:       fos_userbundle
+                login_path:     /admin/login
+                use_forward:    false
+                check_path:     /admin/login_check
+                failure_path:   null
+            logout:
+                path:           /admin/logout
+                target:         /admin/login
+            anonymous:          true
+
     access_control:
         - { path: ^/api/v1/security/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/secured, roles: ROLE_DOCTOR }
+        # Admin login page needs to be accessed without credential
+        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN, ROLE_SUPER_ADMIN] }
+        - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/v1/secured, roles: [ROLE_DOCTOR, ROLE_EMERGENCY_DOCTOR] }
         - { path: ^/api/v1/security/refresh-token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+acl:
+    connection: default

@@ -4,3 +4,8 @@ framework:
     csrf_protection: false
     php_errors:
         log: true
+    session:
+        # enables the support of sessions in the app
+        enabled: true
+
+    templating: { engines: ['twig'] }

@@ -1,0 +1,13 @@
+{# templates/CRUD/list__action_print.html.twig #}
+
+
+{#    <a href="{{ admin.generateObjectUrl('print', object) }}" class="btn btn-sm btn-default delete_link" title="Imprimer" target="_blank">#}
+{#        <i class="fa fa-print" aria-hidden="true"></i>#}
+{#    </a>#}
+
+{% if object.status != 'draft'%}
+<a href="{{ admin.generateObjectUrl('print', object) }}" class="btn btn-sm btn-default delete_link" title="Imprimer" target="_blank">
+    <i class="fa fa-print" aria-hidden="true"></i>
+</a>
+{% endif %}
+
