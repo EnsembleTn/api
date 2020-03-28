@@ -182,7 +182,8 @@ class PatientManager
                 ->setStatus(Patient::STATUS_ON_HOLD)
                 ->setEmergencyStatus(null)
                 ->setFlag(null)
-                ->setDoctor(null);
+                ->setDoctor(null)
+                ->setDenounced(0);
 
             $this->update($patient);
         }
