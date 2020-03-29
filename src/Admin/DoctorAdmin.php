@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\Doctor;
-use App\Manager\DoctorManager;
 use App\Util\Tools;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -18,6 +17,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /**
  * Created By IJ
  * @author : Ala Daly <ala.daly@dotit-corp.com>
+ * @author : Ghaith Daly <daly.ghaith@gmail.com>
  * @date : 22‏/3‏/2020, Sun
  **/
 final class DoctorAdmin extends AbstractAdmin
@@ -64,26 +64,26 @@ final class DoctorAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('id')
-            ->add('guid')
             ->add('email')
             ->add('firstName')
             ->add('lastName')
             ->add('active')
-                    ->add('passwordRequestedAt')
             ->add('phoneNumber')
+            ->add('category')
             ->add('roles');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
-        $listMapper->add('email')
+        $listMapper
+            ->add('email')
             ->add('firstName')
             ->add('lastName')
             ->add('active')
+            ->add('phoneNumber')
+            ->add('category')
+            ->add('rolesAsString', null, ['label' => 'Roles'])
             ->add('_action', 'actions', ['actions' => ['edit' => ['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
-
-
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
@@ -103,7 +103,24 @@ final class DoctorAdmin extends AbstractAdmin
         $formMapper
             ->add('active')
             ->add('phoneNumber')
-        ;
+            ->add('category', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                    'choices' => [
+                        'CATEGORY_JUNIOR' => 'JUNIOR',
+                        'CATEGORY_SENIOR' => 'SENIOR',
+                    ],
+                    'multiple' => false,
+                    'required' => true,
+                ]
+            )
+            ->add('roles', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                    'choices' => [
+                        'ROLE_DOCTOR' => 'ROLE_DOCTOR',
+                        'ROLE_EMERGENCY_DOCTOR' => 'ROLE_EMERGENCY_DOCTOR',
+                    ],
+                    'multiple' => true,
+                    'required' => true,
+                ]
+            );
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -113,8 +130,10 @@ final class DoctorAdmin extends AbstractAdmin
             ->add('firstName')
             ->add('lastName')
             ->add('email')
+            ->add('active')
             ->add('phoneNumber')
-            ->add('active');
+            ->add('category')
+            ->add('rolesAsString', null, ['label' => 'Roles']);
 
     }
 

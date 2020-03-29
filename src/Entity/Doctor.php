@@ -431,6 +431,11 @@ class Doctor implements UserInterface
         return is_array($this->roles) ? $this->roles : [];
     }
 
+    public function getRolesAsString(): string
+    {
+        return is_array($this->roles) ? implode(', ', $this->roles) : '';
+    }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
