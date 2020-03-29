@@ -20,7 +20,7 @@ class Sms
      * @Assert\NotBlank
      * @Assert\Length(
      *      min = 10,
-     *      max = 160,
+     *      max = 620,
      *      minMessage="The sms content should have at least {{ limit }} characters",
      *      maxMessage="The sms content should have at most {{ limit }} characters"
      * )
