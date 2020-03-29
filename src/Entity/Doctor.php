@@ -182,6 +182,8 @@ class Doctor implements UserInterface
      * @var array The doctor roles
      *
      * @ORM\Column(type="json_array")
+     *
+     * @Assert\NotBlank
      */
     private $roles;
 
