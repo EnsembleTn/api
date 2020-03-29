@@ -142,7 +142,7 @@ final class DoctorAdmin extends AbstractAdmin
 
         $plainPassword = $doctor->getPlainPassword();
         $doctor
-            ->setGuid(Tools::generateGUID('DCT', 12))
+            ->setGuid(Tools::generateGUID('DCT', 8))
             ->setPassword($this->encodingPassword->encodePassword($doctor, $plainPassword))
             ->setRoles([Doctor::ROLE_DOCTOR])
             ->eraseCredentials();
