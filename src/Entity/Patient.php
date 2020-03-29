@@ -52,6 +52,12 @@ class Patient implements Uploadable
     const GENDER_MALE = 'MALE';
     const GENDER_FEMALE = 'FEMALE';
 
+    //patient medical status
+
+    const MEDICAL_STATUS_TO_BE_TESTED = 'TO_BE_TESTED';
+    const MEDICAL_STATUS_NOT_TO_BE_TESTED = 'NOT_TO_BE_TESTED';
+    const MEDICAL_STATUS_TESTED  = 'TESTED';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -131,6 +137,16 @@ class Patient implements Uploadable
      * @ORM\Column(type="string", length=20, nullable=false)
      */
     private $status;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $medicalStatus;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $testPositive = false;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -303,6 +319,40 @@ class Patient implements Uploadable
 
         return $this;
     }
+
+    public function getMedicalStatus(): ?string
+    {
+        return $this->medicalStatus;
+    }
+
+    public function setMedicalStatus(string $medicalStatus): self
+    {
+        $this->medicalStatus = $medicalStatus;
+
+        return $this;
+    }
+
+    public static function getMedicalStatusesList()
+    {
+        return [
+            self::MEDICAL_STATUS_NOT_TO_BE_TESTED,
+            self::MEDICAL_STATUS_TO_BE_TESTED,
+            self::MEDICAL_STATUS_TESTED,
+        ];
+    }
+
+    public function isTestPositive(): bool
+    {
+        return $this->testPositive;
+    }
+
+    public function setTestPositive(bool $testPositive): self
+    {
+        $this->testPositive = $testPositive;
+
+        return $this;
+    }
+
 
     public static function getStatusesList($manageable = false)
     {
