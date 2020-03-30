@@ -183,7 +183,9 @@ class PatientManager
                 ->setEmergencyStatus(null)
                 ->setFlag(null)
                 ->setDoctor(null)
-                ->setDenounced(0);
+                ->setDenounced(0)
+                ->setMedicalStatus(null)
+                ->setTestPositive(false);
 
             $this->update($patient);
         }
