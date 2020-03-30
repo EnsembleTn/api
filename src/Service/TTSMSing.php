@@ -60,7 +60,7 @@ class TTSMSing implements SMSInterface
             'SenderAppId' => $this->appID,
             'DA' => sprintf("%s%s", self::TN_PHONE_NUMBER_PREFIX, $destinationAddress),
             'SOA' => $this->soa,
-            'Content' => $content,
+            'Content' => utf8_decode($content),
             'Flags' => $this->flags,
         ];
 
