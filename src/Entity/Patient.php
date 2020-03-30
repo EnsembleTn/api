@@ -325,7 +325,7 @@ class Patient implements Uploadable
         return $this->medicalStatus;
     }
 
-    public function setMedicalStatus(string $medicalStatus): self
+    public function setMedicalStatus(?string $medicalStatus): self
     {
         $this->medicalStatus = $medicalStatus;
 
