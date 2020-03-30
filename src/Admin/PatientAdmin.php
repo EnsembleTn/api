@@ -45,8 +45,12 @@ final class PatientAdmin extends AbstractAdmin
         $showMapper->add('status');
         $showMapper->add('emergencyStatus');
         $showMapper->add('flag');
-        $showMapper->add('denounced');
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+
+            $showMapper->add('isDecouncedAsString', null, ['label' => 'Denounced']);
+        }
     }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('firstName');
@@ -70,8 +74,22 @@ final class PatientAdmin extends AbstractAdmin
         $listMapper->addIdentifier('status');
         $listMapper->addIdentifier('emergencyStatus');
         $listMapper->addIdentifier('flag');
-        $listMapper->addIdentifier('denounced');
-        $listMapper->add('_action','actions', ['actions'=>['edit' =>['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $listMapper->addIdentifier('isDecouncedAsString', null, ['label' => 'Denounced']);
+        }
+        $listMapper->add('_action', 'actions', ['actions' => ['edit' => ['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
 
+    }
+
+    public function createQuery($context = 'list')
+    {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            return parent::createQuery($context);
+        } else {
+            $query = parent::createQuery($context);
+            $query->andWhere(
+                $query->expr()->in($query->getRootAlias() . '.denounced', 1));
+            return $query;
+        }
     }
 }

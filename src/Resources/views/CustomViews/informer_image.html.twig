@@ -1,0 +1,6 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field %}
+    <img  id='base64image'
+         src="{{admin.image.base64encodedString}}" width="500"  />
+{% endblock field %}
