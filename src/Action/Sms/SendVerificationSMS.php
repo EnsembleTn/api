@@ -62,7 +62,7 @@ class SendVerificationSMS extends BaseAction
         $verificationCode = Tools::generateRandomCode();
 
         try {
-            $ttSMSing->send($phone->getNumber(), "Code verification : {$verificationCode}");
+            $ttSMSing->send($phone->getNumber(), "Code de vérification : {$verificationCode}");
         } catch (Exception $exception) {
             return $this->jsonResponse(
                 Response::HTTP_INTERNAL_SERVER_ERROR,
