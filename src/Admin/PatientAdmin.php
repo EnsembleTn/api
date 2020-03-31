@@ -2,10 +2,10 @@
 
 namespace App\Admin;
 
+use App\Manager\FileManager;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,6 +18,31 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  **/
 final class PatientAdmin extends AbstractAdmin
 {
+    /**
+     * @var FileManager
+     */
+    private $fm;
+
+    /**
+     * @var string
+     */
+    public $audio = '';
+
+    /**
+     * PatientAdmin constructor.
+     *
+     * @param $code
+     * @param $class
+     * @param $baseControllerName
+     * @param FileManager $fm
+     */
+    public function __construct($code, $class, $baseControllerName, FileManager $fm)
+    {
+        parent::__construct($code, $class, $baseControllerName);
+
+        $this->fm = $fm;
+    }
+
     public function configureRoutes(RouteCollection $collection)
     {
         $collection->remove('create');
@@ -43,6 +68,12 @@ final class PatientAdmin extends AbstractAdmin
             $showMapper->add('doctorSms');
             $showMapper->add('emergencyDoctor');
             $showMapper->add('emergencyDoctorSms');
+        }
+
+        // add audio
+        if ($this->audio = $this->fm->getFile($this->getSubject())) {
+            $this->audio = sprintf('data:audio/wav;base64,%s', $this->audio->getBase64EncodedString());
+            $showMapper->add('audio', null, ['template' => 'CustomViews/patient_audio.html.twig']);
         }
     }
 
