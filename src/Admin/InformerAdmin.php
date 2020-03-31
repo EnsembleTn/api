@@ -1,29 +1,28 @@
 <?php
-/**
- * Created By IJ
- * @author : Ala Daly <ala.daly@dotit-corp.com>
- * @date : 27‏/3‏/2020, Fri
- **/
 
 namespace App\Admin;
 
-
 use App\Manager\FileManager;
-use App\Manager\InformerManager;
 use App\Util\Tools;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * Class InformerAdmin
+ *
+ * @author : Ala Daly <ala.daly@dotit-corp.com>
+ * @author : Ghaith Daly <daly.ghaith@gmail.com>
+ **/
 final class InformerAdmin extends AbstractAdmin
 {
     /**
      * @var FileManager
      */
     private $fm;
+
     /**
      * @var string
      */
@@ -34,7 +33,7 @@ final class InformerAdmin extends AbstractAdmin
      * @param $code
      * @param $class
      * @param $baseControllerName
-     * @param InformerManager $im
+     * @param FileManager $fm
      */
     public function __construct($code, $class, $baseControllerName, FileManager $fm)
     {

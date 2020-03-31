@@ -1,20 +1,19 @@
 <?php
-/**
- * Created By IJ
- * @author : Ala Daly <ala.daly@dotit-corp.com>
- * @date : 22‏/3‏/2020, Sun
- **/
 
 namespace App\Admin;
-
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+/**
+ * Class ResponseAdmin
+ *
+ * @author : Ala Daly <ala.daly@dotit-corp.com>
+ * @author : Ghaith Daly <daly.ghaith@gmail.com>
+ **/
 
 final class ResponseAdmin extends AbstractAdmin
 {

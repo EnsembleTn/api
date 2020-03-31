@@ -346,6 +346,11 @@ class Patient implements Uploadable
         return $this->testPositive;
     }
 
+    public function isTestPositiveAsString(): string
+    {
+        return $this->testPositive ? 'YES' : 'NO';
+    }
+
     public function setTestPositive(bool $testPositive): self
     {
         $this->testPositive = $testPositive;
@@ -400,6 +405,11 @@ class Patient implements Uploadable
         return $this->denounced == 1;
     }
 
+    public function isDenouncedAsString() : string
+    {
+        return $this->denounced ? 'YES' : 'NO';
+    }
+
     /**
      * @param int $denounced
      * @return Patient
@@ -410,7 +420,6 @@ class Patient implements Uploadable
 
         return $this;
     }
-
 
     /**
      * @return Collection|Response[]

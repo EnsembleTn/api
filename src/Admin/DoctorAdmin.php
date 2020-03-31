@@ -15,10 +15,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Created By IJ
+ * Class DoctorAdmin
+ *
  * @author : Ala Daly <ala.daly@dotit-corp.com>
  * @author : Ghaith Daly <daly.ghaith@gmail.com>
- * @date : 22‏/3‏/2020, Sun
  **/
 final class DoctorAdmin extends AbstractAdmin
 {
