@@ -30,6 +30,7 @@ final class InformerAdmin extends AbstractAdmin
 
     /**
      * InformerAdmin constructor.
+     *
      * @param $code
      * @param $class
      * @param $baseControllerName
@@ -38,16 +39,20 @@ final class InformerAdmin extends AbstractAdmin
     public function __construct($code, $class, $baseControllerName, FileManager $fm)
     {
         parent::__construct($code, $class, $baseControllerName);
+
         $this->fm = $fm;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('id')
-            ->add('guid')
             ->add('firstName')
-            ->add('lastName');
+            ->add('lastName')
+            ->add('address')
+            ->add('phoneNumber')
+            ->add('culpableFirstName')
+            ->add('culpableLastName')
+            ->add('culpableAddress');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -55,32 +60,16 @@ final class InformerAdmin extends AbstractAdmin
         $listMapper
             ->add('firstName')
             ->add('lastName')
-            ->add('comment')
             ->add('address')
-            ->add('zipCode')
             ->add('phoneNumber')
             ->add('culpableFirstName')
             ->add('culpableLastName')
             ->add('culpableAddress')
-            ->add('_action', 'actions', ['actions' => ['edit' => ['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
-    }
-
-    protected function configureFormFields(FormMapper $formMapper): void
-    {
-        $formMapper->add('firstName');
-        $formMapper->add('lastName');
-        $formMapper->add('address');
-        $formMapper->add('phoneNumber');
-        $formMapper->add('zipCode');
-        $formMapper->add('culpableFirstName');
-        $formMapper->add('culpableLastName');
-        $formMapper->add('culpableAddress');
-        $formMapper->add('comment');
+            ->add('_action', 'actions', ['actions' => ['show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
-        $this->image = $this->fm->getFile($this->getSubject());
         $showMapper
             ->add('id')
             ->add('guid')
@@ -90,14 +79,12 @@ final class InformerAdmin extends AbstractAdmin
             ->add('culpableFirstName')
             ->add('culpableLastName')
             ->add('culpableAddress')
-            ->add('comment')
-            ->add('image', null, ['template' => 'CustomViews/informer_image.html.twig']);
+            ->add('comment');
 
+        // add image
+        if ($this->image = $this->fm->getFile($this->getSubject())) {
+            $this->image = sprintf('data:image/png;base64,%s', $this->image->getBase64EncodedString());
+            $showMapper->add('image', null, ['template' => 'CustomViews/informer_image.html.twig']);
+        }
     }
-
-    public function prePersist($informer)
-    {
-        $informer->setGuid(Tools::generateGUID('INF', 8));
-    }
-
 }

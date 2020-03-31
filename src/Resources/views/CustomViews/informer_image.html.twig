@@ -1,6 +1,9 @@
-{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
-
-{% block field %}
-    <img  id='base64image'
-         src="{{admin.image.base64encodedString}}" width="500"  />
-{% endblock field %}
+<tr class="sonata-ba-view-container">
+    <th>Image</th>
+    <td>
+        <a download href="{{ admin.image }}" target="_blank">
+            <img src="{{ admin.image }}" style="width: 100%;height: auto;max-width: 500px"
+                 alt="Denunciation-image"/>
+        </a>
+    </td>
+</tr>
