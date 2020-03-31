@@ -92,7 +92,6 @@ class Post extends BaseAction
             $parameters->get('upload_files_to_server') === 'true' ? true : false
         ), GenericEvents::FILE_UPLOAD);
 
-
         return $this->jsonResponse(
             Response::HTTP_CREATED,
             'Patient resource add success'

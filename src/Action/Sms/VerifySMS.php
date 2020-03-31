@@ -4,7 +4,9 @@ namespace App\Action\Sms;
 
 use App\Action\BaseAction;
 use App\Dto\Phone;
+use App\Dto\VerificationCodeDto;
 use App\Form\PhoneType;
+use App\Form\VerificationCodeType;
 use App\Manager\SMSManager;
 use App\Service\TTSMSing;
 use App\Util\Tools;
@@ -18,52 +20,48 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class SendVerificationSMS
+ * Class VerifySMS
  *
  * @author Ghassen Karray <ghassen.karray@epfl.ch>
- * @author Daly Ghaith <daly.ghaith@gmail.com>
  */
-class SendVerificationSMS extends BaseAction
+class VerifySMS extends BaseAction
 {
     /**
-     * Send verification sms to patient
+     * Check if verification sms entered by the patient is valid
      *
-     * this endpoint is used to ensure 2 factors authentication for patient
      *
-     * @Rest\Post("/api/v1/sms/authentication")
+     * @Rest\Post("/api/v1/sms/authentication/check")
      *
      * @SWG\Parameter(
-     *     name="phone",
+     *     name="verificationCode",
      *     in="body",
      *     required=true,
-     *     @Model(type=PhoneType::class)
+     *     @Model(type=VerificationCodeType::class)
      * )
      *
-     * @SWG\Response(response=200, description="Verification SMS successfully sent to patient")
+     * @SWG\Response(response=200, description="Verification code check success")
      * @SWG\Response(response=400, description="Validation Failed")
-     * @SWG\Response(response=500, description="Error with TT SMS Gateway")
+     * @SWG\Response(response=500, description="No SMS found for this phone number")
      *
      * @SWG\Tag(name="SMS")
      *
      * @Rest\View()
      * @param Request $request
-     * @param TTSMSing $ttSMSing
+     * @param SMSManager $sm
      * @return View|FormInterface
      */
-    public function __invoke(Request $request, TTSMSing $ttSMSing, SMSManager $sm)
+    public function __invoke(Request $request, SMSManager $sm)
     {
-        $phone = new Phone();
+        $verificationCode = new VerificationCodeDto();
 
-        $form = $this->createForm(PhoneType::class, $phone);
+        $form = $this->createForm(VerificationCodeType::class, $verificationCode);
         $form->submit($request->request->all());
         if (!$form->isValid()) {
             return $form;
         }
 
-        $verificationCode = Tools::generateRandomCode();
-
-        try {
-            $ttSMSing->send($phone->getNumber(), "Code de vérification : {$verificationCode}");
+        try{
+            $sms = $sm->getByPhoneNumber($verificationCode->getNumber());
         } catch (Exception $exception) {
             return $this->jsonResponse(
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -71,14 +69,18 @@ class SendVerificationSMS extends BaseAction
             );
         }
 
-        $sm->newSMS($verificationCode, $phone->getNumber());
+        if($sms->getVerificationCode() != $verificationCode->getCode()) {
+            return $this->jsonResponse(
+                Response::HTTP_BAD_REQUEST,
+                "Validation Failed"
+            );
+        }
+
+        $sm->remove($sms);
 
         return $this->jsonResponse(
             Response::HTTP_OK,
-            'Verification SMS successfully sent to patient',
-            [
-                'verificationCode' => $verificationCode
-            ]
+            'Verification code check success'
         );
     }
 }
