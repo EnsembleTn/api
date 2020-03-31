@@ -53,6 +53,22 @@ class Tools
     }
 
     /**
+     * Return array second level keys
+     *
+     * @param $array
+     * @return array
+     */
+    public static function array_second_level_keys($array)
+    {
+        $result = array();
+        foreach($array as $sub) {
+            $result = array_merge($result, $sub);
+        }
+        return array_keys($result);
+    }
+
+
+    /**
      * Generating a random password
      *
      * @param int $length
@@ -176,12 +192,13 @@ class Tools
      * @param string $fullName
      * @return array
      */
-    public static function split_name( string $fullName):array
+    public static function split_name(string $fullName): array
     {
         $fullName = trim($fullName);
         $last_name = (strpos($fullName, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $fullName);
         $first_name = trim(preg_replace('#' . $last_name . '#', '', $fullName));
-        return array('firstName'=>$first_name, 'lastName'=>$last_name);
+
+        return ['firstName' => $first_name, 'lastName' => $last_name];
     }
 
     /**

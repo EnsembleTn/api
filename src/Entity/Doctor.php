@@ -31,8 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *     fields={"phoneNumber"},
  *     message="This phone number is already used.",
  * )
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class Doctor implements UserInterface
 {
@@ -51,7 +49,6 @@ class Doctor implements UserInterface
     // <editor-fold defaultstate="collapsed" desc="traits">
 
     use TimestampableTrait;
-    use SoftDeleteableTrait;
     use ObjectMetaDataTrait;
 
     // </editor-fold>

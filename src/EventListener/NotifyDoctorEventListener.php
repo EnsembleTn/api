@@ -1,22 +1,24 @@
 <?php
-/**
- * Created By IJ
- * @author : Ala Daly <ala.daly@dotit-corp.com>
- * @date : 21‏/3‏/2020, Sat
- **/
 
 namespace App\EventListener;
 
-
 use App\Entity\Doctor;
+use App\Manager\DoctorManager;
 use App\Service\MailerInterface;
+use App\Util\Tools;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Twig_Environment;
 
+/**
+ * Class InformerAdmin
+ *
+ * @author : Ala Daly <ala.daly@dotit-corp.com>
+ * @author : Ghaith Daly <daly.ghaith@gmail.com>
+ **/
 class NotifyDoctorEventListener
 {
 
@@ -26,20 +28,20 @@ class NotifyDoctorEventListener
     private $mailer;
 
     /**
-     * @var \Twig_Environment
+     * @var Twig_Environment
      */
     private $templating;
 
-
     /**
      * NotifyDoctorEventListener constructor.
+     *
      * @param MailerInterface $mailer
+     * @param Environment $templating
      */
     public function __construct(MailerInterface $mailer, Environment $templating)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;
-
     }
 
     /**
@@ -51,22 +53,20 @@ class NotifyDoctorEventListener
     public function prePersist(LifecycleEventArgs $args)
     {
         $doctor = $args->getObject();
+
         if ($doctor instanceof Doctor) {
-            $url = $this->mailer->getFrontEndServerUrl() . '/login';
+
             $this->mailer->sendEmail(
-                "Account Information",
+                "Bienvenue sur la plateforme Maabaadhna",
                 $doctor->getEmail(),
                 $this->templating->render('emails/security/notify-doctor.html.twig', [
                     'fullName' => $doctor->getFullname(),
                     'email' => $doctor->getEmail(),
-                    'password' => $doctor->getPlainPassword(),
-                    'url' => $url
+                    'password' => $doctor->getPlainPassword()
                 ])
             );
+
             $doctor->eraseCredentials();
         }
-        return;
-
-
     }
 }
