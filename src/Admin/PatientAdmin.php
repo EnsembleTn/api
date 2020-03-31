@@ -64,18 +64,18 @@ final class PatientAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('firstName');
-        $listMapper->addIdentifier('lastName');
-        $listMapper->addIdentifier('address');
+        $listMapper->add('firstName');
+        $listMapper->add('lastName');
+        $listMapper->add('address');
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $listMapper->addIdentifier('status');
-            $listMapper->addIdentifier('emergencyStatus');
-            $listMapper->addIdentifier('flag');
-            $listMapper->addIdentifier('isDenouncedAsString', null, ['label' => 'Denounced']);
+            $listMapper->add('status');
+            $listMapper->add('emergencyStatus');
+            $listMapper->add('flag');
+            $listMapper->add('isDenouncedAsString', null, ['label' => 'Denounced']);
         } else {
-            $listMapper->addIdentifier('phoneNumber');
-            $listMapper->addIdentifier('zipCode');
+            $listMapper->add('phoneNumber');
+            $listMapper->add('zipCode');
         }
 
         $listMapper->add('_action', 'actions', ['actions' => ['delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);

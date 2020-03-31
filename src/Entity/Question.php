@@ -98,6 +98,22 @@ class Question
         return $this->type;
     }
 
+    public function getTypeAsString(): string
+    {
+        $type = '';
+
+        switch ($this->type) {
+            case 1 :
+                return 'TYPE_YES_OR_NO';
+                break;
+            case 2 :
+                return 'TYPE_NORMAL';
+                break;
+        }
+
+        return $type;
+    }
+
     public function setType(int $type): self
     {
         $this->type = $type;
@@ -108,6 +124,25 @@ class Question
     public function getCategory(): ?int
     {
         return $this->category;
+    }
+
+    public function getCategoryAsString(): string
+    {
+        $category = '';
+
+        switch ($this->category) {
+            case 1 :
+                return 'CATEGORY_GENERAL';
+                break;
+            case 2 :
+                return 'CATEGORY_ANTECEDENT';
+                break;
+            case 3 :
+                return 'CATEGORY_SYMPTOMS';
+                break;
+        }
+
+        return $category;
     }
 
     public function setCategory(int $category): self
@@ -150,6 +185,6 @@ class Question
 
     public function __toString()
     {
-        return (string) $this->id;
+        return (string)$this->id;
     }
 }

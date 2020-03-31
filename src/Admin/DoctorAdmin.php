@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -103,7 +104,7 @@ final class DoctorAdmin extends AbstractAdmin
         $formMapper
             ->add('active')
             ->add('phoneNumber')
-            ->add('category', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+            ->add('category', ChoiceType::class, [
                     'choices' => [
                         'CATEGORY_JUNIOR' => 'JUNIOR',
                         'CATEGORY_SENIOR' => 'SENIOR',
@@ -112,7 +113,7 @@ final class DoctorAdmin extends AbstractAdmin
                     'required' => true,
                 ]
             )
-            ->add('roles', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+            ->add('roles', ChoiceType::class, [
                     'choices' => [
                         'ROLE_DOCTOR' => 'ROLE_DOCTOR',
                         'ROLE_EMERGENCY_DOCTOR' => 'ROLE_EMERGENCY_DOCTOR',
