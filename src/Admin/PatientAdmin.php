@@ -68,6 +68,8 @@ final class PatientAdmin extends AbstractAdmin
             $showMapper->add('doctorSms');
             $showMapper->add('emergencyDoctor');
             $showMapper->add('emergencyDoctorSms');
+            $showMapper->add('createdAt');
+            $showMapper->add('updatedAt');
         }
 
         // add audio
