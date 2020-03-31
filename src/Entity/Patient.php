@@ -56,7 +56,7 @@ class Patient implements Uploadable
 
     const MEDICAL_STATUS_TO_BE_TESTED = 'TO_BE_TESTED';
     const MEDICAL_STATUS_NOT_TO_BE_TESTED = 'NOT_TO_BE_TESTED';
-    const MEDICAL_STATUS_TESTED  = 'TESTED';
+    const MEDICAL_STATUS_TESTED = 'TESTED';
 
     /**
      * @ORM\Id()
@@ -228,6 +228,11 @@ class Patient implements Uploadable
         return $this;
     }
 
+    public function getFullname()
+    {
+        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
+    }
+
     public function getAddress(): ?string
     {
         return $this->address;
@@ -303,7 +308,7 @@ class Patient implements Uploadable
 
     public function setEmergencySms(string $sms): self
     {
-        $this->emergencyDoctorSms= $sms;
+        $this->emergencyDoctorSms = $sms;
 
         return $this;
     }
@@ -405,7 +410,7 @@ class Patient implements Uploadable
         return $this->denounced == 1;
     }
 
-    public function isDenouncedAsString() : string
+    public function isDenouncedAsString(): string
     {
         return $this->denounced ? 'YES' : 'NO';
     }
@@ -534,8 +539,9 @@ class Patient implements Uploadable
     {
         return sprintf('%s/%s/', strtolower($this->getClass()), date('Ymd'));
     }
+
     public function __toString()
     {
-     return $this->getFirstName();
+        return $this->getFullname();
     }
 }
