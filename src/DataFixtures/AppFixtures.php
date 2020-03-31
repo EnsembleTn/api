@@ -12,8 +12,8 @@ class AppFixtures extends Fixture
     {
         $questions = [
             [
-                "fr_value" => "Étiez vous à l’étranger récemment ?",
-                "ar_value" => "هل كنت  في الخارج مؤخرًا ؟",
+                "fr_value" => "Étiez vous à l’étranger récemment ? (14 jours)",
+                "ar_value" => "هل كنت  في الخارج مؤخرًا ؟ (14 يوم)",
                 "type" => Question::TYPE_YES_OR_NO,
                 "category" => Question::CATEGORY_GENERAL
             ],
