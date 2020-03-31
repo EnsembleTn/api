@@ -68,10 +68,9 @@ final class DoctorAdmin extends AbstractAdmin
             ->add('email')
             ->add('firstName')
             ->add('lastName')
-            ->add('active')
-            ->add('phoneNumber')
+            ->add('region')
             ->add('category')
-            ->add('roles');
+            ->add('active');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -80,10 +79,9 @@ final class DoctorAdmin extends AbstractAdmin
             ->add('email')
             ->add('firstName')
             ->add('lastName')
-            ->add('active')
-            ->add('phoneNumber')
+            ->add('region')
             ->add('category')
-            ->add('rolesAsString', null, ['label' => 'Roles'])
+            ->add('active')
             ->add('_action', 'actions', ['actions' => ['edit' => ['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
     }
 
@@ -102,7 +100,6 @@ final class DoctorAdmin extends AbstractAdmin
         }
 
         $formMapper
-            ->add('active')
             ->add('phoneNumber')
             ->add('category', ChoiceType::class, [
                     'choices' => [
@@ -121,7 +118,8 @@ final class DoctorAdmin extends AbstractAdmin
                     'multiple' => true,
                     'required' => true,
                 ]
-            );
+            )
+            ->add('active');
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -131,29 +129,26 @@ final class DoctorAdmin extends AbstractAdmin
             ->add('firstName')
             ->add('lastName')
             ->add('email')
-            ->add('active')
             ->add('phoneNumber')
+            ->add('region')
             ->add('category')
+            ->add('active')
             ->add('rolesAsString', null, ['label' => 'Roles']);
 
     }
 
     public function prePersist($doctor)
     {
-
         $plainPassword = $doctor->getPlainPassword();
         $doctor
             ->setGuid(Tools::generateGUID('DCT', 8))
             ->setPassword($this->encodingPassword->encodePassword($doctor, $plainPassword))
             ->setRoles([Doctor::ROLE_DOCTOR])
             ->eraseCredentials();
-
-
     }
 
     public function preUpdate($doctor)
     {
-
         $plainPassword = $doctor->getPlainPassword();
         if (!empty($plainPassword)) {
             $doctor->setPassword($this->encodingPassword->encodePassword($doctor, $plainPassword));
@@ -161,6 +156,5 @@ final class DoctorAdmin extends AbstractAdmin
         } else {
             return true;
         }
-
     }
 }
