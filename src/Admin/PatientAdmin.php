@@ -54,6 +54,7 @@ final class PatientAdmin extends AbstractAdmin
         $showMapper->add('lastName', TextType::class);
         $showMapper->add('gender', TextType::class);
         $showMapper->add('address', TextType::class);
+        $showMapper->add('city', TextType::class);
         $showMapper->add('zipCode');
         $showMapper->add('phoneNumber');
 
@@ -84,6 +85,7 @@ final class PatientAdmin extends AbstractAdmin
         $datagridMapper->add('firstName');
         $datagridMapper->add('lastName');
         $datagridMapper->add('address');
+        $datagridMapper->add('city');
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             $datagridMapper->add('status');
@@ -100,6 +102,7 @@ final class PatientAdmin extends AbstractAdmin
         $listMapper->add('firstName');
         $listMapper->add('lastName');
         $listMapper->add('address');
+        $listMapper->add('city');
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             $listMapper->add('status');

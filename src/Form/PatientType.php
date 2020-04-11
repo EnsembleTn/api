@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Patient;
+use App\Util\Tools;
 use App\Validator\constraints\Base64StringConstraint;
 use App\Validator\constraints\FileMimeTypeConstraint;
 use App\Validator\constraints\FileSizeConstraint;
@@ -21,7 +22,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class PatientType extends AbstractType
 {
-    CONST SIZE = 4000000 ; // 4Mo
+    CONST SIZE = 4000000; // 4Mo
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -29,6 +30,9 @@ class PatientType extends AbstractType
             ->add('firstName')
             ->add('lastName')
             ->add('address')
+            ->add('city', ChoiceType::class, [
+                'choices' => Tools::tunisiaCitiesList()
+            ])
             ->add('zipCode')
             ->add('phoneNumber')
             ->add('gender', ChoiceType::class, [

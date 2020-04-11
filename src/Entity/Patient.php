@@ -182,6 +182,11 @@ class Patient implements Uploadable
      */
     private $responses;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $city;
+
     public function __construct()
     {
         $this->responses = new ArrayCollection();
@@ -543,5 +548,17 @@ class Patient implements Uploadable
     public function __toString()
     {
         return $this->getFullname();
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
     }
 }
