@@ -1,7 +1,7 @@
 App\Entity\Patient:
 
     accessor_order: custom
-    custom_accessor_order: [guid, firstName, lastName, address, zipCode, phoneNumber, gender, status, emergencyStatus, flag, responses, virtual_properties]
+    custom_accessor_order: [guid, firstName, lastName, address,city, zipCode, phoneNumber, gender, status, emergencyStatus, flag, medicalStatus, testPositive, createdAt, responses, virtual_properties]
 
     virtual_properties:
         getGroupedResponses:
@@ -17,6 +17,8 @@ App\Entity\Patient:
         lastName:
             groups: ['patient-list', 'patient', 'treat']
         address:
+            groups: ['patient', 'treat']
+        city:
             groups: ['patient', 'treat']
         zipCode:
             groups: ['patient', 'treat']
