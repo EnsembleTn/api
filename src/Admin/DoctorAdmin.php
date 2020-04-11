@@ -90,7 +90,12 @@ final class DoctorAdmin extends AbstractAdmin
         $formMapper
             ->add('email')
             ->add('firstName')
-            ->add('lastName');
+            ->add('lastName')
+            ->add('region', ChoiceType::class, [
+                'choices' => Tools::tunisiaCitiesList(),
+                'multiple' => false,
+                'required' => true,
+            ]);
         if (null !== $this->getSubject()) {
             $formMapper->add('plainPassword', TextType::class, [
                 'required' => false,]);

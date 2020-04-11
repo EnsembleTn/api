@@ -212,4 +212,39 @@ class Tools
     {
         return (base64_encode(base64_decode($base64string, true)) === $base64string);
     }
+
+    /**
+     * Tunisia 24 cities list
+     *
+     * @return array
+     */
+    public static function tunisiaCitiesList()
+    {
+        return [
+            'ARIANA' => 'ARIANA',
+            'BEJA' => 'BEJA',
+            'BEN AROUS' => 'BEN AROUS',
+            'BIZERTE' => 'BIZERTE',
+            'GABES' => 'GABES',
+            'GAFSA' => 'GAFSA',
+            'JENDOUBA' => 'JENDOUBA',
+            'KAIROUAN' => 'KAIROUAN',
+            'KASSERINE' => 'KASSERINE',
+            'KEBILI' => 'KEBILI',
+            'KEF' => 'KEF',
+            'MAHDIA' => 'MAHDIA',
+            'MANOUBA' => 'MANOUBA',
+            'MEDENINE' => 'MEDENINE',
+            'MONASTIR' => 'MONASTIR',
+            'NABEUL' => 'NABEUL',
+            'SFAX' => 'SFAX',
+            'SIDI BOUZID' => 'SIDI BOUZID',
+            'SILIANA' => 'SILIANA',
+            'SOUSSE' => 'SOUSSE',
+            'TATAOUINE' => 'TATAOUINE',
+            'TOZEUR' => 'TOZEUR',
+            'TUNIS' => 'TUNIS',
+            'ZAGHOUAN' => 'ZAGHOUAN',
+        ];
+    }
 }
