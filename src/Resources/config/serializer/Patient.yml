@@ -34,5 +34,7 @@ App\Entity\Patient:
             groups: ['patient-list', 'patient', 'treat']
         testPositive:
             groups: ['patient-list', 'patient', 'treat']
+        createdAt:
+            groups: ['patient-list', 'patient', 'treat']
         responses:
             groups: ['patient']
