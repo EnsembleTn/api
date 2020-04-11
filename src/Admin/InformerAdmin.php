@@ -3,11 +3,10 @@
 namespace App\Admin;
 
 use App\Manager\FileManager;
-use App\Util\Tools;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
@@ -41,6 +40,11 @@ final class InformerAdmin extends AbstractAdmin
         parent::__construct($code, $class, $baseControllerName);
 
         $this->fm = $fm;
+    }
+
+    public function configureRoutes(RouteCollection $collection)
+    {
+        $collection->remove('create');
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void

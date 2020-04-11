@@ -7,7 +7,6 @@
 
 namespace App\Action\Security;
 
-
 use App\Action\BaseAction;
 use App\ApiEvents\DoctorEvents;
 use App\Dto\ResetPasswordRequest;

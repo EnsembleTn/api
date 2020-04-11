@@ -7,7 +7,6 @@
 
 namespace App\Action\Security;
 
-
 use App\Action\BaseAction;
 use App\Dto\ChangePasswordRequest;
 use App\Form\ChangePasswordRequestType;

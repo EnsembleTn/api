@@ -19,6 +19,7 @@ class Question
 
     const TYPE_YES_OR_NO = 1;
     const TYPE_NORMAL = 2;
+    const TYPE_NUMBER = 3;
 
     //question categories
 
@@ -108,6 +109,9 @@ class Question
                 break;
             case 2 :
                 return 'TYPE_NORMAL';
+                break;
+            case 3 :
+                return 'TYPE_NUMBER';
                 break;
         }
 

@@ -26,6 +26,7 @@ final class QuestionAdmin extends AbstractAdmin
                 'choices' => [
                     'TYPE_YES_OR_NO' => 1,
                     'TYPE_NORMAL' => 2,
+                    'TYPE_NUMBER' => 3,
                 ],
                 'multiple' => false,
                 'required' => true,

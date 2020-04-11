@@ -4,7 +4,6 @@ namespace App\Action\Patient;
 
 use App\Action\BaseAction;
 use App\Entity\Patient;
-use App\Manager\PatientManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Swagger\Annotations as SWG;

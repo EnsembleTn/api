@@ -3,7 +3,6 @@
 namespace App\Action\Patient;
 
 use App\Action\BaseAction;
-use App\Entity\Doctor;
 use App\Entity\Patient;
 use App\Form\PatientUpdateType;
 use App\Manager\DoctorManager;
