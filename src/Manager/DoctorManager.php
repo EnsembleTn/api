@@ -228,6 +228,27 @@ class DoctorManager
         $this->em->flush();
     }
 
+    public function getEmergencyDoctorControlledCities(Doctor $doctor)
+    {
+        if (!$doctor->isEmergencyDoctor())
+            return [];
+
+        switch ($doctor->getRegion()) {
+            case 'TUNIS' :
+                return ['TUNIS', 'ARIANA', 'BEN AROUS', 'MANOUBA', 'BIZERTE', 'NABEUL', 'ZAGHOUAN'];
+                break;
+            case 'SOUSSE' :
+                return ['SOUSSE', 'MONASTIR', 'MAHDIA', 'KAIROUAN'];
+                break;
+            case 'SFAX' :
+                return ['SFAX', 'SIDI BOUZID'];
+                break;
+            case 'GAFSA' :
+                return ['GAFSA', 'TOZEUR', 'KASSERINE'];
+                break;
+        }
+    }
+
     /**
      * Encode plain password
      *

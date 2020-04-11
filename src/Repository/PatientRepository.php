@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Doctor;
 use App\Entity\Patient;
+use App\Manager\DoctorManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -18,22 +19,36 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class PatientRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var DoctorManager
+     */
+    private $dm;
+
+    public function __construct(ManagerRegistry $registry, DoctorManager $dm)
     {
         parent::__construct($registry, Patient::class);
+
+        $this->dm = $dm;
     }
 
     public function findAllCustom(Doctor $doctor)
     {
         return $doctor->isEmergencyDoctor() ?
-            $this->findBy(['flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT]], ['createdAt' => 'ASC']) :
+            $this->findBy([
+                'flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT],
+                'city' => $this->dm->getEmergencyDoctorControlledCities($doctor)],
+                ['createdAt' => 'ASC']) :
             $this->findBy(['denounced' => 0], ['createdAt' => 'ASC']);
     }
 
     public function first(Doctor $doctor)
     {
         if ($doctor->isEmergencyDoctor()) {
-            $arrayResult = $this->findBy(['emergencyStatus' => Patient::STATUS_ON_HOLD, 'flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT]], ['createdAt' => 'ASC'], 1);
+            $arrayResult = $this->findBy([
+                'emergencyStatus' => Patient::STATUS_ON_HOLD,
+                'flag' => [Patient::FLAG_SUSPECT, Patient::FLAG_URGENT],
+                'city' => $this->dm->getEmergencyDoctorControlledCities($doctor)],
+                ['createdAt' => 'ASC'], 1);
         } else {
             $arrayResult = $this->findBy(['status' => Patient::STATUS_ON_HOLD, 'flag' => null], ['createdAt' => 'ASC'], 1);
         }
