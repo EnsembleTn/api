@@ -52,6 +52,6 @@ class DoctorRepository extends ServiceEntityRepository implements UserLoaderInte
             ->where('doctor.roles LIKE :roles')
             ->setParameter('roles', '%"' . $role . '"%')
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 }
