@@ -61,7 +61,7 @@ class Tools
     public static function array_second_level_keys($array)
     {
         $result = array();
-        foreach($array as $sub) {
+        foreach ($array as $sub) {
             $result = array_merge($result, $sub);
         }
         return array_keys($result);
@@ -246,5 +246,13 @@ class Tools
             'TUNIS' => 'TUNIS',
             'ZAGHOUAN' => 'ZAGHOUAN',
         ];
+    }
+
+    public static function UniqueRandomNumbersWithinRange($min, $max, $quantity)
+    {
+        $numbers = range($min, $max);
+        shuffle($numbers);
+        
+        return array_slice($numbers, 0, $quantity);
     }
 }
