@@ -6,8 +6,10 @@ use App\Manager\FileManager;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
@@ -46,6 +48,19 @@ final class PatientAdmin extends AbstractAdmin
     public function configureRoutes(RouteCollection $collection)
     {
         $collection->remove('create');
+    }
+
+    protected function configureFormFields(FormMapper $formMapper): void
+    {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $formMapper
+                ->add('denounced', ChoiceType::class, [
+                    'choices' => [
+                        'UNDENOUNCED' => 0,
+                        'DENOUNCED' => 1,
+                    ]
+                ]);
+        }
     }
 
     protected function configureShowFields(ShowMapper $showMapper)
@@ -115,7 +130,7 @@ final class PatientAdmin extends AbstractAdmin
             $listMapper->add('zipCode');
         }
 
-        $listMapper->add('_action', 'actions', ['actions' => ['delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
+        $listMapper->add('_action', 'actions', ['actions' => ['edit' => ['template' => ':CRUD:list__action_edit.html.twig'], 'delete' => ['template' => ':CRUD:list__action_delete.html.twig'], 'show' => ['template' => ':CRUD:list__action_show.html.twig']]]);
 
     }
 
