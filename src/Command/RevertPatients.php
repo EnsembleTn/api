@@ -49,7 +49,7 @@ class RevertPatients extends Command
             ->setName('app:revert-patients')
             ->setDescription('Revert patients due to inactivity');
 
-        // this cron should be ran every 30 minutes :   */30 * * * * php /path/to/app/bin/console app:revert-patients
+        // this cron should be ran every 10 minutes :   */10 * * * * php /path/to/app/bin/console app:revert-patients
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

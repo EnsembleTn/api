@@ -55,6 +55,7 @@ class PatientType extends AbstractType
                     ])
                 ],
             ])
+            ->add('comment')
             ->add('responses', CollectionType::class, [
                 'entry_type' => ResponseType::class,
                 'allow_add' => false,

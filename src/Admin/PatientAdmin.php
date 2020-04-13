@@ -59,6 +59,7 @@ final class PatientAdmin extends AbstractAdmin
         $showMapper->add('phoneNumber');
 
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $showMapper->add('comment');
             $showMapper->add('status');
             $showMapper->add('emergencyStatus');
             $showMapper->add('flag');
