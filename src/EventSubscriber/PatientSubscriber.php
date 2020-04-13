@@ -9,6 +9,7 @@ use App\Manager\DoctorManager;
 use App\Service\TTSMSing;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -36,15 +37,22 @@ DOCTOR_NOTIFICATION_SMS_CONTENT;
     private $TTSMSing;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * PatientSubscriber constructor.
      *
      * @param DoctorManager $doctorManager
      * @param TTSMSing $TTSMSing
+     * @param LoggerInterface $logger
      */
-    public function __construct(DoctorManager $doctorManager, TTSMSing $TTSMSing)
+    public function __construct(DoctorManager $doctorManager, TTSMSing $TTSMSing, LoggerInterface $logger)
     {
         $this->doctorManager = $doctorManager;
         $this->TTSMSing = $TTSMSing;
+        $this->logger = $logger;
     }
 
     /**
@@ -66,12 +74,12 @@ DOCTOR_NOTIFICATION_SMS_CONTENT;
      */
     public function onPatientNew(PatientEvent $patientEvent)
     {
-        $patient = $patientEvent->getPatient();
-
         foreach ($this->doctorManager->getRandomDoctorsByRole(Doctor::ROLE_DOCTOR, 7) as $doctor) {
             $this->TTSMSing->send($doctor->getPhoneNumber(),
                 self::DOCTOR_NOTIFICATION_SMS_CONTENT
             );
+
+            $this->logger->info("Notification SMS sent to {$doctor->getFullname()} , phone Number : {$doctor->getPhoneNumber()}", ['DOCTOR NOTIFICATION']);
         }
     }
 }
