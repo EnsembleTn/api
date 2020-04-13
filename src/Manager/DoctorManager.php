@@ -156,6 +156,17 @@ class DoctorManager
     }
 
     /**
+     * Load doctors by role
+     *
+     * @param string $role
+     * @return Doctor[]|null
+     */
+    public function getDoctorsByRole(string $role)
+    {
+        return $this->em->getRepository(Doctor::class)->findByRole($role);
+    }
+
+    /**
      * ConfirmRegistration doctor account
      *
      * @param Doctor $doctor

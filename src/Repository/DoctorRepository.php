@@ -45,4 +45,13 @@ class DoctorRepository extends ServiceEntityRepository implements UserLoaderInte
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findByRole(string $role)
+    {
+        return $this->createQueryBuilder('doctor')
+            ->where('doctor.roles LIKE :roles')
+            ->setParameter('roles', '%"' . $role . '"%')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

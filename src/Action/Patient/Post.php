@@ -4,8 +4,10 @@ namespace App\Action\Patient;
 
 use App\Action\BaseAction;
 use App\ApiEvents\GenericEvents;
+use App\ApiEvents\PatientEvents;
 use App\Entity\Patient;
 use App\Event\FileUploadEvent;
+use App\Event\PatientEvent;
 use App\Form\PatientType;
 use App\Manager\PatientManager;
 use App\Manager\QuestionManager;
@@ -92,6 +94,8 @@ class Post extends BaseAction
             $parameters->get('upload_files_to_server') === 'true' ? true : false
         ), GenericEvents::FILE_UPLOAD);
 
+        // dispatch new patient event
+        $dispatcher->dispatch(new PatientEvent($patient), PatientEvents::PATIENT_NEW);
 
         return $this->jsonResponse(
             Response::HTTP_CREATED,

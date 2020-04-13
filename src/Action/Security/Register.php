@@ -64,7 +64,7 @@ class Register extends BaseAction
 
         $dm->registerDoctor($doctor);
 
-        $dispatcher->dispatch( new DoctorEvent($doctor), DoctorEvents::DOCTOR_REGISTRATION_SUCCESS);
+        $dispatcher->dispatch(new DoctorEvent($doctor), DoctorEvents::DOCTOR_REGISTRATION_SUCCESS);
 
         return $this->JsonResponse(
             Response::HTTP_CREATED,

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\EventSubscriber;
 
 use App\ApiEvents\DoctorEvents;
@@ -15,7 +16,6 @@ use Twig\Error\SyntaxError;
  * @author : Ala Daly <ala.daly@dotit-corp.com>
  * @date : 21‏/3‏/2020, Sat
  **/
-
 class DoctorSubscriber implements EventSubscriberInterface
 {
     /**
@@ -29,7 +29,8 @@ class DoctorSubscriber implements EventSubscriberInterface
     private $templating;
 
     /**
-     * UserSubscriber constructor.
+     * DoctorSubscriber constructor.
+     *
      * @param MailerInterface $mailer
      * @param Environment $templating
      */
