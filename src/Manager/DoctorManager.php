@@ -246,6 +246,12 @@ class DoctorManager
             case 'GAFSA' :
                 return ['GAFSA', 'TOZEUR', 'KASSERINE'];
                 break;
+            case 'GABES' :
+                return ['GABES', 'MEDENINE', 'TATAOUINE', 'KEBILI'];
+                break;
+            case 'JENDOUBA' :
+                return ['JENDOUBA', 'BEJA', 'KEF', 'SILIANA'];
+                break;
         }
     }
 
