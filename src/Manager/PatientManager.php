@@ -183,6 +183,7 @@ class PatientManager
                 ->setEmergencyStatus(null)
                 ->setFlag(null)
                 ->setDoctor(null)
+                ->getEmergencyDoctor(null)
                 ->setDenounced(0)
                 ->setMedicalStatus(null)
                 ->setTestPositive(false);

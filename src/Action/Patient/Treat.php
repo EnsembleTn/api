@@ -53,10 +53,18 @@ class Treat extends BaseAction
         $patient = $pm->treat($doctor);
 
         if ($patient) {
-            // automatically update patient status to IN_PROGRESS
-            $doctor->isEmergencyDoctor() ? $patient->setEmergencyStatus(Patient::STATUS_IN_PROGRESS) : $patient->setStatus(Patient::STATUS_IN_PROGRESS);
+            // automatically update patient status to IN_PROGRESS and attach the doctor involved
+            if ($doctor->isEmergencyDoctor()) {
+                $patient->setEmergencyDoctor($doctor);
+                $patient->setEmergencyStatus(Patient::STATUS_IN_PROGRESS);
+            } else {
+                $patient->setDoctor($doctor);
+                $patient->setStatus(Patient::STATUS_IN_PROGRESS);
+            }
+
             $pm->update($patient);
         }
+
 
         return $this->jsonResponse(
             Response::HTTP_OK,
