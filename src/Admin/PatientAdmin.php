@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 use App\Manager\FileManager;
+use App\Util\Tools;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -53,13 +54,16 @@ final class PatientAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $formMapper
-                ->add('denounced', ChoiceType::class, [
-                    'choices' => [
-                        'UNDENOUNCED' => 0,
-                        'DENOUNCED' => 1,
-                    ]
-                ]);
+            $formMapper->add('city', ChoiceType::class, [
+                'choices' => Tools::tunisiaCitiesList(),
+                'multiple' => false
+            ]);
+            $formMapper->add('denounced', ChoiceType::class, [
+                'choices' => [
+                    'UNDENOUNCED' => 0,
+                    'DENOUNCED' => 1,
+                ]
+            ]);
         }
     }
 
