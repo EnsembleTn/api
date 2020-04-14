@@ -38,9 +38,6 @@ class Get extends BaseAction
      */
     public function __invoke(Request $request, QuestionManager $qm, LoggerInterface $logger)
     {
-
-        $logger->info('TESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST');
-
         $questions = $qm->getAll(true);
 
         return $this->jsonResponse(
