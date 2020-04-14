@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class PatientSubscriber implements EventSubscriberInterface
 {
     const DOCTOR_NOTIFICATION_SMS_CONTENT = <<<DOCTOR_NOTIFICATION_SMS_CONTENT
-L’équipe maabaadhna vous informe que vous avez un nouveau dossier d’un patient à traiter sur la plateforme. 
+L&rsquo;équipe maabaadhna vous informe que vous avez un nouveau dossier d&rsquo;un patient à traiter sur la plateforme. 
 Notre devise est la rapidité de la prise en charge pour ne pas encombrer le Samu. 
 Nous vous remercions pour votre collaboration et votre dévouement!
 DOCTOR_NOTIFICATION_SMS_CONTENT;
