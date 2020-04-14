@@ -62,7 +62,7 @@ class DoctorRepository extends ServiceEntityRepository implements UserLoaderInte
             ->getQuery()
             ->getSingleScalarResult();
 
-        $randomIds = Tools::UniqueRandomNumbersWithinRange(135, 140, $limit);
+        $randomIds = Tools::UniqueRandomNumbersWithinRange(1, $total, $limit);
 
         return $this->createQueryBuilder('doctor')
             ->where('doctor.id IN (:ids)')
