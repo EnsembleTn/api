@@ -7,8 +7,6 @@ use App\Entity\Doctor;
 use App\Event\PatientEvent;
 use App\Manager\DoctorManager;
 use App\Service\TTSMSing;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -69,8 +67,6 @@ DOCTOR_NOTIFICATION_SMS_CONTENT;
      * Actions to perform after new patient form is submitted successfully
      *
      * @param PatientEvent $patientEvent
-     * @throws NoResultException
-     * @throws NonUniqueResultException
      */
     public function onPatientNew(PatientEvent $patientEvent)
     {

@@ -3,11 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Doctor;
-use App\Util\Tools;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -50,24 +48,12 @@ class DoctorRepository extends ServiceEntityRepository implements UserLoaderInte
 
     /**
      * @param string $role
-     * @param int $limit
      * @return mixed
-     * @throws NonUniqueResultException
-     * @throws NoResultException
      */
-    public function findByRole(string $role, int $limit)
+    public function findByRole(string $role)
     {
-        $total = $totalRowsTable = $this->createQueryBuilder('doctor')
-            ->select('count(doctor.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        $randomIds = Tools::UniqueRandomNumbersWithinRange(1, $total, $limit);
-
         return $this->createQueryBuilder('doctor')
-            ->where('doctor.id IN (:ids)')
-            ->andWhere('doctor.roles LIKE :roles')
-            ->setParameter('ids', $randomIds)
+            ->where('doctor.roles LIKE :roles')
             ->setParameter('roles', '%"' . $role . '"%')
             ->getQuery()
             ->getResult();

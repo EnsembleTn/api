@@ -9,8 +9,6 @@ use App\Permissions\DoctorPermissions;
 use App\Util\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -163,12 +161,14 @@ class DoctorManager
      * @param string $role
      * @param int $limit
      * @return Doctor[]|null
-     * @throws NoResultException
-     * @throws NonUniqueResultException
      */
     public function getRandomDoctorsByRole(string $role, int $limit)
     {
-        return $this->em->getRepository(Doctor::class)->findByRole($role, $limit);
+        $doctors = $this->em->getRepository(Doctor::class)->findByRole($role);
+
+        shuffle($doctors);
+
+        return array_slice($doctors, 0, $limit);
     }
 
     /**
