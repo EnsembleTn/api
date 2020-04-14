@@ -6,6 +6,7 @@ use App\Action\BaseAction;
 use App\Manager\QuestionManager;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
+use Psr\Log\LoggerInterface;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,8 +36,10 @@ class Get extends BaseAction
      * @param QuestionManager $qm
      * @return View
      */
-    public function __invoke(Request $request, QuestionManager $qm)
+    public function __invoke(Request $request, QuestionManager $qm, LoggerInterface $logger)
     {
+
+        $logger->info('TESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST');
 
         $questions = $qm->getAll(true);
 

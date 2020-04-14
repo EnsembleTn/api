@@ -74,7 +74,11 @@ DOCTOR_NOTIFICATION_SMS_CONTENT;
      */
     public function onPatientNew(PatientEvent $patientEvent)
     {
-        foreach ($this->doctorManager->getRandomDoctorsByRole(Doctor::ROLE_DOCTOR, 7) as $doctor) {
+        $doctors = $this->doctorManager->getRandomDoctorsByRole(Doctor::ROLE_DOCTOR, 7);
+
+        $this->logger->info("Notified Doctors number: " . count($doctors), ['DOCTOR NOTIFICATION']);
+
+        foreach ($doctors as $doctor) {
             $this->TTSMSing->send($doctor->getPhoneNumber(),
                 self::DOCTOR_NOTIFICATION_SMS_CONTENT
             );
