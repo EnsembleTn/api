@@ -79,7 +79,7 @@ DOCTOR_NOTIFICATION_SMS_CONTENT;
                 self::DOCTOR_NOTIFICATION_SMS_CONTENT
             );
 
-            $this->logger->info("Notification SMS sent to {$doctor->getFullname()} , phone Number : {$doctor->getPhoneNumber()}", ['DOCTOR NOTIFICATION']);
+            $this->logger->alert("Notification SMS sent to {$doctor->getFullname()} , phone Number : {$doctor->getPhoneNumber()}", ['DOCTOR NOTIFICATION']);
         }
     }
 }
