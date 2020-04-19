@@ -13,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class PatientType
@@ -58,7 +57,8 @@ class PatientType extends AbstractType
             ->add('comment')
             ->add('responses', CollectionType::class, [
                 'entry_type' => ResponseType::class,
-                'allow_add' => false,
+                'allow_add' => $options['allow_extra_fields'],
+                'by_reference' => !$options['allow_extra_fields'],
                 'allow_delete' => false,
             ]);
     }
@@ -67,6 +67,7 @@ class PatientType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Patient::class,
+            'allow_extra_fields' => false,
         ]);
     }
 }

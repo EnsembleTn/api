@@ -73,14 +73,14 @@ class Patient implements Uploadable
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"add-by-doctor"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"add-by-doctor"})
      */
     private $lastName;
 
@@ -107,11 +107,12 @@ class Patient implements Uploadable
      *
      * @ORM\Column(type="integer")
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"add-by-doctor"})
      * @Assert\Length(
      *      min = 8,
      *      max = 8,
-     *      exactMessage="The phone number should have exactly {{ limit }} characters"
+     *      exactMessage="The phone number should have exactly {{ limit }} characters",
+     *      groups={"add-by-doctor"}
      * )
      */
     private $phoneNumber;
@@ -119,7 +120,7 @@ class Patient implements Uploadable
     /**
      * @ORM\Column(type="string", length=20, nullable=false)
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"add-by-doctor"})
      */
     private $gender;
 
