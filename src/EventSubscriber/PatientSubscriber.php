@@ -60,6 +60,7 @@ DOCTOR_NOTIFICATION_SMS_CONTENT;
     {
         return array(
             PatientEvents::PATIENT_NEW => 'onPatientNew',
+            PatientEvents::PATIENT_EMERGENCY_CASE => 'onPatientEmergencyCase',
         );
     }
 
@@ -71,11 +72,26 @@ DOCTOR_NOTIFICATION_SMS_CONTENT;
     public function onPatientNew(PatientEvent $patientEvent)
     {
         foreach ($this->doctorManager->getRandomDoctorsByRole(Doctor::ROLE_DOCTOR, 7) as $doctor) {
-            $this->TTSMSing->send($doctor->getPhoneNumber(),
-                self::DOCTOR_NOTIFICATION_SMS_CONTENT
-            );
+            $this->TTSMSing->send($doctor->getPhoneNumber(), self::DOCTOR_NOTIFICATION_SMS_CONTENT);
 
-            $this->logger->alert("Notification SMS sent to {$doctor->getFullname()} , phone Number : {$doctor->getPhoneNumber()}", ['DOCTOR NOTIFICATION']);
+            $this->logger->alert("Notification SMS sent to {$doctor->getFullname()} , phone Number : {$doctor->getPhoneNumber()}", ['DOCTOR_NOTIFICATION']);
+        }
+    }
+
+    /**
+     * Actions to perform after patient case is treated as an emergency
+     *
+     * @param PatientEvent $patientEvent
+     */
+    public function onPatientEmergencyCase(PatientEvent $patientEvent)
+    {
+        $patient = $patientEvent->getPatient();
+
+        foreach ($this->doctorManager->getRandomDoctorsByRole(Doctor::ROLE_EMERGENCY_DOCTOR, 7) as $doctor) {
+            if (in_array($patient->getCity(), $this->doctorManager->getEmergencyDoctorControlledCities($doctor)))
+                $this->TTSMSing->send($doctor->getPhoneNumber(), self::DOCTOR_NOTIFICATION_SMS_CONTENT);
+
+            $this->logger->alert("Notification SMS sent to {$doctor->getFullname()} , phone Number : {$doctor->getPhoneNumber()}", ['EMERGENCY_DOCTOR_NOTIFICATION']);
         }
     }
 }

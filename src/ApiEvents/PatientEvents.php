@@ -17,4 +17,11 @@ final class PatientEvents
      * @Event("App\Event\PatientEvent")
      */
     const PATIENT_NEW = 'patient.new';
+
+    /**
+     * The PATIENT_EMERGENCY_CASE event occurs when a new patient is treated as an emergency case ( flag = SUSPECT or URGENT).
+     *
+     * @Event("App\Event\PatientEvent")
+     */
+    const PATIENT_EMERGENCY_CASE = 'patient.emergency_case';
 }

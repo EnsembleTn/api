@@ -3,7 +3,9 @@
 namespace App\Action\Patient;
 
 use App\Action\BaseAction;
+use App\ApiEvents\PatientEvents;
 use App\Entity\Patient;
+use App\Event\PatientEvent;
 use App\Form\PatientUpdateType;
 use App\Manager\DoctorManager;
 use App\Manager\PatientManager;
@@ -15,6 +17,7 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Patch
@@ -66,7 +69,7 @@ class Patch extends BaseAction
      * @param DoctorManager $dm
      * @return View|FormInterface
      */
-    public function __invoke(Request $request, Patient $patient, PatientManager $pm, DoctorManager $dm)
+    public function __invoke(Request $request, Patient $patient, PatientManager $pm, DoctorManager $dm, EventDispatcherInterface $dispatcher)
     {
         try {
             $dm->canUpdatePatient($patient);
@@ -98,6 +101,11 @@ class Patch extends BaseAction
             $patient->setDoctor($dm->getCurrentDoctor());
 
         $pm->update($patient);
+
+        // notify emergency doctor
+        if (!$dm->getCurrentDoctor()->isEmergencyDoctor() && $patient->getFlag() != Patient::FLAG_STABLE)
+            // dispatch new patient event
+            $dispatcher->dispatch(new PatientEvent($patient), PatientEvents::PATIENT_EMERGENCY_CASE);
 
         return $this->jsonResponse(
             Response::HTTP_OK,
