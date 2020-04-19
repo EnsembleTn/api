@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
-use App\Entity\Doctor;
 use App\Util\Tools;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -147,8 +146,7 @@ final class DoctorAdmin extends AbstractAdmin
         $plainPassword = $doctor->getPlainPassword();
         $doctor
             ->setGuid(Tools::generateGUID('DCT', 8))
-            ->setPassword($this->encodingPassword->encodePassword($doctor, $plainPassword))
-            ->setRoles([Doctor::ROLE_DOCTOR]);
+            ->setPassword($this->encodingPassword->encodePassword($doctor, $plainPassword));
     }
 
     public function preUpdate($doctor)
