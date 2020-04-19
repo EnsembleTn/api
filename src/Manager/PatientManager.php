@@ -41,15 +41,18 @@ class PatientManager
      * Save patient
      *
      * @param Patient $patient
+     * @param bool $addedByDoctor
      * @throws Exception
      */
-    public function save(Patient $patient): void
+    public function save(Patient $patient, $addedByDoctor = false): void
     {
         // generate GUID
         $patient->setGuid(Tools::generateGUID('PAT', 8));
 
-        // set status ON_HOLD
-        $patient->setStatus(Patient::STATUS_ON_HOLD);
+        if ($addedByDoctor)
+            $patient->setStatus(Patient::STATUS_IN_PROGRESS);        // set status automatically to IN_PROGRESS
+        else
+            $patient->setStatus(Patient::STATUS_ON_HOLD);         // set status ON_HOLD
 
         $this->em->persist($patient);
         $this->em->flush();

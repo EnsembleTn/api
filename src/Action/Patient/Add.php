@@ -60,7 +60,7 @@ class Add extends BaseAction
      *
      * @SWG\Tag(name="Patient")
      *
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"patient"})
      * @param Request $request
      * @param PatientManager $pm
      * @param DoctorManager $dm
@@ -92,7 +92,7 @@ class Add extends BaseAction
             return $form;
         }
 
-        $pm->save($patient);
+        $pm->save($patient, true);
 
         // dispatch file upload event
         $dispatcher->dispatch(new FileUploadEvent(
@@ -106,7 +106,10 @@ class Add extends BaseAction
 
         return $this->jsonResponse(
             Response::HTTP_CREATED,
-            'Patient resource add success'
+            'Patient resource add success',
+            [
+                'patient' => $patient
+            ]
         );
     }
 }

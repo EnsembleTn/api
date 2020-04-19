@@ -87,7 +87,7 @@ class Patient implements Uploadable
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"add-by-doctor"})
      */
     private $address;
 
@@ -185,6 +185,8 @@ class Patient implements Uploadable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Assert\NotBlank(groups={"add-by-doctor"})
      */
     private $city;
 
