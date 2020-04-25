@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Patient;
+use App\Entity\SMSVerification;
 use App\Util\Tools;
 use App\Validator\constraints\Base64StringConstraint;
 use App\Validator\constraints\FileMimeTypeConstraint;
@@ -10,9 +11,12 @@ use App\Validator\constraints\FileSizeConstraint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class PatientType
@@ -21,7 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class PatientType extends AbstractType
 {
-    CONST SIZE = 4000000; // 4Mo
+    const MAX_AUDIO_SIZE = 4000000; // 4Mo
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -42,7 +46,7 @@ class PatientType extends AbstractType
                 'constraints' => [
                     new Base64StringConstraint(),
                     new FileSizeConstraint([
-                        'size' => self::SIZE
+                        'size' => self::MAX_AUDIO_SIZE
                     ]),
                     new FileMimeTypeConstraint([
                         'mimeTypes' => [
@@ -60,6 +64,17 @@ class PatientType extends AbstractType
                 'allow_add' => $options['allow_extra_fields'],
                 'by_reference' => !$options['allow_extra_fields'],
                 'allow_delete' => false,
+            ])
+            ->add('pinCode', IntegerType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length([
+                        'min' => SMSVerification::PIN_CODE_MAX_LENGTH,
+                        'max' => SMSVerification::PIN_CODE_MAX_LENGTH,
+                        'exactMessage' => "The pin code should have exactly {{ limit }} characters"
+                    ])
+                ]
             ]);
     }
 

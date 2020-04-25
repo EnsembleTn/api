@@ -4,7 +4,9 @@ namespace App\Action\Sms;
 
 use App\Action\BaseAction;
 use App\Dto\Phone;
+use App\Entity\SMSVerification;
 use App\Form\PhoneType;
+use App\Manager\SMSVerificationManager;
 use App\Service\TTSMSing;
 use App\Util\Tools;
 use Exception;
@@ -40,6 +42,7 @@ class SendVerificationSMS extends BaseAction
      *
      * @SWG\Response(response=200, description="Verification SMS successfully sent to patient")
      * @SWG\Response(response=400, description="Validation Failed")
+     * @SWG\Response(response=403, description="Phone number %phone number% can retry verification again in : : %remaining time%")
      * @SWG\Response(response=500, description="Error with TT SMS Gateway")
      *
      * @SWG\Tag(name="SMS")
@@ -47,9 +50,10 @@ class SendVerificationSMS extends BaseAction
      * @Rest\View()
      * @param Request $request
      * @param TTSMSing $ttSMSing
+     * @param SMSVerificationManager $svm
      * @return View|FormInterface
      */
-    public function __invoke(Request $request, TTSMSing $ttSMSing)
+    public function __invoke(Request $request, TTSMSing $ttSMSing, SMSVerificationManager $svm)
     {
         $phone = new Phone();
 
@@ -59,10 +63,18 @@ class SendVerificationSMS extends BaseAction
             return $form;
         }
 
-        $verificationCode = Tools::generateRandomCode();
+        // check send verification sms for given phone number
+        if ($timeToSubmitAgain = $svm->canSendVerificationSend($phone->getNumber())) {
+            return $this->jsonResponse(
+                Response::HTTP_FORBIDDEN,
+                "Phone number {$phone->getNumber()} can retry verification again in : {$timeToSubmitAgain}"
+            );
+        }
+
+        $pinCode = Tools::generateRandomCode(SMSVerification::PIN_CODE_MAX_LENGTH);
 
         try {
-            $ttSMSing->send($phone->getNumber(), "Code de vérification : {$verificationCode}");
+            $ttSMSing->send($phone->getNumber(), "Code de vérification : {$pinCode}");
         } catch (Exception $exception) {
             return $this->jsonResponse(
                 Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -70,12 +82,16 @@ class SendVerificationSMS extends BaseAction
             );
         }
 
+        $svm->save(
+            (new SMSVerification())
+                ->setPhoneNumber($phone->getNumber())
+                ->setPinCode($pinCode)
+                ->setStatus(SMSVerification::STATUS_UNUSED)
+        );
+
         return $this->jsonResponse(
             Response::HTTP_OK,
-            'Verification SMS successfully sent to patient',
-            [
-                'verificationCode' => $verificationCode
-            ]
+            'Verification SMS successfully sent to patient'
         );
     }
 }

@@ -12,6 +12,7 @@ use App\Event\PatientEvent;
 use App\Form\PatientType;
 use App\Manager\PatientManager;
 use App\Manager\QuestionManager;
+use App\Manager\SMSVerificationManager;
 use Exception;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -46,7 +47,7 @@ class Post extends BaseAction
      *
      * @SWG\Response(response=200, description="Patient resource add success")
      * @SWG\Response(response=400, description="Validation Failed")
-     * @SWG\Response(response=403, description="Patient with phone number %phone number% can submit again in : %remaining time%")
+     * @SWG\Response(response=403, description="Patient with phone number %phone number% can submit again in : %remaining time% / Wrong sms verification pin code")
      *
      * @SWG\Tag(name="Patient")
      *
@@ -56,10 +57,18 @@ class Post extends BaseAction
      * @param QuestionManager $qm
      * @param EventDispatcherInterface $dispatcher
      * @param ParameterBagInterface $parameters
+     * @param SMSVerificationManager $svm
      * @return View|FormInterface
      * @throws Exception
      */
-    public function __invoke(Request $request, PatientManager $pm, QuestionManager $qm, EventDispatcherInterface $dispatcher, ParameterBagInterface $parameters)
+    public function __invoke(
+        Request $request,
+        PatientManager $pm,
+        QuestionManager $qm,
+        EventDispatcherInterface $dispatcher,
+        ParameterBagInterface $parameters,
+        SMSVerificationManager $svm
+    )
     {
         $patient = new Patient();
 
@@ -78,6 +87,7 @@ class Post extends BaseAction
             return $form;
         }
 
+        // check submission interval
         if ($timeToSubmitAgain = $pm->canSubmit($patient)) {
             return $this->jsonResponse(
                 Response::HTTP_FORBIDDEN,
@@ -85,7 +95,18 @@ class Post extends BaseAction
             );
         }
 
+        // check two factor authentication with SMS
+        $smsVerification = $svm->getLastSMSVerification($patient->getPhoneNumber());
+
+        if (!$smsVerification or $smsVerification->getPinCode() != $form->get('pinCode')->getData()) {
+            return $this->jsonResponse(
+                Response::HTTP_FORBIDDEN,
+                "Wrong sms verification pin code"
+            );
+        }
+
         $pm->save($patient);
+        $svm->markAsUsed($smsVerification, $patient);
 
         // dispatch file upload event
         $dispatcher->dispatch(new FileUploadEvent(

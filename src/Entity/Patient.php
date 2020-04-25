@@ -195,9 +195,15 @@ class Patient implements Uploadable
      */
     private $comment;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SMSVerification", mappedBy="patient", cascade={"remove"})
+     */
+    private $smsVerifications;
+
     public function __construct()
     {
         $this->responses = new ArrayCollection();
+        $this->smsVerifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -578,6 +584,37 @@ class Patient implements Uploadable
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SMSVerification[]
+     */
+    public function getSMSVerifications(): Collection
+    {
+        return $this->smsVerifications;
+    }
+
+    public function addSMSVerification(SMSVerification $smsVerifications): self
+    {
+        if (!$this->smsVerifications->contains($smsVerifications)) {
+            $this->smsVerifications[] = $smsVerifications;
+            $smsVerifications->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSMSVerification(SMSVerification $smsVerifications): self
+    {
+        if ($this->smsVerifications->contains($smsVerifications)) {
+            $this->smsVerifications->removeElement($smsVerifications);
+            // set the owning side to null (unless already changed)
+            if ($smsVerifications->getPatient() === $this) {
+                $smsVerifications->setPatient(null);
+            }
+        }
 
         return $this;
     }
