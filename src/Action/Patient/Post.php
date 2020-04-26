@@ -47,7 +47,8 @@ class Post extends BaseAction
      *
      * @SWG\Response(response=200, description="Patient resource add success")
      * @SWG\Response(response=400, description="Validation Failed")
-     * @SWG\Response(response=403, description="Patient with phone number %phone number% can submit again in : %remaining time% / Wrong sms verification pin code")
+     * @SWG\Response(response=403, description="Patient with phone number %phone number% can submit again in : %remaining time%")
+     * @SWG\Response(response=404, description="Wrong sms verification pin code")
      *
      * @SWG\Tag(name="Patient")
      *
@@ -100,7 +101,7 @@ class Post extends BaseAction
 
         if (!$smsVerification or $smsVerification->getPinCode() != $form->get('pinCode')->getData()) {
             return $this->jsonResponse(
-                Response::HTTP_FORBIDDEN,
+                Response::HTTP_NOT_FOUND,
                 "Wrong sms verification pin code"
             );
         }
