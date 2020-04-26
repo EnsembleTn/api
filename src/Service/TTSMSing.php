@@ -60,21 +60,21 @@ class TTSMSing implements SMSInterface
             'Flags' => $this->flags,
         ];
 
-//        $client = new Client();
-//        $request = new Request('GET', $uri->withQuery(http_build_query($queryParams)));
-//
-//        // Response coming from gateway is in text/html format, will be using dom crawler to retrieve status code
-//        $promise = $client->sendAsync($request)->then(function ($response) {
-//            $crawler = new Crawler($response->getBody()->getContents());
-//
-//            $body = $crawler->filter('body')->text();
-//            $statusCode = str_replace("Status=", "", strtok($body, "\n"));
-//
-//            if (self::TT_SMS_GATEWAY_SUCCESS_CODE !== $statusCode)
-//                throw new Exception("Error when sending sms, exited with status code = {$statusCode}");
-//        });
-//
-//        $promise->wait();
+        $client = new Client();
+        $request = new Request('GET', $uri->withQuery(http_build_query($queryParams)));
+
+        // Response coming from gateway is in text/html format, will be using dom crawler to retrieve status code
+        $promise = $client->sendAsync($request)->then(function ($response) {
+            $crawler = new Crawler($response->getBody()->getContents());
+
+            $body = $crawler->filter('body')->text();
+            $statusCode = str_replace("Status=", "", strtok($body, "\n"));
+
+            if (self::TT_SMS_GATEWAY_SUCCESS_CODE !== $statusCode)
+                throw new Exception("Error when sending sms, exited with status code = {$statusCode}");
+        });
+
+        $promise->wait();
     }
 
     private function initParams(): void
