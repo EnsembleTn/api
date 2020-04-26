@@ -2,8 +2,12 @@
 
 namespace App\Service;
 
+use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class SMS
