@@ -37,7 +37,8 @@ class SendVerificationSMS extends BaseAction
      *     name="phone",
      *     in="body",
      *     required=true,
-     *     @Model(type=PhoneType::class)
+     *     @Model(type=PhoneType::class),
+     *     description="type field can be : 1 -> PATIENT VERIFICATION / 2 -> INFORMER VERIFICATION."
      * )
      *
      * @SWG\Response(response=200, description="Verification SMS successfully sent to patient")
@@ -64,7 +65,7 @@ class SendVerificationSMS extends BaseAction
         }
 
         // check send verification sms for given phone number
-        if ($timeToSubmitAgain = $svm->canSendVerificationSend($phone->getNumber())) {
+        if ($timeToSubmitAgain = $svm->canSendVerificationSend($phone->getNumber(), $phone->getType())) {
             return $this->jsonResponse(
                 Response::HTTP_FORBIDDEN,
                 "Phone number {$phone->getNumber()} can retry verification again in : {$timeToSubmitAgain}"
@@ -86,6 +87,7 @@ class SendVerificationSMS extends BaseAction
             (new SMSVerification())
                 ->setPhoneNumber($phone->getNumber())
                 ->setPinCode($pinCode)
+                ->setType($phone->getType())
                 ->setStatus(SMSVerification::STATUS_UNUSED)
         );
 

@@ -9,6 +9,7 @@ use FOS\RestBundle\View\View;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class Get
@@ -34,6 +35,10 @@ class Get extends BaseAction
      */
     public function __invoke(Request $request, PatientManager $pm)
     {
+        if (in_array($this->getParameter('kernel.environment'), ['prod', 'test'])) {
+            throw new NotFoundHttpException();
+        }
+
         $pm->revertAll();
 
         return $this->jsonResponse(

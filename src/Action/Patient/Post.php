@@ -7,6 +7,7 @@ use App\ApiEvents\GenericEvents;
 use App\ApiEvents\PatientEvents;
 use App\Entity\Patient;
 use App\Entity\Response as QuestionResponse;
+use App\Entity\SMSVerification;
 use App\Event\FileUploadEvent;
 use App\Event\PatientEvent;
 use App\Form\PatientType;
@@ -97,7 +98,7 @@ class Post extends BaseAction
         }
 
         // check two factor authentication with SMS
-        $smsVerification = $svm->getLastSMSVerification($patient->getPhoneNumber());
+        $smsVerification = $svm->getLastSMSVerification($patient->getPhoneNumber(), SMSVerification::TYPE_PATIENT);
 
         if (!$smsVerification or $smsVerification->getPinCode() != $form->get('pinCode')->getData()) {
             return $this->jsonResponse(

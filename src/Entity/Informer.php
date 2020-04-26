@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Entity\Interfaces\Uploadable;
 use App\Entity\Traits\ObjectMetaDataTrait;
 use App\Entity\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ReflectionException;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -104,6 +106,16 @@ class Informer implements Uploadable
      * @ORM\Column(type="text", nullable=true)
      */
     private $comment;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SMSVerification", mappedBy="informer")
+     */
+    private $smsVerifications;
+
+    public function __construct()
+    {
+        $this->smsVerifications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -241,6 +253,37 @@ class Informer implements Uploadable
 
     public function __toString()
     {
-     return (string) $this->firstName ;
+        return (string)$this->firstName;
+    }
+
+    /**
+     * @return Collection|SMSVerification[]
+     */
+    public function getSmsVerifications(): Collection
+    {
+        return $this->smsVerifications;
+    }
+
+    public function addSmsVerification(SMSVerification $smsVerification): self
+    {
+        if (!$this->smsVerifications->contains($smsVerification)) {
+            $this->smsVerifications[] = $smsVerification;
+            $smsVerification->setInformer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSmsVerification(SMSVerification $smsVerification): self
+    {
+        if ($this->smsVerifications->contains($smsVerification)) {
+            $this->smsVerifications->removeElement($smsVerification);
+            // set the owning side to null (unless already changed)
+            if ($smsVerification->getInformer() === $this) {
+                $smsVerification->setInformer(null);
+            }
+        }
+
+        return $this;
     }
 }

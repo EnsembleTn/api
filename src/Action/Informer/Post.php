@@ -5,9 +5,11 @@ namespace App\Action\Informer;
 use App\Action\BaseAction;
 use App\ApiEvents\GenericEvents;
 use App\Entity\Informer;
+use App\Entity\SMSVerification;
 use App\Event\FileUploadEvent;
 use App\Form\InformerType;
 use App\Manager\InformerManager;
+use App\Manager\SMSVerificationManager;
 use Exception;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -43,6 +45,7 @@ class Post extends BaseAction
      * @SWG\Response(response=200, description="Informer resource add success")
      * @SWG\Response(response=400, description="Validation Failed")
      * @SWG\Response(response=403, description="Informer with phone number %phone number% can submit again in : %remaining time%")
+     * @SWG\Response(response=404, description="Wrong sms verification pin code")
      *
      * @SWG\Tag(name="Informer")
      *
@@ -51,10 +54,11 @@ class Post extends BaseAction
      * @param InformerManager $im
      * @param EventDispatcherInterface $dispatcher
      * @param ParameterBagInterface $parameters
+     * @param SMSVerificationManager $svm
      * @return View|FormInterface
      * @throws Exception
      */
-    public function __invoke(Request $request, InformerManager $im, EventDispatcherInterface $dispatcher, ParameterBagInterface $parameters)
+    public function __invoke(Request $request, InformerManager $im, EventDispatcherInterface $dispatcher, ParameterBagInterface $parameters, SMSVerificationManager $svm)
     {
         $informer = new Informer();
 
@@ -71,13 +75,24 @@ class Post extends BaseAction
             );
         }
 
+        // check two factor authentication with SMS
+        $smsVerification = $svm->getLastSMSVerification($informer->getPhoneNumber(), SMSVerification::TYPE_INFORMER);
+
+        if (!$smsVerification or $smsVerification->getPinCode() != $form->get('pinCode')->getData()) {
+            return $this->jsonResponse(
+                Response::HTTP_NOT_FOUND,
+                "Wrong sms verification pin code"
+            );
+        }
+
         $im->save($informer);
+        $svm->markAsUsed($smsVerification, $informer);
 
         // dispatch file upload event
         $dispatcher->dispatch(new FileUploadEvent(
             $informer,
             $form->get('image')->getData(),
-            $parameters->get('upload_files_to_server') === 'true' ? true : false
+            $parameters->get('upload_files_to_server') === 'true'
         ), GenericEvents::FILE_UPLOAD);
         
 

@@ -3,13 +3,16 @@
 namespace App\Form;
 
 use App\Entity\Informer;
+use App\Entity\SMSVerification;
 use App\Validator\constraints\Base64StringConstraint;
 use App\Validator\constraints\FileMimeTypeConstraint;
 use App\Validator\constraints\FileSizeConstraint;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
@@ -49,6 +52,17 @@ class InformerType extends AbstractType
                         ]
                     ])
                 ],
+            ])
+            ->add('pinCode', IntegerType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length([
+                        'min' => SMSVerification::PIN_CODE_MAX_LENGTH,
+                        'max' => SMSVerification::PIN_CODE_MAX_LENGTH,
+                        'exactMessage' => "The pin code should have exactly {{ limit }} characters"
+                    ])
+                ]
             ]);
     }
 

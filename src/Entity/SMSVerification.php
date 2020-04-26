@@ -6,6 +6,11 @@ use App\Entity\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Class SMSVerification
+ *
+ * @author Daly Ghaith <daly.ghaith@gmail.com>
+ *
+ * @ORM\Table(name="sms_verification")
  * @ORM\Entity(repositoryClass="App\Repository\SMSVerificationRepository")
  */
 class SMSVerification
@@ -15,9 +20,14 @@ class SMSVerification
     const STATUS_UNUSED = 0;
     const STATUS_USED = 1;
 
-    // pin code length
+    // pin code constraints
 
     const PIN_CODE_MAX_LENGTH = 6;
+
+    // types
+
+    const TYPE_PATIENT = 1;
+    const TYPE_INFORMER = 2;
 
     use TimestampableTrait;
 
@@ -47,6 +57,16 @@ class SMSVerification
      * @ORM\ManyToOne(targetEntity="App\Entity\Patient", inversedBy="sMSVerifications")
      */
     private $patient;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Informer", inversedBy="smsVerifications")
+     */
+    private $informer;
 
     public function getId(): ?int
     {
@@ -99,5 +119,37 @@ class SMSVerification
         $this->patient = $patient;
 
         return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getInformer(): ?Informer
+    {
+        return $this->informer;
+    }
+
+    public function setInformer(?Informer $informer): self
+    {
+        $this->informer = $informer;
+
+        return $this;
+    }
+
+    public static function getTypes()
+    {
+        return [
+            'PATIENT' => self::TYPE_PATIENT,
+            'INFORMER' => self::TYPE_INFORMER
+        ];
     }
 }

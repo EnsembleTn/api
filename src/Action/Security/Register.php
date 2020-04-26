@@ -9,13 +9,14 @@ use App\Event\DoctorEvent;
 use App\Form\RegistrationType;
 use App\Manager\DoctorManager;
 use Exception;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -53,6 +54,10 @@ class Register extends BaseAction
      */
     public function __invoke(Request $request, DoctorManager $dm, EventDispatcherInterface $dispatcher)
     {
+        if (in_array($this->getParameter('kernel.environment'), ['prod', 'test'])) {
+            throw new NotFoundHttpException();
+        }
+
         $doctor = new Doctor();
         $form = $this->createForm(RegistrationType::class, $doctor);
 

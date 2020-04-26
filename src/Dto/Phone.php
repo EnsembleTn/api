@@ -2,8 +2,8 @@
 
 namespace App\Dto;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Phone
@@ -15,8 +15,6 @@ class Phone
     /**
      * @var int phone number
      *
-     * @ORM\Column(type="integer")
-     *
      * @Assert\NotBlank
      * @Assert\Length(
      *      min = 8,
@@ -25,6 +23,13 @@ class Phone
      * )
      */
     private $number;
+
+    /**
+     * @ORM\Column(type="smallint")
+     *
+     * @Assert\NotBlank
+     */
+    private $type;
 
     /**
      * @return int|null
@@ -40,5 +45,17 @@ class Phone
     public function setNumber(int $number): void
     {
         $this->number = $number;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }

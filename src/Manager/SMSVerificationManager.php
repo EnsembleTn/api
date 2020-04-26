@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Entity\Informer;
 use App\Entity\Patient;
 use App\Entity\SMSVerification;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,22 +45,26 @@ class SMSVerificationManager
         $this->em->flush();
     }
 
-    public function markAsUsed(SMSVerification $smsVerification, Patient $patient)
+    public function markAsUsed(SMSVerification $smsVerification, $object)
     {
-        $smsVerification
-            ->setPatient($patient)
-            ->setStatus(SMSVerification::STATUS_USED);
+        $smsVerification->setStatus(SMSVerification::STATUS_USED);
+
+        if ($object instanceof Patient)
+            $smsVerification->setPatient($object);
+        elseif ($object instanceof Informer)
+            $smsVerification->setInformer($object);
 
         $this->em->flush();
     }
 
     /**
      * @param int $phoneNumber
+     * @param int $type
      * @return string|null
      */
-    public function canSendVerificationSend(int $phoneNumber): ?string
+    public function canSendVerificationSend(int $phoneNumber, int $type): ?string
     {
-        if (!$smsVerification = $this->getLastSMSVerification($phoneNumber))
+        if (!$smsVerification = $this->getLastSMSVerification($phoneNumber, $type))
             return null;
 
         if ($smsVerification->getCreatedAt()->getTimestamp() + self::RETRY_TTL > time()) {
@@ -70,12 +75,13 @@ class SMSVerificationManager
         return null;
     }
 
-    public function getLastSMSVerification(int $phoneNumber): ?SMSVerification
+    public function getLastSMSVerification(int $phoneNumber, int $type): ?SMSVerification
     {
         /** @var SMSVerification[] $smsVerification */
         $smsVerification = $this->em->getRepository(SMSVerification::class)->findBy([
             'phoneNumber' => $phoneNumber,
-            'status' => SMSVerification::STATUS_UNUSED
+            'status' => SMSVerification::STATUS_UNUSED,
+            'type' => $type
         ], ['createdAt' => 'DESC'], 1);
 
         return count($smsVerification) ? $smsVerification[0] : null;
