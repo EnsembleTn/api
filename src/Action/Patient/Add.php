@@ -101,8 +101,10 @@ class Add extends BaseAction
             $parameters->get('upload_files_to_server') === 'true'
         ), GenericEvents::FILE_UPLOAD);
 
-        // dispatch new patient event
-        $dispatcher->dispatch(new PatientEvent($patient), PatientEvents::PATIENT_NEW);
+        // notify emergency doctor
+        if ($patient->getFlag() != Patient::FLAG_STABLE)
+            // dispatch new patient event
+            $dispatcher->dispatch(new PatientEvent($patient), PatientEvents::PATIENT_EMERGENCY_CASE);
 
         return $this->jsonResponse(
             Response::HTTP_CREATED,
