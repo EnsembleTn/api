@@ -1,0 +1,26 @@
+monolog:
+    handlers:
+        security:
+            # log all messages (since debug is the lowest level)
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/security.log'
+            channels: [security]
+
+        doctrine:
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/doctrine.log'
+            channels: [doctrine]
+
+        php:
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/php.log'
+            channels: [php]
+
+        main:
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/%kernel.environment%.log'
+            channels: ['!security', '!doctrine', '!php']
