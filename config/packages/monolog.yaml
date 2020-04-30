@@ -19,8 +19,14 @@ monolog:
             path:     '%kernel.logs_dir%/php.log'
             channels: [php]
 
+        cache:
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/cache.log'
+            channels: [cache]
+
         main:
             level:    debug
             type:     stream
             path:     '%kernel.logs_dir%/%kernel.environment%.log'
-            channels: ['!security', '!doctrine', '!php']
+            channels: ['!security', '!doctrine', '!php', '!cache']
