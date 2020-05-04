@@ -54,16 +54,30 @@ final class PatientAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $formMapper->add('city', ChoiceType::class, [
-                'choices' => Tools::tunisiaCitiesList(),
-                'multiple' => false
-            ]);
-            $formMapper->add('denounced', ChoiceType::class, [
-                'choices' => [
-                    'UNDENOUNCED' => 0,
-                    'DENOUNCED' => 1,
-                ]
-            ]);
+            $formMapper
+                ->add('city', ChoiceType::class, [
+                    'choices' => Tools::tunisiaCitiesList(),
+                    'multiple' => false
+                ])
+                ->add('denounced', ChoiceType::class, [
+                    'choices' => [
+                        'UNDENOUNCED' => 0,
+                        'DENOUNCED' => 1,
+                    ]
+                ])
+                ->add('medicalStatus', ChoiceType::class, [
+                    'choices' => [
+                        'TO BE TESTED' => 'TO_BE_TESTED',
+                        'NOT TO BE TESTED' => 'NOT_TO_BE_TESTED',
+                        'TESTED' => 'TESTED',
+                    ]
+                ])
+                ->add('testPositive', ChoiceType::class, [
+                    'choices' => [
+                        'NO' => 0,
+                        'YES' => 1,
+                    ]
+                ]);
         }
     }
 
