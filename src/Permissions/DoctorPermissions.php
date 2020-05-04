@@ -67,14 +67,8 @@ trait DoctorPermissions
      */
     public function canUpdatePatientMedicalStatus(Patient $patient)
     {
-        if (!$this->getCurrentDoctor()->isEmergencyDoctor())
-            throw new Exception('Only Emergency Doctor update patient medicalStatus field');
-        else {
-            if ($patient->getEmergencyStatus() != Patient::STATUS_CLOSED)
-                throw new Exception('Patient case emergencyStatus field must be CLOSED so that patient medicalStatus field can be changed.');
-            if ($patient->getMedicalStatus() == Patient::MEDICAL_STATUS_TESTED)
-                throw new Exception('Patient is already tested.');
-        }
+        if ($patient->getMedicalStatus() == Patient::MEDICAL_STATUS_TESTED)
+            throw new Exception('Patient is already tested.');
     }
 
     /**
