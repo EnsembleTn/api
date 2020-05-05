@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Patient;
 use App\Manager\FileManager;
 use App\Util\Tools;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -162,5 +163,11 @@ final class PatientAdmin extends AbstractAdmin
                 $query->expr()->in($query->getRootAlias() . '.denounced', 1));
             return $query;
         }
+    }
+
+    public function preUpdate($patient)
+    {
+        if ($patient->getMedicalStatus() && !$patient->getEmergencyStatus())
+            $patient->setEmergencyStatus(Patient::STATUS_CLOSED);
     }
 }

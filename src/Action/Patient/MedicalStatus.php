@@ -78,6 +78,8 @@ class MedicalStatus extends BaseAction
             return $form;
         }
 
+        $patient->getEmergencyStatus() == Patient::STATUS_CLOSED ?: $patient->setEmergencyStatus(Patient::STATUS_CLOSED);
+
         $pm->update($patient);
 
         return $this->jsonResponse(
