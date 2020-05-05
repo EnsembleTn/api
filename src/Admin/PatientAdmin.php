@@ -167,7 +167,10 @@ final class PatientAdmin extends AbstractAdmin
 
     public function preUpdate($patient)
     {
-        if ($patient->getMedicalStatus())
+        if ($patient->getMedicalStatus()) {
             $patient->setEmergencyStatus(Patient::STATUS_CLOSED);
+            $patient->setStatus(Patient::STATUS_CLOSED);
+            $patient->setFLag(Patient::FLAG_SUSPECT);
+        }
     }
 }
