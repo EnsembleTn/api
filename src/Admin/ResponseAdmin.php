@@ -25,4 +25,9 @@ final class ResponseAdmin extends AbstractAdmin
         $listMapper->add('question.frValue', null, ['label' => 'Question']);
         $listMapper->add('value', null, ['label' => 'Response']);
     }
+
+    public function getExportFields()
+    {
+        return ['patient', 'question.frValue', 'value'];
+    }
 }
