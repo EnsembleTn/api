@@ -170,7 +170,8 @@ final class PatientAdmin extends AbstractAdmin
         if ($patient->getMedicalStatus()) {
             $patient->setEmergencyStatus(Patient::STATUS_CLOSED);
             $patient->setStatus(Patient::STATUS_CLOSED);
-            $patient->setFLag(Patient::FLAG_SUSPECT);
+            if (!$patient->getFlag())
+                $patient->setFlag(Patient::FLAG_SUSPECT);
         }
     }
 }
